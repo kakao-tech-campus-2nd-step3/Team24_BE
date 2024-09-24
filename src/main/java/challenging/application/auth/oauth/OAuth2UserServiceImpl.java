@@ -1,6 +1,7 @@
 package challenging.application.auth.oauth;
 
 import challenging.application.auth.domain.Member;
+import challenging.application.auth.oauth.oauthResponse.KakaoResponse;
 import challenging.application.auth.oauth.oauthResponse.NaverResponse;
 import challenging.application.auth.oauth.oauthResponse.OAuth2Response;
 import challenging.application.auth.repository.MemberRepository;
@@ -34,6 +35,12 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         if(registrationId.equals("naver")){
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
+        }
+        else if (registrationId.equals("kakao")){
+            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
+        }
+        else{
+            return null;
         }
 
         String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
