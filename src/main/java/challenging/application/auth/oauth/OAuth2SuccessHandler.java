@@ -1,8 +1,7 @@
 package challenging.application.auth.oauth;
 
-import challenging.application.auth.domain.RefreshToken;
 import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.auth.repository.RefreshTokenRepository;
+import challenging.application.auth.service.RefreshTokenService;
 import challenging.application.auth.utils.servletUtils.cookie.CookieUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 
 import static challenging.application.auth.utils.AuthConstant.*;
@@ -29,7 +27,7 @@ import static challenging.application.auth.utils.AuthConstant.*;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTUtils jwtUtil;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenService refreshTokenService;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
@@ -43,7 +41,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String refreshToken = jwtUtil.generateRefreshToken(email, role);
 
-        addRefreshEntity(email, refreshToken, 1L);
+        refreshTokenService.addRefreshEntity(refreshToken, email, jwtUtil.getRefreshExpiredTime());
 
         log.info("Access = {}", accessToken);
         log.info("Refresh = {}", refreshToken);
@@ -68,15 +66,5 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         return auth.getAuthority();
-    }
-
-
-    private void addRefreshEntity(String username, String refresh, Long expiredMs) {
-
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-
-        RefreshToken refreshToken = new RefreshToken(username, refresh, date.toString());
-
-        refreshTokenRepository.save(refreshToken);
     }
 }

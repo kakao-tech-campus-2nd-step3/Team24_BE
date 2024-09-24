@@ -1,8 +1,7 @@
 package challenging.application.auth.controller;
 
-import challenging.application.auth.domain.RefreshToken;
 import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.auth.repository.RefreshTokenRepository;
+import challenging.application.auth.service.RefreshTokenService;
 import challenging.application.auth.utils.servletUtils.cookie.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
 import java.util.Map;
 
 import static challenging.application.auth.utils.AuthConstant.*;
@@ -24,7 +22,7 @@ import static challenging.application.auth.utils.AuthConstant.*;
 public class ReissueController {
 
     private final JWTUtils jwtUtil;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
@@ -41,9 +39,7 @@ public class ReissueController {
         String newRefresh = jwtUtil.generateRefreshToken(email, role);
 
         //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
-        refreshTokenRepository.deleteByToken(refresh);
-
-        addRefreshEntity(email, newRefresh, jwtUtil.getRefreshExpiredTime());
+        refreshTokenService.renewalRefreshToken(refresh, newRefresh, email, jwtUtil.getRefreshExpiredTime());
 
         //response
         response.setHeader(AUTHORIZATION, BEARER + newAccess);
@@ -51,14 +47,5 @@ public class ReissueController {
         response.addCookie(CookieUtils.createCookie(REFRESH_TOKEN, newRefresh));
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private void addRefreshEntity(String email, String refresh, Long expiredMs) {
-
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-
-        RefreshToken refreshToken = new RefreshToken(email, refresh, date.toString());
-
-        refreshTokenRepository.save(refreshToken);
     }
 }
