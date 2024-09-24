@@ -1,6 +1,5 @@
 package challenging.application.auth.filter;
 
-import challenging.application.auth.jwt.JWTUtils;
 import challenging.application.auth.servletUtils.jwtUtils.JWTResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -8,7 +8,6 @@ import challenging.application.auth.oauth.OAuth2SuccessHandler;
 import challenging.application.auth.oauth.OAuth2UserServiceImpl;
 import challenging.application.auth.repository.RefreshTokenRepository;
 import challenging.application.auth.servletUtils.jwtUtils.JWTResponseUtils;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
