@@ -3,7 +3,7 @@ package challenging.application.auth.controller;
 import challenging.application.auth.domain.RefreshToken;
 import challenging.application.auth.jwt.JWTUtils;
 import challenging.application.auth.repository.RefreshTokenRepository;
-import challenging.application.auth.servletUtils.cookie.CookieUtils;
+import challenging.application.auth.utils.servletUtils.cookie.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.Map;
+
+import static challenging.application.auth.utils.AuthConstant.*;
 
 @Controller
 @ResponseBody
@@ -26,24 +29,26 @@ public class ReissueController {
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
 
-        String refresh = (String) request.getAttribute("refresh");
+        String refresh = (String) request.getAttribute(REFRESH_TOKEN);
 
-        String email = jwtUtil.getEmail(refresh);
-        String role = jwtUtil.getRole(refresh);
+        Map<String, String> jwtInformation = jwtUtil.getJWTInformation(refresh);
+
+        String email = jwtInformation.get(EMAIL);
+        String role = jwtInformation.get(ROLE);
 
         //make new JWT
-        String newAccess = jwtUtil.createJwt("access", email, role, 600000L);
-        String newRefresh = jwtUtil.createJwt("refresh", email, role, 86400000L);
+        String newAccess = jwtUtil.generateAccessToken(email, role);
+        String newRefresh = jwtUtil.generateRefreshToken(email, role);
 
         //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
         refreshTokenRepository.deleteByToken(refresh);
 
-        addRefreshEntity(email, newRefresh, 86400000L);
+        addRefreshEntity(email, newRefresh, jwtUtil.getRefreshExpiredTime());
 
         //response
-        response.setHeader("Authorization", "Bearer " + newAccess);
+        response.setHeader(AUTHORIZATION, BEARER + newAccess);
 
-        response.addCookie(CookieUtils.createCookie("refresh", newRefresh));
+        response.addCookie(CookieUtils.createCookie(REFRESH_TOKEN, newRefresh));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

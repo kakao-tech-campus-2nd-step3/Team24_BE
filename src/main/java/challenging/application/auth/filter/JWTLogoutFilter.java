@@ -1,7 +1,7 @@
 package challenging.application.auth.filter;
 
 import challenging.application.auth.repository.RefreshTokenRepository;
-import challenging.application.auth.servletUtils.jwtUtils.JWTResponseUtils;
+import challenging.application.auth.utils.servletUtils.jwtUtils.JWTResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -13,7 +13,8 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 
-import static challenging.application.auth.servletUtils.cookie.CookieUtils.*;
+import static challenging.application.auth.utils.AuthConstant.*;
+import static challenging.application.auth.utils.servletUtils.cookie.CookieUtils.*;
 
 @AllArgsConstructor
 public class JWTLogoutFilter extends GenericFilterBean {
@@ -54,7 +55,7 @@ public class JWTLogoutFilter extends GenericFilterBean {
             return;
         }
 
-        if (!jwtResponseUtils.checkTokenType(response, refresh, "refresh")) {
+        if (!jwtResponseUtils.checkTokenType(response, refresh, REFRESH_TOKEN)) {
             return;
         }
 

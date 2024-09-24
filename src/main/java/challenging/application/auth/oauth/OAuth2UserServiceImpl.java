@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static challenging.application.auth.utils.AuthConstant.*;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -33,10 +35,10 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         OAuth2Response oAuth2Response = null;
 
-        if(registrationId.equals("naver")){
+        if(registrationId.equals(NAVER)){
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
         }
-        else if (registrationId.equals("kakao")){
+        else if (registrationId.equals(KAKAO)){
             oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
         }
         else{
