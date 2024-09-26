@@ -7,7 +7,6 @@ import java.time.*;
 import lombok.Data;
 
 @Entity
-@Data
 public class Challenge {
 
   @Id
@@ -17,7 +16,7 @@ public class Challenge {
   // 카테고리 id 추가
 
   @ManyToOne
-  @JoinColumn(name = "host_id", referencedColumnName = "id")
+  @JoinColumn(name = "host_id")
   private Member host;
 
   private String name;
