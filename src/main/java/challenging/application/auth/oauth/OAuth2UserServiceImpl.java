@@ -1,6 +1,7 @@
 package challenging.application.auth.oauth;
 
 import challenging.application.auth.domain.Member;
+import challenging.application.auth.oauth.oauthResponse.KakaoResponse;
 import challenging.application.auth.oauth.oauthResponse.NaverResponse;
 import challenging.application.auth.oauth.oauthResponse.OAuth2Response;
 import challenging.application.auth.repository.MemberRepository;
@@ -13,6 +14,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static challenging.application.auth.utils.AuthConstant.*;
 
 @Service
 @AllArgsConstructor
@@ -32,8 +35,14 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         OAuth2Response oAuth2Response = null;
 
-        if(registrationId.equals("naver")){
+        if(registrationId.equals(NAVER)){
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
+        }
+        else if (registrationId.equals(KAKAO)){
+            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
+        }
+        else{
+            return null;
         }
 
         String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();

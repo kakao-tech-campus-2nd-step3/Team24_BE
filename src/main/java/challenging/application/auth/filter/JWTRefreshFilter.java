@@ -1,7 +1,6 @@
 package challenging.application.auth.filter;
 
-import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.auth.servletUtils.jwtUtils.JWTResponseUtils;
+import challenging.application.auth.utils.servletUtils.jwtUtils.JWTResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +11,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static challenging.application.auth.servletUtils.cookie.CookieUtils.checkRefreshTokenInCookie;
+import static challenging.application.auth.utils.AuthConstant.*;
+import static challenging.application.auth.utils.servletUtils.cookie.CookieUtils.*;
 
 
 @RequiredArgsConstructor
@@ -45,11 +45,11 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (!jwtResponseUtils.checkTokenType(response, refresh, "refresh")) {
+        if (!jwtResponseUtils.checkTokenType(response, refresh, REFRESH_TOKEN)) {
             return;
         }
 
-        request.setAttribute("refresh",refresh);
+        request.setAttribute(REFRESH_TOKEN,refresh);
 
         filterChain.doFilter(request, response);
     }
