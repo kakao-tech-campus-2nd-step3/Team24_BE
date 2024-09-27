@@ -1,20 +1,25 @@
 # Team24_BE
-24조 백엔드
-
-## 개발 스프린트 1주차
-
-### 1. Spring Security 를 활용한 OAuth2 로그인 기능 구현
-- 구현 내용
-  - 백엔드 서버에서 OAuth2 로그인 처리를 다하고 서버에서 JWT 발급
-  - ACCESS TOKEN 과 REFRESH TOKEN 을 COOKIE 에 저장 후 안드로이드 측에 전달
-  - ACCESS TOKEN 만료 시 정해진 API(/reissue) 로 요청을 보내 REFRESH TOKEN 을 이용한 재발급
-  - 로그아웃 시 저장된 REFRESH TOKEN 삭제
-- 앞으로 할 부분
-  - 코드 리팩토링 : 문자열, 숫자 상수 도입
-  - 회원 ROLE Enum 도입
-  - 카카오 OAuth2 등록
-  - 안드로이드 측과 로그인 기능 연결 (CORS 등 해결 필요)
 
 ## 개발 스프린트 2주차
 
+
 ### 1. Kakao Login 기능 추가
+### 2. UserProfile 구현
+
+  - 일단 네이버 로그인 작동시 토큰발급
+  - 발급된 토큰으로 현재 접속한 계정정보 가져오기
+  - get 하면 현재 계정정보와 userprofile에 들어가는 내용 출력
+  - post 하면 본문에 들어간 내용으로 회원 정보 수정
+- 엔티티에 들어가는 내용
+  -  profileId : 1부터 1씩 증가시키는 genereted value
+  -  userId : 현재 접속한 계정의 이메일
+  -  userNickName : default
+  -  userBody : default
+  - userimageUrl : default
+  - point : 1000
+- 시행착오
+  - 원래는  userId에 현재 접속중인 id값을 넣으려고 했는데
+  그 아이디 값이 토큰처럼 지저분한 문자열이라 이메일 값을 입력받아
+  userid에 맵핑했습니다. 
+
+  
