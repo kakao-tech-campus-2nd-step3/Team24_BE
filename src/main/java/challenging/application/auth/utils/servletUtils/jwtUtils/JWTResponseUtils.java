@@ -1,4 +1,4 @@
-package challenging.application.auth.servletUtils.jwtUtils;
+package challenging.application.auth.utils.servletUtils.jwtUtils;
 
 import challenging.application.auth.exception.ErrorResult;
 import challenging.application.auth.jwt.JWTUtils;
@@ -48,6 +48,7 @@ public class JWTResponseUtils {
 
     public boolean checkTokenType(HttpServletResponse response, String token, String type) {
         String category = jwtUtils.getCategory(token);
+
         if (!category.equals(type)) {
 
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
