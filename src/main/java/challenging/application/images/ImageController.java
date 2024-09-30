@@ -1,4 +1,4 @@
-package challenging.application.s3;
+package challenging.application.images;
 
 import java.util.Map;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +15,6 @@ public class ImageController {
 
 
 
-        return 
+        return Res
     }
 }
