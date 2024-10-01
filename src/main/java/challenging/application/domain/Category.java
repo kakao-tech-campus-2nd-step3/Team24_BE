@@ -2,6 +2,8 @@ package challenging.application.domain;
 
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 
 @Entity
@@ -15,4 +17,7 @@ public class Category {
   private String name;
 
   private String description;
+
+  @OneToMany(mappedBy = "category")
+  private List<Challenge> challenges = new ArrayList<>();
 }
