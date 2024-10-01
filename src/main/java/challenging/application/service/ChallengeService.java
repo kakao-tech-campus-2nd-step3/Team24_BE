@@ -3,7 +3,8 @@ package challenging.application.service;
 
 import challenging.application.domain.Challenge;
 import challenging.application.dto.response.ChallengeResponseDTO;
-import challenging.application.exeption.challenge.*;
+import challenging.application.exception.challenge.ChallengeNotFoundException;
+import challenging.application.exception.challenge.InvalidDateException;
 import challenging.application.repository.ChallengeRepository;
 import org.springframework.stereotype.Service;
 

@@ -13,6 +13,8 @@ public record ChallengeResponseDTO(
     int maxParticipantNum,
     int currentParticipantNum,
     Long hostId
+
+    // 카테고리 아이디 추가
 ) {
   public static ChallengeResponseDTO fromEntity(Challenge challenge) {
     return new ChallengeResponseDTO(

@@ -1,6 +1,7 @@
-package challenging.application.exeption;
+package challenging.application.exception;
 
-import challenging.application.exeption.challenge.*;
+import challenging.application.exception.challenge.ChallengeNotFoundException;
+import challenging.application.exception.challenge.InvalidDateException;
 import challenging.application.util.ResponseUtil;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;

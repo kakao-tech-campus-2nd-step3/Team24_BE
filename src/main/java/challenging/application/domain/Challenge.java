@@ -5,8 +5,10 @@ import challenging.application.auth.domain.Member;
 import jakarta.persistence.*;
 import java.time.*;
 import lombok.Data;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Challenge {
 
   @Id
