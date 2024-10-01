@@ -15,7 +15,9 @@ public class Challenge {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  // 카테고리 id 추가
+  @ManyToOne
+  @JoinColumn(name = "category_id")
+  private Category category;
 
   @ManyToOne
   @JoinColumn(name = "host_id")

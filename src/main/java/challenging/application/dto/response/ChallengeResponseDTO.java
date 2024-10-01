@@ -12,9 +12,8 @@ public record ChallengeResponseDTO(
     int minParticipantNum,
     int maxParticipantNum,
     int currentParticipantNum,
-    Long hostId
-
-    // 카테고리 아이디 추가
+    Long hostId,
+    int categoryId
 ) {
   public static ChallengeResponseDTO fromEntity(Challenge challenge) {
     return new ChallengeResponseDTO(
@@ -28,7 +27,8 @@ public record ChallengeResponseDTO(
         challenge.getMinParticipantNum(),
         challenge.getMaxParticipantNum(),
         challenge.getCurrentParticipantNum(),
-        challenge.getHost().getId()
+        challenge.getHost().getId(),
+        challenge.getCategory().getId()
     );
   }
 }
