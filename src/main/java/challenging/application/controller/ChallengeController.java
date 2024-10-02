@@ -53,6 +53,11 @@ public class ChallengeController {
   }
 
   // 챌린지 삭제
+  @DeleteMapping("{challengeId}")
+  public ResponseEntity<Long> deleteChallenge(@PathVariable Long challengeId) {
+    challengeService.deleteChallenge(challengeId);
+    return ResponseEntity.status(HttpStatus.OK).body(challengeId);
+  }
 
   // 챌린지 예약
 

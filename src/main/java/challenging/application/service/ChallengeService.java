@@ -77,5 +77,16 @@ public class ChallengeService {
     Challenge savedChallenge = challengeRepository.save(challenge);
     return savedChallenge.getId();
   }
+
+
+  // 챌린지 삭제
+  public void deleteChallenge(Long challengeId) {
+    Challenge challenge = challengeRepository.findById(challengeId)
+        .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
+
+    challengeRepository.delete(challenge);
+  }
+
+
 }
 
