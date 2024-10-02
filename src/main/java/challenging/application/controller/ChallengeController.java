@@ -1,5 +1,7 @@
 package challenging.application.controller;
 
+import challenging.application.auth.annotation.LoginMember;
+import challenging.application.auth.domain.Member;
 import challenging.application.dto.request.ChallengeRequestDTO;
 import challenging.application.dto.response.ChallengeResponseDTO;
 import challenging.application.service.ChallengeService;
@@ -60,6 +62,14 @@ public class ChallengeController {
   }
 
   // 챌린지 예약
+  @PostMapping("/reservation/{challengeId}")
+  public ResponseEntity<?> reserveChallenge(@PathVariable Long challengeId,
+      @LoginMember Member loginMember) {
+    challengeService.reserveChallenge(challengeId, loginMember);
 
+    return ResponseEntity.status(HttpStatus.OK).body(
+        Map.of("challenge_id", challengeId, "user_id", loginMember.getId())
+    );
+  }
 
 }

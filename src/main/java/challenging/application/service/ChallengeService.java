@@ -1,5 +1,6 @@
 package challenging.application.service;
 
+import challenging.application.auth.domain.Member;
 import challenging.application.auth.repository.MemberRepository;
 import challenging.application.domain.Challenge;
 import challenging.application.dto.request.ChallengeRequestDTO;
@@ -85,6 +86,15 @@ public class ChallengeService {
         .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
 
     challengeRepository.delete(challenge);
+  }
+
+  // 챌린지 예약
+  public void reserveChallenge(Long challengeId, Member user) {
+    Challenge challenge = challengeRepository.findById(challengeId)
+        .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
+
+
+    // 예약 로직
   }
 
 
