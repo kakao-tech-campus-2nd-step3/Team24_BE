@@ -15,7 +15,7 @@ public record ChallengeResponseDTO(
     Long hostId,
     int categoryId
 ) {
-  public static ChallengeResponseDTO fromEntity(Challenge challenge) {
+  public static ChallengeResponseDTO fromEntity(Challenge challenge, int currentParticipantNum) {
     return new ChallengeResponseDTO(
         challenge.getName(),
         challenge.getBody(),
@@ -26,7 +26,7 @@ public record ChallengeResponseDTO(
         challenge.getImageUrl(),
         challenge.getMinParticipantNum(),
         challenge.getMaxParticipantNum(),
-        challenge.getCurrentParticipantNum(),
+        currentParticipantNum,
         challenge.getHost().getId(),
         challenge.getCategory().getId()
     );

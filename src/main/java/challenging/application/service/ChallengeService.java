@@ -3,6 +3,7 @@ package challenging.application.service;
 import challenging.application.auth.domain.Member;
 import challenging.application.auth.repository.MemberRepository;
 import challenging.application.domain.Challenge;
+import challenging.application.domain.Participant;
 import challenging.application.dto.request.ChallengeRequestDTO;
 import challenging.application.dto.response.ChallengeResponseDTO;
 import challenging.application.exception.challenge.*;
@@ -18,12 +19,15 @@ public class ChallengeService {
   private final ChallengeRepository challengeRepository;
   private final MemberRepository memberRepository;
   private final CategoryRepository categoryRepository;
+  private final ParticipantRepository participantRepository;
 
   public ChallengeService(ChallengeRepository challengeRepository,
-      MemberRepository memberRepository, CategoryRepository categoryRepository) {
+      MemberRepository memberRepository, CategoryRepository categoryRepository,
+      ParticipantRepository participantRepository) {
     this.challengeRepository = challengeRepository;
     this.memberRepository = memberRepository;
     this.categoryRepository = categoryRepository;
+    this.participantRepository = participantRepository;
   }
 
   // 챌린지 단건 조회
@@ -35,9 +39,10 @@ public class ChallengeService {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
 
-    return ChallengeResponseDTO.fromEntity(challenge);
-  }
+    int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
+    return ChallengeResponseDTO.fromEntity(challenge, currentParticipantNum);
+  }
 
   // 카테고리별 챌린지 조회
   public List<ChallengeResponseDTO> getChallengesByCategoryAndDate(int categoryId, String date) {
@@ -48,7 +53,11 @@ public class ChallengeService {
     }
 
     return challenges.stream()
-        .map(ChallengeResponseDTO::fromEntity)
+        .map(challenge -> {
+          int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId())
+              .intValue();
+          return ChallengeResponseDTO.fromEntity(challenge, currentParticipantNum);
+        })
         .collect(Collectors.toList());
   }
 
@@ -71,9 +80,7 @@ public class ChallengeService {
         LocalTime.parse(challengeRequestDTO.endTime()),
         challengeRequestDTO.imageUrl(),
         challengeRequestDTO.minParticipantNum(),
-        challengeRequestDTO.maxParticipantNum(),
-        0
-    );
+        challengeRequestDTO.maxParticipantNum());
 
     Challenge savedChallenge = challengeRepository.save(challenge);
     return savedChallenge.getId();
@@ -93,8 +100,8 @@ public class ChallengeService {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
 
-
-    // 예약 로직
+    Participant participant = new Participant(challenge, user);
+    participantRepository.save(participant);
   }
 
 

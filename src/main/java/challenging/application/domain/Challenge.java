@@ -41,13 +41,9 @@ public class Challenge {
 
   private int maxParticipantNum;
 
-  private int currentParticipantNum;
-
-
   public Challenge(Category category, Member host, String name, String body, int point,
       LocalDate date, LocalTime startTime, LocalTime endTime, String imageUrl,
-      int minParticipantNum,
-      int maxParticipantNum, int currentParticipantNum) {
+      int minParticipantNum, int maxParticipantNum) {
     this.category = category;
     this.host = host;
     this.name = name;
@@ -59,6 +55,5 @@ public class Challenge {
     this.imageUrl = imageUrl;
     this.minParticipantNum = minParticipantNum;
     this.maxParticipantNum = maxParticipantNum;
-    this.currentParticipantNum = currentParticipantNum;
   }
 }
