@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
-    // 이메일을 userId로 사용하는 메소드
-    Optional<UserProfile> findByUserId(String userId);
+
+    // Member의 id를 사용하여 UserProfile을 조회
+    Optional<UserProfile> findByUserId(Long userId);
 }

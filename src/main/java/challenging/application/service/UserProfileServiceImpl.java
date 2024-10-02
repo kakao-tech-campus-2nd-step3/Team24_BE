@@ -16,33 +16,34 @@ public class UserProfileServiceImpl implements UserProfileService {
         this.userProfileRepository = userProfileRepository;
     }
 
+    // Member의 id로 프로필을 조회하는 메서드로 수정
     @Override
-    public Optional<UserProfile> getUserProfileByEmail(String email) {
-        return userProfileRepository.findByUserId(email);
+    public Optional<UserProfile> getUserProfileByMemberId(Long memberId) {
+        return userProfileRepository.findByUserId(memberId);
     }
 
+    // 프로필 저장
     @Override
     public UserProfile saveUserProfile(UserProfile userProfile) {
         return userProfileRepository.save(userProfile);
     }
 
+    // UserProfile을 DTO로 변환
     @Override
     public UserProfileResponseDTO convertToDTO(UserProfile userProfile) {
         return new UserProfileResponseDTO(
             userProfile.getUserNickName(),
-            userProfile.getUserBody(),
             userProfile.getImageUrl(),
             userProfile.getPoint()
         );
     }
 
-    // 새로운 프로필 생성
+    // 새로운 프로필 생성 시 Member의 id를 사용
     @Override
-    public UserProfile createNewUserProfile(String email) {
+    public UserProfile createNewUserProfile(Long memberId) {
         UserProfile userProfile = new UserProfile();
-        userProfile.setUserId(email);
+        userProfile.setUserId(memberId);  // Member의 id 값을 설정
         userProfile.setUserNickName("New User");
-        userProfile.setUserBody("Default body");
         userProfile.setImageUrl("Default image URL");
         userProfile.setPoint(1000);
         return saveUserProfile(userProfile);
@@ -55,11 +56,6 @@ public class UserProfileServiceImpl implements UserProfileService {
 
         if (updates.containsKey("user_nick_name")) {
             userProfile.setUserNickName(updates.get("user_nick_name"));
-            isUpdated = true;
-        }
-
-        if (updates.containsKey("user_body")) {
-            userProfile.setUserBody(updates.get("user_body"));
             isUpdated = true;
         }
 
