@@ -2,17 +2,16 @@ package challenging.application.service;
 
 import challenging.application.auth.domain.Member;
 import challenging.application.auth.repository.MemberRepository;
-import challenging.application.domain.Challenge;
-import challenging.application.domain.Participant;
+import challenging.application.domain.*;
 import challenging.application.dto.request.ChallengeRequestDTO;
 import challenging.application.dto.response.ChallengeResponseDTO;
 import challenging.application.exception.challenge.*;
 import challenging.application.repository.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-
 @Service
 public class ChallengeService {
 
@@ -20,6 +19,8 @@ public class ChallengeService {
   private final MemberRepository memberRepository;
   private final CategoryRepository categoryRepository;
   private final ParticipantRepository participantRepository;
+  private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
+      "yyyy-MM-dd:HH:mm");
 
   public ChallengeService(ChallengeRepository challengeRepository,
       MemberRepository memberRepository, CategoryRepository categoryRepository,
@@ -46,7 +47,9 @@ public class ChallengeService {
 
   // 카테고리별 챌린지 조회
   public List<ChallengeResponseDTO> getChallengesByCategoryAndDate(int categoryId, String date) {
-    List<Challenge> challenges = challengeRepository.findByCategoryIdAndDate(categoryId, date);
+    LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
+
+    List<Challenge> challenges = challengeRepository.findByCategoryIdAndDate(categoryId,  localDateTime.toLocalDate());
 
     if (challenges.isEmpty()) {
       throw new CategoryNotFoundException("옳지 않은 카테고리 ID 입니다.");
