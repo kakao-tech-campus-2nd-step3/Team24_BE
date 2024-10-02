@@ -1,5 +1,6 @@
 package challenging.application.controller;
 
+import challenging.application.dto.request.ChallengeRequestDTO;
 import challenging.application.dto.response.ChallengeResponseDTO;
 import challenging.application.service.ChallengeService;
 import java.util.List;
@@ -42,6 +43,14 @@ public class ChallengeController {
   }
 
   // 챌린지 생성
+  @PostMapping
+  public ResponseEntity<Long> createChallenge(
+      @RequestBody ChallengeRequestDTO challengeRequestDTO) {
+
+    Long challengeId = challengeService.createChallenge(challengeRequestDTO);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(challengeId);
+  }
 
   // 챌린지 삭제
 

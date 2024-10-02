@@ -1,12 +1,12 @@
 package challenging.application.service;
 
-
+import challenging.application.auth.repository.MemberRepository;
 import challenging.application.domain.Challenge;
+import challenging.application.dto.request.ChallengeRequestDTO;
 import challenging.application.dto.response.ChallengeResponseDTO;
-import challenging.application.exception.challenge.CategoryNotFoundException;
-import challenging.application.exception.challenge.ChallengeNotFoundException;
-import challenging.application.exception.challenge.InvalidDateException;
-import challenging.application.repository.ChallengeRepository;
+import challenging.application.exception.challenge.*;
+import challenging.application.repository.*;
+import java.time.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,14 @@ import org.springframework.stereotype.Service;
 public class ChallengeService {
 
   private final ChallengeRepository challengeRepository;
+  private final MemberRepository memberRepository;
+  private final CategoryRepository categoryRepository;
 
-  public ChallengeService(ChallengeRepository challengeRepository) {
+  public ChallengeService(ChallengeRepository challengeRepository,
+      MemberRepository memberRepository, CategoryRepository categoryRepository) {
     this.challengeRepository = challengeRepository;
+    this.memberRepository = memberRepository;
+    this.categoryRepository = categoryRepository;
   }
 
   // 챌린지 단건 조회
@@ -46,6 +51,31 @@ public class ChallengeService {
         .collect(Collectors.toList());
   }
 
+  // 챌린지 생성
+  public Long createChallenge(ChallengeRequestDTO challengeRequestDTO) {
+    var host = memberRepository.findById(challengeRequestDTO.hostId())
+        .orElseThrow(() -> new UserNotFoundException("해당 유저를 찾을 수 없습니다."));
 
+    var category = categoryRepository.findById(challengeRequestDTO.categoryId())
+        .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리를 찾을 수 없습니다."));
+
+    Challenge challenge = new Challenge(
+        category,
+        host,
+        challengeRequestDTO.challengeName(),
+        challengeRequestDTO.challengeBody(),
+        challengeRequestDTO.point(),
+        LocalDate.parse(challengeRequestDTO.challengeDate()),
+        LocalTime.parse(challengeRequestDTO.startTime()),
+        LocalTime.parse(challengeRequestDTO.endTime()),
+        challengeRequestDTO.imageUrl(),
+        challengeRequestDTO.minParticipantNum(),
+        challengeRequestDTO.maxParticipantNum(),
+        0
+    );
+
+    Challenge savedChallenge = challengeRepository.save(challenge);
+    return savedChallenge.getId();
+  }
 }
 
