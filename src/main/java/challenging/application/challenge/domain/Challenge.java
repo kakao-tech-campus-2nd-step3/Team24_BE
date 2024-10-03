@@ -5,7 +5,6 @@ import challenging.application.auth.domain.Member;
 import challenging.application.domain.Category;
 import jakarta.persistence.*;
 import java.time.*;
-import lombok.Data;
 import lombok.Getter;
 
 @Entity
@@ -42,9 +41,12 @@ public class Challenge {
 
   private int maxParticipantNum;
 
+  protected Challenge() {
+  }
+
   public Challenge(Category category, Member host, String name, String body, int point,
-      LocalDate date, LocalTime startTime, LocalTime endTime, String imageUrl,
-      int minParticipantNum, int maxParticipantNum) {
+                   LocalDate date, LocalTime startTime, LocalTime endTime, String imageUrl,
+                   int minParticipantNum, int maxParticipantNum) {
     this.category = category;
     this.host = host;
     this.name = name;
