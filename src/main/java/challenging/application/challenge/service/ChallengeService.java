@@ -40,7 +40,7 @@ public class ChallengeService {
     }
 
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
+        .orElseThrow(() -> new ChallengeNotFoundException());
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
