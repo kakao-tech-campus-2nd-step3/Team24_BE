@@ -21,4 +21,7 @@ public class Category {
 
   @OneToMany(mappedBy = "category")
   private List<Challenge> challenges = new ArrayList<>();
+
+  protected Category() {
+  }
 }
