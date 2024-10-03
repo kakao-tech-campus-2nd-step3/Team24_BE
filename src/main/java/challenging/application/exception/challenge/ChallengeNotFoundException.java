@@ -1,4 +1,4 @@
-package challenging.application.exeption.challenge;
+package challenging.application.exception.challenge;
 
 public class ChallengeNotFoundException extends RuntimeException {
 
