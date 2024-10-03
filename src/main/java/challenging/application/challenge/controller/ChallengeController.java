@@ -1,10 +1,13 @@
-package challenging.application.controller;
+package challenging.application.challenge.controller;
 
 import challenging.application.auth.annotation.LoginMember;
 import challenging.application.auth.domain.Member;
 import challenging.application.dto.request.ChallengeRequestDTO;
+import challenging.application.dto.request.DateRequest;
 import challenging.application.dto.response.ChallengeResponseDTO;
-import challenging.application.service.ChallengeService;
+import challenging.application.challenge.service.ChallengeService;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.*;
@@ -23,11 +26,11 @@ public class ChallengeController {
   // 챌린지 단건 조회
   @GetMapping("/{challengeId}")
   public ResponseEntity<ChallengeResponseDTO> getChallenge(
-      @PathVariable Long challengeId,
-      @RequestBody Map<String, String> requestBody) {
+          @PathVariable Long challengeId,
+          @RequestBody DateRequest dateRequest) {
 
     ChallengeResponseDTO response = challengeService.getChallengeByIdAndDate(challengeId,
-        requestBody.get("date"));
+            dateRequest.date());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
@@ -36,10 +39,10 @@ public class ChallengeController {
   @GetMapping("/{categoryId}")
   public ResponseEntity<List<ChallengeResponseDTO>> getChallengesByCategory(
       @PathVariable int categoryId,
-      @RequestBody Map<String, String> requestBody) {
+      @RequestBody DateRequest dateRequest) {
 
     List<ChallengeResponseDTO> responses = challengeService.getChallengesByCategoryAndDate(
-        categoryId, requestBody.get("date"));
+        categoryId, dateRequest.date());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(responses);
   }
@@ -67,9 +70,13 @@ public class ChallengeController {
       @LoginMember Member loginMember) {
     challengeService.reserveChallenge(challengeId, loginMember);
 
-    return ResponseEntity.status(HttpStatus.OK).body(
-        Map.of("challenge_id", challengeId, "user_id", loginMember.getId())
-    );
+    Map<String, Long> response = new HashMap<>();
+    response.put("challenge_id", challengeId);
+    response.put("user_id", loginMember.getId());
+
+    return ResponseEntity.status(HttpStatus.OK)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(response);
   }
 
 }
