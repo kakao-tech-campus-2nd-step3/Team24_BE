@@ -1,7 +1,7 @@
 package challenging.application.userprofile.service;
 
 import challenging.application.dto.response.UserProfileResponseDTO;
-import challenging.application.model.UserProfile;
+import challenging.application.userprofile.domain.UserProfile;
 import challenging.application.userprofile.repository.UserProfileRepository;
 import org.springframework.stereotype.Service;
 import java.util.Map;

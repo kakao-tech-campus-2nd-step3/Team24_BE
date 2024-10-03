@@ -2,7 +2,7 @@ package challenging.application.userprofile.controller;
 
 import challenging.application.auth.jwt.JWTUtils;
 import challenging.application.dto.response.UserProfileResponseDTO;
-import challenging.application.model.UserProfile;
+import challenging.application.userprofile.domain.UserProfile;
 import challenging.application.userprofile.service.UserProfileService;
 import challenging.application.auth.domain.Member; // Member 엔터티
 import challenging.application.auth.repository.MemberRepository; // MemberRepository 사용

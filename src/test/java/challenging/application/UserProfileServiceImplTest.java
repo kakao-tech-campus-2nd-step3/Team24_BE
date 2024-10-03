@@ -1,7 +1,7 @@
 package challenging.application;
 
 
-import challenging.application.model.UserProfile;
+import challenging.application.userprofile.domain.UserProfile;
 import challenging.application.userprofile.repository.UserProfileRepository;
 import challenging.application.userprofile.service.UserProfileServiceImpl;
 import java.util.Map;

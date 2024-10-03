@@ -1,7 +1,7 @@
 package challenging.application;
 
 
-import challenging.application.model.UserProfile;
+import challenging.application.userprofile.domain.UserProfile;
 import challenging.application.userprofile.repository.UserProfileRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

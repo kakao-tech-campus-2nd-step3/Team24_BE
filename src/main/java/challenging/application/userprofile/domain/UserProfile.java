@@ -1,4 +1,4 @@
-package challenging.application.model;
+package challenging.application.userprofile.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
