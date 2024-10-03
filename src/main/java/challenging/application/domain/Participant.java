@@ -21,6 +21,9 @@ public class Participant {
   @JoinColumn(name = "user_id")
   private Member member;
 
+  protected Participant() {
+  }
+
   public Participant(Challenge challenge, Member member) {
     this.challenge = challenge;
     this.member = member;
