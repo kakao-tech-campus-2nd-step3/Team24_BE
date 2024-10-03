@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-
 @Entity
 public class UserProfile {
 
@@ -13,28 +12,22 @@ public class UserProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long profileId;
 
-    private String userId;
-    private String userNickName ;
-    private String userBody;
+    private Long userId;  // id값 Long으로 변경
+    private String userNickName;
     private String imageUrl;
     private Integer point;
 
-
-    // getter and setter
+    // getter와 setter
     public Long getProfileId() {
         return profileId;
     }
 
-    public String getUserId() {
+    public Long getUserId() {  // Long으로 수정
         return userId;
     }
 
     public String getUserNickName() {
         return userNickName;
-    }
-
-    public String getUserBody() {
-        return userBody;
     }
 
     public String getImageUrl() {
@@ -49,16 +42,12 @@ public class UserProfile {
         this.profileId = profileId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {  // Long으로 수정
         this.userId = userId;
     }
 
     public void setUserNickName(String userNickName) {
         this.userNickName = userNickName;
-    }
-
-    public void setUserBody(String userBody) {
-        this.userBody = userBody;
     }
 
     public void setImageUrl(String imageUrl) {

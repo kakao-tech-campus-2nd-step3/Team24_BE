@@ -6,13 +6,19 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface UserProfileService {
-    Optional<UserProfile> getUserProfileByEmail(String email);
 
+    // Member의 id로 프로필을 조회
+    Optional<UserProfile> getUserProfileByMemberId(Long memberId);
+
+    // 프로필 저장
     UserProfile saveUserProfile(UserProfile userProfile);
 
+    // UserProfile을 DTO로 변환
     UserProfileResponseDTO convertToDTO(UserProfile userProfile);
 
-    UserProfile createNewUserProfile(String email);
+    // 새로운 프로필 생성 시 Member의 id를 사용
+    UserProfile createNewUserProfile(Long memberId);
 
+    // 회원정보 업데이트
     boolean updateUserProfileFields(UserProfile userProfile, Map<String, String> updates);
 }
