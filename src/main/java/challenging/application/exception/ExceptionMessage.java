@@ -1,4 +1,4 @@
-package challenging.application.auth.exception.exceptionMessage;
+package challenging.application.exception;
 
 public class ExceptionMessage {
 
