@@ -1,7 +1,8 @@
-package challenging.application.domain;
+package challenging.application.challenge.domain;
 
 
 import challenging.application.auth.domain.Member;
+import challenging.application.domain.Category;
 import jakarta.persistence.*;
 import java.time.*;
 import lombok.Data;

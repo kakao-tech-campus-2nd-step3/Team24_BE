@@ -1,4 +1,4 @@
-package challenging.application.repository;
+package challenging.application.userprofile.repository;
 
 import challenging.application.model.UserProfile;
 import java.util.Optional;

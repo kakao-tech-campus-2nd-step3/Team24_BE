@@ -1,8 +1,8 @@
-package challenging.application.service;
+package challenging.application.userprofile.service;
 
-import challenging.application.dto.UserProfileResponseDTO;
+import challenging.application.dto.response.UserProfileResponseDTO;
 import challenging.application.model.UserProfile;
-import challenging.application.repository.UserProfileRepository;
+import challenging.application.userprofile.repository.UserProfileRepository;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Optional;

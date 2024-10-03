@@ -1,6 +1,7 @@
 package challenging.application.domain;
 
 import challenging.application.auth.domain.Member;
+import challenging.application.challenge.domain.Challenge;
 import jakarta.persistence.*;
 import lombok.Getter;
 

@@ -3,10 +3,10 @@ package challenging.application;
 
 
 import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.controller.UserProfileController;
-import challenging.application.dto.UserProfileResponseDTO;
+import challenging.application.userprofile.controller.UserProfileController;
+import challenging.application.dto.response.UserProfileResponseDTO;
 import challenging.application.model.UserProfile;
-import challenging.application.service.UserProfileService;
+import challenging.application.userprofile.service.UserProfileService;
 import challenging.application.auth.domain.Member;
 import challenging.application.auth.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;

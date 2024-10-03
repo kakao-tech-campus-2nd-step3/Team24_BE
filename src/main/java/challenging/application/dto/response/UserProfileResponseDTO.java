@@ -1,4 +1,4 @@
-package challenging.application.dto;
+package challenging.application.dto.response;
 
 
 public class UserProfileResponseDTO {

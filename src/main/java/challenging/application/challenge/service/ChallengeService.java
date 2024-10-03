@@ -1,7 +1,9 @@
-package challenging.application.service;
+package challenging.application.challenge.service;
 
 import challenging.application.auth.domain.Member;
 import challenging.application.auth.repository.MemberRepository;
+import challenging.application.challenge.domain.Challenge;
+import challenging.application.challenge.repository.ChallengeRepository;
 import challenging.application.domain.*;
 import challenging.application.dto.request.ChallengeRequestDTO;
 import challenging.application.dto.response.ChallengeResponseDTO;

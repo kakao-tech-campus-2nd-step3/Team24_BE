@@ -1,9 +1,9 @@
-package challenging.application.controller;
+package challenging.application.userprofile.controller;
 
 import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.dto.UserProfileResponseDTO;
+import challenging.application.dto.response.UserProfileResponseDTO;
 import challenging.application.model.UserProfile;
-import challenging.application.service.UserProfileService;
+import challenging.application.userprofile.service.UserProfileService;
 import challenging.application.auth.domain.Member; // Member 엔터티
 import challenging.application.auth.repository.MemberRepository; // MemberRepository 사용
 import org.springframework.http.HttpStatus;

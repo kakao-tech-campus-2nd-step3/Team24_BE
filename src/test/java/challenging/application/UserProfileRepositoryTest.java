@@ -2,7 +2,7 @@ package challenging.application;
 
 
 import challenging.application.model.UserProfile;
-import challenging.application.repository.UserProfileRepository;
+import challenging.application.userprofile.repository.UserProfileRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
