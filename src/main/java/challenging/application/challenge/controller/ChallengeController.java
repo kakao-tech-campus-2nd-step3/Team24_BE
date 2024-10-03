@@ -10,6 +10,8 @@ import challenging.application.challenge.service.ChallengeService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import challenging.application.dto.response.ReserveChallengeResponse;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,13 +72,10 @@ public class ChallengeController {
       @LoginMember Member loginMember) {
     challengeService.reserveChallenge(challengeId, loginMember);
 
-    Map<String, Long> response = new HashMap<>();
-    response.put("challenge_id", challengeId);
-    response.put("user_id", loginMember.getId());
+    ReserveChallengeResponse response = new ReserveChallengeResponse(challengeId, loginMember.getId());
 
     return ResponseEntity.status(HttpStatus.OK)
             .contentType(MediaType.APPLICATION_JSON)
             .body(response);
   }
-
 }
