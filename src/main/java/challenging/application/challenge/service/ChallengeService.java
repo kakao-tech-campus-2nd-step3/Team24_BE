@@ -5,8 +5,8 @@ import challenging.application.auth.repository.MemberRepository;
 import challenging.application.challenge.domain.Challenge;
 import challenging.application.challenge.repository.ChallengeRepository;
 import challenging.application.domain.*;
-import challenging.application.dto.request.ChallengeRequestDTO;
-import challenging.application.dto.response.ChallengeResponseDTO;
+import challenging.application.dto.request.ChallengeRequest;
+import challenging.application.dto.response.ChallengeResponse;
 import challenging.application.exception.challenge.*;
 import challenging.application.repository.*;
 import java.time.*;
@@ -34,7 +34,7 @@ public class ChallengeService {
   }
 
   // 챌린지 단건 조회
-  public ChallengeResponseDTO getChallengeByIdAndDate(Long challengeId, String date) {
+  public ChallengeResponse getChallengeByIdAndDate(Long challengeId, String date) {
     if (date == null || date.isEmpty()) {
       throw new InvalidDateException("날짜가 유효하지 않습니다.");
     }
@@ -44,11 +44,11 @@ public class ChallengeService {
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
-    return ChallengeResponseDTO.fromEntity(challenge, currentParticipantNum);
+    return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
   }
 
   // 카테고리별 챌린지 조회
-  public List<ChallengeResponseDTO> getChallengesByCategoryAndDate(int categoryId, String date) {
+  public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
     LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
 
     List<Challenge> challenges = challengeRepository.findByCategoryIdAndDate(categoryId,  localDateTime.toLocalDate());
@@ -61,13 +61,13 @@ public class ChallengeService {
         .map(challenge -> {
           int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId())
               .intValue();
-          return ChallengeResponseDTO.fromEntity(challenge, currentParticipantNum);
+          return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
         })
         .collect(Collectors.toList());
   }
 
   // 챌린지 생성
-  public Long createChallenge(ChallengeRequestDTO challengeRequestDTO) {
+  public Long createChallenge(ChallengeRequest challengeRequestDTO) {
     var host = memberRepository.findById(challengeRequestDTO.hostId())
         .orElseThrow(() -> new UserNotFoundException("해당 유저를 찾을 수 없습니다."));
 
