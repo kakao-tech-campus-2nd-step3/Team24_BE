@@ -8,5 +8,11 @@ public class ExceptionMessage {
     public static final String SIGNATURE_EXCEPTION = "Token 의 서명이 유효하지 않습니다.";
     public static final String JWT_EXCEPTION = "잘못된 Token 입니다.";
 
+    // 챌린지
+    public static final String CHALLENGE_NOT_FOUND = "존재 하지 않는 챌린지 입니다.";
+    public static final String INVALID_DATE = "날짜가 유효하지 않습니다.";
+    public static final String CATEGORY_NOT_FOUND = "옳지 않은 카테고리 ID 입니다.";
+    public static final String USER_NOT_FOUND = "해당 유저를 찾을 수 없습니다.";
+
 
 }

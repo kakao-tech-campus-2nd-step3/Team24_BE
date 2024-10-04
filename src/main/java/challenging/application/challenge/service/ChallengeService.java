@@ -37,11 +37,11 @@ public class ChallengeService {
   // 챌린지 단건 조회
   public ChallengeResponse getChallengeByIdAndDate(Long challengeId, String date) {
     if (date == null || date.isEmpty()) {
-      throw new InvalidDateException("날짜가 유효하지 않습니다.");
+      throw new InvalidDateException();
     }
 
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(() -> new ChallengeNotFoundException());
+        .orElseThrow(ChallengeNotFoundException::new);
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
@@ -56,7 +56,7 @@ public class ChallengeService {
         localDateTime.toLocalDate());
 
     if (challenges.isEmpty()) {
-      throw new CategoryNotFoundException("옳지 않은 카테고리 ID 입니다.");
+      throw new CategoryNotFoundException();
     }
 
     return challenges.stream()
@@ -71,10 +71,10 @@ public class ChallengeService {
   // 챌린지 생성
   public Long createChallenge(ChallengeRequest challengeRequestDTO) {
     var host = memberRepository.findById(challengeRequestDTO.hostId())
-        .orElseThrow(() -> new UserNotFoundException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(UserNotFoundException::new);
 
     var category = categoryRepository.findById(challengeRequestDTO.categoryId())
-        .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리를 찾을 수 없습니다."));
+        .orElseThrow(CategoryNotFoundException::new);
 
     Challenge challenge = Challenge.builder()
         .category(category)
@@ -98,7 +98,7 @@ public class ChallengeService {
   // 챌린지 삭제
   public void deleteChallenge(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
+        .orElseThrow(ChallengeNotFoundException::new);
 
     challengeRepository.delete(challenge);
   }
@@ -106,7 +106,7 @@ public class ChallengeService {
   // 챌린지 예약
   public void reserveChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
+        .orElseThrow(ChallengeNotFoundException::new);
 
     Participant participant = new Participant(challenge, user);
     participantRepository.save(participant);
