@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+
 @Service
 public class ChallengeService {
 
@@ -51,7 +52,8 @@ public class ChallengeService {
   public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
     LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
 
-    List<Challenge> challenges = challengeRepository.findByCategoryIdAndDate(categoryId,  localDateTime.toLocalDate());
+    List<Challenge> challenges = challengeRepository.findByCategoryIdAndDate(categoryId,
+        localDateTime.toLocalDate());
 
     if (challenges.isEmpty()) {
       throw new CategoryNotFoundException("옳지 않은 카테고리 ID 입니다.");
@@ -74,18 +76,19 @@ public class ChallengeService {
     var category = categoryRepository.findById(challengeRequestDTO.categoryId())
         .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리를 찾을 수 없습니다."));
 
-    Challenge challenge = new Challenge(
-        category,
-        host,
-        challengeRequestDTO.challengeName(),
-        challengeRequestDTO.challengeBody(),
-        challengeRequestDTO.point(),
-        LocalDate.parse(challengeRequestDTO.challengeDate()),
-        LocalTime.parse(challengeRequestDTO.startTime()),
-        LocalTime.parse(challengeRequestDTO.endTime()),
-        challengeRequestDTO.imageUrl(),
-        challengeRequestDTO.minParticipantNum(),
-        challengeRequestDTO.maxParticipantNum());
+    Challenge challenge = Challenge.builder()
+        .category(category)
+        .host(host)
+        .name(challengeRequestDTO.challengeName())
+        .body(challengeRequestDTO.challengeBody())
+        .point(challengeRequestDTO.point())
+        .date(LocalDate.parse(challengeRequestDTO.challengeDate()))
+        .startTime(LocalTime.parse(challengeRequestDTO.startTime()))
+        .endTime(LocalTime.parse(challengeRequestDTO.endTime()))
+        .imageUrl(challengeRequestDTO.imageUrl())
+        .minParticipantNum(challengeRequestDTO.minParticipantNum())
+        .maxParticipantNum(challengeRequestDTO.maxParticipantNum())
+        .build();
 
     Challenge savedChallenge = challengeRepository.save(challenge);
     return savedChallenge.getId();
