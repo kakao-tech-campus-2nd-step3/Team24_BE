@@ -1,6 +1,6 @@
-package challenging.application.repository;
+package challenging.application.userprofile.repository;
 
-import challenging.application.model.UserProfile;
+import challenging.application.userprofile.domain.UserProfile;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,6 +1,6 @@
 package challenging.application.auth.utils.servletUtils.jwtUtils;
 
-import challenging.application.auth.exception.ErrorResult;
+import challenging.application.exception.ErrorResult;
 import challenging.application.auth.jwt.JWTUtils;
 import challenging.application.auth.repository.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static challenging.application.auth.exception.exceptionMessage.ExceptionMessage.*;
+import static challenging.application.exception.ExceptionMessage.*;
 
 @Component
 @RequiredArgsConstructor

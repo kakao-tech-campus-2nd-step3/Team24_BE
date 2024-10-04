@@ -1,6 +1,7 @@
 package challenging.application.domain;
 
 
+import challenging.application.challenge.domain.Challenge;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,4 +21,7 @@ public class Category {
 
   @OneToMany(mappedBy = "category")
   private List<Challenge> challenges = new ArrayList<>();
+
+  protected Category() {
+  }
 }

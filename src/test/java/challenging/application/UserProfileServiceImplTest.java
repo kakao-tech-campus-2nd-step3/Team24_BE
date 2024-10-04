@@ -1,10 +1,9 @@
 package challenging.application;
 
 
-import challenging.application.dto.UserProfileResponseDTO;
-import challenging.application.model.UserProfile;
-import challenging.application.repository.UserProfileRepository;
-import challenging.application.service.UserProfileServiceImpl;
+import challenging.application.userprofile.domain.UserProfile;
+import challenging.application.userprofile.repository.UserProfileRepository;
+import challenging.application.userprofile.service.UserProfileServiceImpl;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

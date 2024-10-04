@@ -1,5 +1,5 @@
 package challenging.application.dto.response;
-import challenging.application.domain.Challenge;
+import challenging.application.challenge.domain.Challenge;
 
 public record ChallengeResponseDTO(
     String challengeName,

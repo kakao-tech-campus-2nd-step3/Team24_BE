@@ -1,6 +1,6 @@
-package challenging.application.repository;
+package challenging.application.challenge.repository;
 
-import challenging.application.domain.Challenge;
+import challenging.application.challenge.domain.Challenge;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

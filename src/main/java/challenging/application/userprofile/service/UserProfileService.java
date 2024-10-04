@@ -1,7 +1,7 @@
-package challenging.application.service;
+package challenging.application.userprofile.service;
 
-import challenging.application.dto.UserProfileResponseDTO;
-import challenging.application.model.UserProfile;
+import challenging.application.dto.response.UserProfileResponseDTO;
+import challenging.application.userprofile.domain.UserProfile;
 import java.util.Map;
 import java.util.Optional;
 
