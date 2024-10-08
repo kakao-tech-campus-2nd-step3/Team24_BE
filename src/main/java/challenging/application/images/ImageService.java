@@ -41,7 +41,7 @@ public class ImageService {
             CannedAccessControlList.PublicRead));
 
         String s3Url = s3Config.amazonS3Client().getUrl(bucket,uuidFileName).toString();
-        // 저장필요
+        // 버킷경로 db 저장필요
 
         //서버 저장 이미지 삭제
         localFile.delete();
