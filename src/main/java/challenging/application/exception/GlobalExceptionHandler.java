@@ -1,9 +1,6 @@
 package challenging.application.exception;
 
-import challenging.application.exception.challenge.CategoryNotFoundException;
-import challenging.application.exception.challenge.ChallengeNotFoundException;
-import challenging.application.exception.challenge.InvalidDateException;
-import challenging.application.exception.challenge.UserNotFoundException;
+import challenging.application.exception.challenge.*;
 import challenging.application.util.ResponseUtil;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
@@ -28,6 +25,13 @@ public class GlobalExceptionHandler extends ResponseUtil {
   @ExceptionHandler(ChallengeNotFoundException.class)
   public ResponseEntity<ErrorResult> handleChallengeNotFoundException(
       ChallengeNotFoundException e) {
+    ErrorResult errorResult = new ErrorResult("404", e.getMessage());
+
+    return new ResponseEntity<>(errorResult, HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(HistoryNotFoundException.class)
+  public ResponseEntity<ErrorResult> historyNotFoundException(HistoryNotFoundException e) {
     ErrorResult errorResult = new ErrorResult("404", e.getMessage());
 
     return new ResponseEntity<>(errorResult, HttpStatus.NOT_FOUND);
