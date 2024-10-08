@@ -19,14 +19,14 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class S3Uploader {
+public class S3Image {
 
     private final S3Presigner s3Presigner;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public S3Uploader(S3Presigner s3Presigner) {
+    public S3Image(S3Presigner s3Presigner) {
         this.s3Presigner = s3Presigner;
     }
 
@@ -59,7 +59,7 @@ public class S3Uploader {
             PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(presignRequest);
             String uploadUrl = presignedRequest.url().toString();
 
-            log.info("Presigned URL to upload a file to: {}", uploadUrl);
+            log.info("업로드 url "+uploadUrl);
 
             return uploadUrl;
 
@@ -102,7 +102,7 @@ public class S3Uploader {
             PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(getPresignRequest);
             String downloadUrl = presignedGetObjectRequest.url().toString();
 
-            log.info("Presigned URL to download a file from: {}", downloadUrl);
+            log.info("업로드 url" + downloadUrl);
 
             return downloadUrl;
 
