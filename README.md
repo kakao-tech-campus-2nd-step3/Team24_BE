@@ -11,9 +11,9 @@
   회원정보의 id를 받도록 수정
 
   ![img.png](img.png)
-
 ### 2. 테스트코드 작성
 - controller 
 - repository
 - serviceImpl 
 - 테스트 코드 작성
+
