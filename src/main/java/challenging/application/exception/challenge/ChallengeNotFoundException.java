@@ -1,5 +1,5 @@
 package challenging.application.exception.challenge;
-
+import static challenging.application.exception.ExceptionMessage.CHALLENGE_NOT_FOUND;
 public class ChallengeNotFoundException extends RuntimeException {
 
   public ChallengeNotFoundException(String message) {
@@ -7,7 +7,7 @@ public class ChallengeNotFoundException extends RuntimeException {
   }
 
   public ChallengeNotFoundException() {
-    super("존재 하지 않는 챌린지 입니다.");
+    super(CHALLENGE_NOT_FOUND);
   }
 
   @Override

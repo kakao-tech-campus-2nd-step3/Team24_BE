@@ -11,7 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends ResponseUtil{
+public class GlobalExceptionHandler extends ResponseUtil {
 
   @ResponseBody
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -26,24 +26,31 @@ public class GlobalExceptionHandler extends ResponseUtil{
   }
 
   @ExceptionHandler(ChallengeNotFoundException.class)
-  public ResponseEntity<ErrorResult> handleNotFoundException(ChallengeNotFoundException e) {
+  public ResponseEntity<ErrorResult> handleChallengeNotFoundException(
+      ChallengeNotFoundException e) {
     ErrorResult errorResult = new ErrorResult("404", e.getMessage());
 
     return new ResponseEntity<>(errorResult, HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(InvalidDateException.class)
-  public ResponseEntity<String> handleInvalidDateException(InvalidDateException ex) {
-    return errorMessage(ex.getMessage());
+  public ResponseEntity<ErrorResult> handleInvalidDateException(InvalidDateException e) {
+    ErrorResult errorResult = new ErrorResult("400", e.getMessage());
+
+    return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(CategoryNotFoundException.class)
-  public ResponseEntity<String> handleCategoryNotFoundException(CategoryNotFoundException ex) {
-    return createResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  public ResponseEntity<ErrorResult> handleCategoryNotFoundException(CategoryNotFoundException e) {
+    ErrorResult errorResult = new ErrorResult("400", e.getMessage());
+
+    return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(UserNotFoundException.class)
-  public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
-    return createResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+  public ResponseEntity<ErrorResult> handleUserNotFoundException(UserNotFoundException e) {
+    ErrorResult errorResult = new ErrorResult("404", e.getMessage());
+
+    return new ResponseEntity<>(errorResult, HttpStatus.NOT_FOUND);
   }
 }

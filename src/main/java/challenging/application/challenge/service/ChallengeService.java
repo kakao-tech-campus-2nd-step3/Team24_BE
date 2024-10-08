@@ -5,8 +5,8 @@ import challenging.application.auth.repository.MemberRepository;
 import challenging.application.challenge.domain.Challenge;
 import challenging.application.challenge.repository.ChallengeRepository;
 import challenging.application.domain.*;
-import challenging.application.dto.request.ChallengeRequestDTO;
-import challenging.application.dto.response.ChallengeResponseDTO;
+import challenging.application.dto.request.ChallengeRequest;
+import challenging.application.dto.response.ChallengeResponse;
 import challenging.application.exception.challenge.*;
 import challenging.application.repository.*;
 import java.time.*;
@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+
 @Service
 public class ChallengeService {
 
@@ -34,58 +35,60 @@ public class ChallengeService {
   }
 
   // 챌린지 단건 조회
-  public ChallengeResponseDTO getChallengeByIdAndDate(Long challengeId, String date) {
+  public ChallengeResponse getChallengeByIdAndDate(Long challengeId, String date) {
     if (date == null || date.isEmpty()) {
-      throw new InvalidDateException("날짜가 유효하지 않습니다.");
+      throw new InvalidDateException();
     }
 
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(() -> new ChallengeNotFoundException());
+        .orElseThrow(ChallengeNotFoundException::new);
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
-    return ChallengeResponseDTO.fromEntity(challenge, currentParticipantNum);
+    return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
   }
 
   // 카테고리별 챌린지 조회
-  public List<ChallengeResponseDTO> getChallengesByCategoryAndDate(int categoryId, String date) {
+  public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
     LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
 
-    List<Challenge> challenges = challengeRepository.findByCategoryIdAndDate(categoryId,  localDateTime.toLocalDate());
+    List<Challenge> challenges = challengeRepository.findByCategoryIdAndDate(categoryId,
+        localDateTime.toLocalDate());
 
     if (challenges.isEmpty()) {
-      throw new CategoryNotFoundException("옳지 않은 카테고리 ID 입니다.");
+      throw new CategoryNotFoundException();
     }
 
     return challenges.stream()
         .map(challenge -> {
           int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId())
               .intValue();
-          return ChallengeResponseDTO.fromEntity(challenge, currentParticipantNum);
+          return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
         })
         .collect(Collectors.toList());
   }
 
   // 챌린지 생성
-  public Long createChallenge(ChallengeRequestDTO challengeRequestDTO) {
+  public Long createChallenge(ChallengeRequest challengeRequestDTO) {
     var host = memberRepository.findById(challengeRequestDTO.hostId())
-        .orElseThrow(() -> new UserNotFoundException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(UserNotFoundException::new);
 
     var category = categoryRepository.findById(challengeRequestDTO.categoryId())
-        .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리를 찾을 수 없습니다."));
+        .orElseThrow(CategoryNotFoundException::new);
 
-    Challenge challenge = new Challenge(
-        category,
-        host,
-        challengeRequestDTO.challengeName(),
-        challengeRequestDTO.challengeBody(),
-        challengeRequestDTO.point(),
-        LocalDate.parse(challengeRequestDTO.challengeDate()),
-        LocalTime.parse(challengeRequestDTO.startTime()),
-        LocalTime.parse(challengeRequestDTO.endTime()),
-        challengeRequestDTO.imageUrl(),
-        challengeRequestDTO.minParticipantNum(),
-        challengeRequestDTO.maxParticipantNum());
+    Challenge challenge = Challenge.builder()
+        .category(category)
+        .host(host)
+        .name(challengeRequestDTO.challengeName())
+        .body(challengeRequestDTO.challengeBody())
+        .point(challengeRequestDTO.point())
+        .date(LocalDate.parse(challengeRequestDTO.challengeDate()))
+        .startTime(LocalTime.parse(challengeRequestDTO.startTime()))
+        .endTime(LocalTime.parse(challengeRequestDTO.endTime()))
+        .imageUrl(challengeRequestDTO.imageUrl())
+        .minParticipantNum(challengeRequestDTO.minParticipantNum())
+        .maxParticipantNum(challengeRequestDTO.maxParticipantNum())
+        .build();
 
     Challenge savedChallenge = challengeRepository.save(challenge);
     return savedChallenge.getId();
@@ -95,7 +98,7 @@ public class ChallengeService {
   // 챌린지 삭제
   public void deleteChallenge(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
+        .orElseThrow(ChallengeNotFoundException::new);
 
     challengeRepository.delete(challenge);
   }
@@ -103,7 +106,7 @@ public class ChallengeService {
   // 챌린지 예약
   public void reserveChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(() -> new ChallengeNotFoundException("존재 하지 않는 챌린지 입니다."));
+        .orElseThrow(ChallengeNotFoundException::new);
 
     Participant participant = new Participant(challenge, user);
     participantRepository.save(participant);

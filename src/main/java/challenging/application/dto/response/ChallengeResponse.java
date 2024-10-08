@@ -1,7 +1,7 @@
 package challenging.application.dto.response;
 import challenging.application.challenge.domain.Challenge;
 
-public record ChallengeResponseDTO(
+public record ChallengeResponse(
     String challengeName,
     String challengeBody,
     int point,
@@ -15,8 +15,9 @@ public record ChallengeResponseDTO(
     Long hostId,
     int categoryId
 ) {
-  public static ChallengeResponseDTO fromEntity(Challenge challenge, int currentParticipantNum) {
-    return new ChallengeResponseDTO(
+
+  public static ChallengeResponse fromEntity(Challenge challenge, int currentParticipantNum) {
+    return new ChallengeResponse(
         challenge.getName(),
         challenge.getBody(),
         challenge.getPoint(),
