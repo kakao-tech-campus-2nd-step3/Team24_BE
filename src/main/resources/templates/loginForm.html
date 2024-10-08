@@ -2,12 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<h1>login page</h1>
-<hr>
-<a href="/oauth2/authorization/naver">naver login</a><br>
+<body class="bg-light">
 
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1 class="my-5">Login Page</h1>
+            <hr>
+            <a href="/oauth2/authorization/naver" class="btn btn-primary btn-block my-3">Naver Login</a>
+            <a href="/oauth2/authorization/kakao" class="btn btn-warning btn-block my-3">Kakao Login</a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies (Popper.js and jQuery) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

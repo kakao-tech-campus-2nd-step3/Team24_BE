@@ -1,4 +1,4 @@
-package challenging.application.auth.exception;
+package challenging.application.exception;
 
 import lombok.Getter;
 

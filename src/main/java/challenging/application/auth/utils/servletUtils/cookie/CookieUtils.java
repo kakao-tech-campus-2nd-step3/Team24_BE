@@ -1,9 +1,11 @@
-package challenging.application.auth.servletUtils.cookie;
+package challenging.application.auth.utils.servletUtils.cookie;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+
+import static challenging.application.auth.utils.AuthConstant.*;
 
 @Slf4j
 public class CookieUtils {
@@ -21,7 +23,7 @@ public class CookieUtils {
     }
 
     public static void clearCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("refresh", null);
+        Cookie cookie = new Cookie(REFRESH_TOKEN, null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
 
@@ -34,7 +36,7 @@ public class CookieUtils {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
 
-            if (cookie.getName().equals("refresh")) {
+            if (cookie.getName().equals(REFRESH_TOKEN)) {
 
                 refresh = cookie.getValue();
             }

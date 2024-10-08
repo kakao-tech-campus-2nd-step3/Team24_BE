@@ -1,9 +1,6 @@
 package challenging.application.auth.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
@@ -13,7 +10,9 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private String token;
 
@@ -22,8 +21,8 @@ public class RefreshToken {
     protected RefreshToken() {
     }
 
-    public RefreshToken(String email, String token, String expiration) {
-        this.email = email;
+    public RefreshToken(Member member, String token, String expiration) {
+        this.member = member;
         this.token = token;
         this.expiration = expiration;
     }

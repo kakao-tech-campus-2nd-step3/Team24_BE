@@ -1,7 +1,7 @@
 package challenging.application.auth.filter;
 
 import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.auth.servletUtils.jwtUtils.JWTResponseUtils;
+import challenging.application.auth.utils.servletUtils.jwtUtils.JWTResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static challenging.application.auth.utils.AuthConstant.*;
 
 @AllArgsConstructor
 @Slf4j
@@ -40,7 +42,7 @@ public class JWTAccessFilter extends OncePerRequestFilter {
             return;
         }
 
-        String authorization = request.getHeader("Authorization");
+        String authorization = request.getHeader(AUTHORIZATION);
 
         //Authorization 헤더 검증
         if (checkHeader(authorization)) {
@@ -58,7 +60,7 @@ public class JWTAccessFilter extends OncePerRequestFilter {
         }
 
         // 토큰이 access인지 확인 (발급시 페이로드에 명시)
-        if(!jwtResponseUtils.checkTokenType(response, token, "access")){
+        if(!jwtResponseUtils.checkTokenType(response, token, ACCESS_TOKEN)){
             return;
         }
         
@@ -83,7 +85,7 @@ public class JWTAccessFilter extends OncePerRequestFilter {
     }
 
     private boolean checkHeader(String authorization) {
-        return authorization == null || !authorization.startsWith("Bearer ");
+        return authorization == null || !authorization.startsWith(BEARER);
     }
 
     private boolean isUrlLogin(String requestUri) {
