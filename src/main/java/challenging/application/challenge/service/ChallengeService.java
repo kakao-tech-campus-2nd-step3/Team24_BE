@@ -34,7 +34,7 @@ public class ChallengeService {
 
   // 챌린지 단건 조회
   public ChallengeResponse getChallengeByIdAndDate(Long challengeId, String date) {
-    if (date == null || date.isEmpty()) {
+    if (date == null || date.trim().isEmpty()) {
       throw new InvalidDateException();
     }
 
@@ -52,7 +52,6 @@ public class ChallengeService {
 
     LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
 
-    // Repository 호출 시 enum 값을 사용
     List<Challenge> challenges = challengeRepository.findByCategoryAndDate(challengeCategory,
         localDateTime.toLocalDate());
 
