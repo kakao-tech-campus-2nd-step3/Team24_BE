@@ -1,13 +1,14 @@
 package challenging.application.dto.request;
 
+import challenging.application.domain.Category;
 import jakarta.validation.constraints.*;
 
 public record ChallengeRequest(
 
     @NotNull(message = "호스트 ID는 필수 입력값입니다.")
     Long hostId,
-    @NotNull(message = "카테고리 ID는 필수 입력값입니다.")
-    int categoryId,
+    @NotNull(message = "카테고리는 필수 입력값입니다.")
+    Category category,
     @NotNull(message = "챌린지 이름은 필수 입력값입니다.")
     @Size(min = 1, message = "챌린지 이름은 비어 있을 수 없습니다.")
     String challengeName,

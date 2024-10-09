@@ -16,8 +16,7 @@ public class Challenge {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "category_id")
+  @Enumerated(EnumType.STRING)
   private Category category;
 
   @ManyToOne

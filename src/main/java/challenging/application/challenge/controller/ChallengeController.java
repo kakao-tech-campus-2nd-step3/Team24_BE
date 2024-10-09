@@ -36,16 +36,17 @@ public class ChallengeController {
   }
 
   // 챌린지 카테고리 조회
-  @GetMapping("/{categoryId}")
+  @GetMapping("/{category}")
   public ResponseEntity<List<ChallengeResponse>> getChallengesByCategory(
-      @PathVariable int categoryId,
+      @PathVariable String category,
       @RequestBody DateRequest dateRequest) {
 
     List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate(
-        categoryId, dateRequest.date());
+        category, dateRequest.date());
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(responses);
+    return ResponseEntity.status(HttpStatus.OK).body(responses);
   }
+
 
   // 챌린지 생성
   @PostMapping

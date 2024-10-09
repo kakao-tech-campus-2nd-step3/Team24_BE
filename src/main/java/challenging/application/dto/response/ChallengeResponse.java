@@ -13,7 +13,7 @@ public record ChallengeResponse(
     int maxParticipantNum,
     int currentParticipantNum,
     Long hostId,
-    int categoryId
+    String category
 ) {
 
   public static ChallengeResponse fromEntity(Challenge challenge, int currentParticipantNum) {
@@ -29,7 +29,7 @@ public record ChallengeResponse(
         challenge.getMaxParticipantNum(),
         currentParticipantNum,
         challenge.getHost().getId(),
-        challenge.getCategory().getId()
+        challenge.getCategory().name()
     );
   }
 }
