@@ -112,13 +112,13 @@ public class ChallengeService {
     participantRepository.save(participant);
   }
 
-  public ChallengeResponseDTO findOneChallenge(Long challengeId){
+  public ChallengeResponse findOneChallenge(Long challengeId){
     Challenge challenge = challengeRepository.findById(challengeId)
             .orElseThrow(ChallengeNotFoundException::new);
 
     int participantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
-    return ChallengeResponseDTO.fromEntity(challenge, participantNum);
+    return ChallengeResponse.fromEntity(challenge, participantNum);
   }
 
 

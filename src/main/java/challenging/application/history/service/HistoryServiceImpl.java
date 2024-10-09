@@ -1,7 +1,7 @@
 package challenging.application.history.service;
 
 import challenging.application.challenge.service.ChallengeService;
-import challenging.application.dto.response.ChallengeResponseDTO;
+import challenging.application.dto.response.ChallengeResponse;
 import challenging.application.dto.response.HistoryResponse;
 import challenging.application.exception.challenge.HistoryNotFoundException;
 import challenging.application.history.domain.History;
@@ -26,9 +26,9 @@ public class HistoryServiceImpl implements HistoryService{
         History history = historyRepository.findHistoryByMemberIdAndId(memberId, historyId)
                 .orElseThrow(HistoryNotFoundException::new);
 
-        ChallengeResponseDTO challengeResponseDTO = challengeService.findOneChallenge(history.getChallenge().getId());
+        ChallengeResponse challengeResponse = challengeService.findOneChallenge(history.getChallenge().getId());
 
-        return HistoryResponse.of(challengeResponseDTO, history);
+        return HistoryResponse.of(challengeResponse, history);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class HistoryServiceImpl implements HistoryService{
 
         List<HistoryResponse> historyResponses = histories.stream()
                 .map(history -> {
-                    ChallengeResponseDTO challengeResponseDTO = challengeService.findOneChallenge(history.getChallenge().getId());
-                    return HistoryResponse.of(challengeResponseDTO, history);
+                    ChallengeResponse challengeResponse = challengeService.findOneChallenge(history.getChallenge().getId());
+                    return HistoryResponse.of(challengeResponse, history);
                 })
                 .collect(Collectors.toList());
 
