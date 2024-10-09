@@ -2,6 +2,7 @@ package challenging.application.challenge.service;
 
 import challenging.application.auth.domain.Member;
 import challenging.application.auth.repository.MemberRepository;
+import challenging.application.challenge.domain.Category;
 import challenging.application.challenge.domain.Challenge;
 import challenging.application.challenge.repository.ChallengeRepository;
 import challenging.application.domain.*;
@@ -20,17 +21,15 @@ public class ChallengeService {
 
   private final ChallengeRepository challengeRepository;
   private final MemberRepository memberRepository;
-  private final CategoryRepository categoryRepository;
   private final ParticipantRepository participantRepository;
   private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd:HH:mm");
 
   public ChallengeService(ChallengeRepository challengeRepository,
-      MemberRepository memberRepository, CategoryRepository categoryRepository,
-      ParticipantRepository participantRepository) {
+                          MemberRepository memberRepository,
+                          ParticipantRepository participantRepository) {
     this.challengeRepository = challengeRepository;
     this.memberRepository = memberRepository;
-    this.categoryRepository = categoryRepository;
     this.participantRepository = participantRepository;
   }
 
@@ -73,8 +72,7 @@ public class ChallengeService {
     var host = memberRepository.findById(challengeRequestDTO.hostId())
         .orElseThrow(UserNotFoundException::new);
 
-    var category = categoryRepository.findById(challengeRequestDTO.categoryId())
-        .orElseThrow(CategoryNotFoundException::new);
+    Category category = Category.findByCategoryCode(challengeRequestDTO.categoryId());
 
     Challenge challenge = Challenge.builder()
         .category(category)
@@ -112,13 +110,13 @@ public class ChallengeService {
     participantRepository.save(participant);
   }
 
-  public ChallengeResponseDTO findOneChallenge(Long challengeId){
+  public ChallengeResponse findOneChallenge(Long challengeId){
     Challenge challenge = challengeRepository.findById(challengeId)
             .orElseThrow(ChallengeNotFoundException::new);
 
     int participantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
-    return ChallengeResponseDTO.fromEntity(challenge, participantNum);
+    return ChallengeResponse.fromEntity(challenge, participantNum);
   }
 
 
