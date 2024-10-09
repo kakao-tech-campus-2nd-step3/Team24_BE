@@ -1,17 +1,11 @@
 package challenging.application.history.service;
 
-import challenging.application.auth.domain.Member;
-import challenging.application.challenge.domain.Challenge;
 import challenging.application.challenge.service.ChallengeService;
-import challenging.application.domain.Category;
 import challenging.application.exception.challenge.HistoryNotFoundException;
-import challenging.application.history.domain.History;
 import challenging.application.history.repository.HistoryRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
