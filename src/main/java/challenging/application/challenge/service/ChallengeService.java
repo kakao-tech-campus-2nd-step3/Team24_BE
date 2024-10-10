@@ -34,6 +34,16 @@ public class ChallengeService {
     this.participantRepository = participantRepository;
   }
 
+  // 챌린지 단건 조회
+  public ChallengeResponse getChallengeByIdAndDate(Long challengeId) {
+    Challenge challenge = challengeRepository.findById(challengeId)
+        .orElseThrow(ChallengeNotFoundException::new);
+
+    int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
+
+    return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
+  }
+
   private LocalDateTime parseDate(String date) {
     if (date == null || date.trim().isEmpty()) {
       throw new InvalidDateException();
@@ -44,19 +54,6 @@ public class ChallengeService {
     } catch (DateTimeParseException e) {
       throw new InvalidDateException();
     }
-  }
-
-
-  // 챌린지 단건 조회
-  public ChallengeResponse getChallengeByIdAndDate(Long challengeId, String date) {
-    LocalDateTime parsedDate = parseDate(date);
-
-    Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(ChallengeNotFoundException::new);
-
-    int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
-
-    return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
   }
 
   // 카테고리별 챌린지 조회

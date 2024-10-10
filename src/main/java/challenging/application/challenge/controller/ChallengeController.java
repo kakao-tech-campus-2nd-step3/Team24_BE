@@ -26,11 +26,9 @@ public class ChallengeController {
   // 챌린지 단건 조회
   @GetMapping("/{challengeId}")
   public ResponseEntity<ChallengeResponse> getChallenge(
-      @PathVariable Long challengeId,
-      @RequestBody DateRequest dateRequest) {
+      @PathVariable Long challengeId) {
 
-    ChallengeResponse response = challengeService.getChallengeByIdAndDate(challengeId,
-        dateRequest.date());
+    ChallengeResponse response = challengeService.getChallengeByIdAndDate(challengeId);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
