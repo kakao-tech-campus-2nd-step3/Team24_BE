@@ -29,7 +29,7 @@ public record ChallengeResponse(
         challenge.getMaxParticipantNum(),
         currentParticipantNum,
         challenge.getHost().getId(),
-        challenge.getCategory().getId()
+        challenge.getCategory().getCategoryCode()
     );
   }
 }
