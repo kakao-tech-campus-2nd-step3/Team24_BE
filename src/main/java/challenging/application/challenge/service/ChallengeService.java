@@ -13,6 +13,7 @@ import challenging.application.repository.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,7 @@ public class ChallengeService {
     );
 
     if (challenges.isEmpty()) {
-      throw new CategoryNotFoundException();
+      return Collections.emptyList();
     }
 
     return challenges.stream()
