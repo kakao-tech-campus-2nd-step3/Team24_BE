@@ -1,3 +1,4 @@
+-- member 테이블
 CREATE TABLE member (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255),
@@ -6,15 +7,10 @@ CREATE TABLE member (
     role VARCHAR(50)
 );
 
-CREATE TABLE category (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255),
-    description VARCHAR(255)
-);
-
+-- challenge 테이블
 CREATE TABLE challenge (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    category_id INT,
+    category_id ENUM('HOBBY', 'SELF_IMPROVEMENT', 'SPORT', 'STUDY'),
     host_id BIGINT,
     name VARCHAR(255),
     body TEXT,
@@ -25,10 +21,10 @@ CREATE TABLE challenge (
     image_url VARCHAR(255),
     min_participant_num INT,
     max_participant_num INT,
-    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES category(id),
     CONSTRAINT fk_host FOREIGN KEY (host_id) REFERENCES member(id)
 );
 
+-- participant 테이블
 CREATE TABLE participant (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     challenge_id BIGINT,
@@ -37,6 +33,7 @@ CREATE TABLE participant (
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES member(id)
 );
 
+-- user_profile 테이블
 CREATE TABLE user_profile (
     profile_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,
@@ -44,12 +41,4 @@ CREATE TABLE user_profile (
     image_url VARCHAR(255),
     point INT,
     CONSTRAINT fk_user_profile FOREIGN KEY (user_id) REFERENCES member(id)
-);
-
-CREATE TABLE refresh_token (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    member_id BIGINT,
-    token VARCHAR(255),
-    expiration VARCHAR(255),
-    CONSTRAINT fk_member FOREIGN KEY (member_id) REFERENCES member(id)
 );

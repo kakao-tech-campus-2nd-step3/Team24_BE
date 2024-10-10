@@ -1,4 +1,4 @@
--- Member Data
+-- member 데이터
 INSERT INTO member (email, username, nick_name, role) VALUES
 ('email1@example.com', 'user1', 'nick1', 'USER'),
 ('email2@example.com', 'user2', 'nick2', 'USER'),
@@ -21,53 +21,30 @@ INSERT INTO member (email, username, nick_name, role) VALUES
 ('email19@example.com', 'user19', 'nick19', 'USER'),
 ('email20@example.com', 'user20', 'nick20', 'ADMIN');
 
--- Category Data
-INSERT INTO category (name, description) VALUES
-('Fitness', 'Fitness-related challenges'),
-('Education', 'Learning and education-related challenges'),
-('Health', 'Health and wellness challenges'),
-('Social', 'Social and community challenges'),
-('Creative', 'Creative and artistic challenges'),
-('Adventure', 'Adventure challenges'),
-('Cooking', 'Cooking and food challenges'),
-('Gaming', 'Gaming-related challenges'),
-('Technology', 'Tech challenges'),
-('Science', 'Science and research challenges'),
-('Photography', 'Photography challenges'),
-('Writing', 'Writing and content creation challenges'),
-('Sports', 'Sports challenges'),
-('Music', 'Music-related challenges'),
-('Craft', 'Craft and DIY challenges'),
-('Reading', 'Book reading challenges'),
-('Travel', 'Travel-related challenges'),
-('Language', 'Language learning challenges'),
-('Art', 'Art and design challenges'),
-('Environment', 'Environmental sustainability challenges');
-
--- Challenge Data
+-- challenge 데이터
 INSERT INTO challenge (category_id, host_id, name, body, point, date, start_time, end_time, image_url, min_participant_num, max_participant_num) VALUES
-(1, 1, 'Morning Workout', 'Start your day with a workout!', 100, '2024-10-01', '06:00', '07:00', 'image1.jpg', 5, 20),
-(2, 2, 'Math Course', 'Learn advanced math topics.', 200, '2024-10-02', '10:00', '12:00', 'image2.jpg', 10, 30),
-(3, 3, 'Meditation Session', 'Daily meditation session.', 150, '2024-10-03', '07:00', '08:00', 'image3.jpg', 3, 15),
-(4, 4, 'Community Service', 'Volunteer at the local community center.', 300, '2024-10-04', '09:00', '12:00', 'image4.jpg', 8, 25),
-(5, 5, 'Art Challenge', 'Create a piece of art every day.', 250, '2024-10-05', '14:00', '16:00', 'image5.jpg', 4, 10),
-(6, 6, 'Language Learning', 'Daily language learning challenge.', 180, '2024-10-06', '17:00', '18:00', 'image6.jpg', 4, 12),
-(7, 7, 'Tech Exploration', 'Explore new technologies every week.', 200, '2024-10-07', '11:00', '12:00', 'image7.jpg', 5, 15),
-(8, 8, 'Coding Challenge', 'Solve coding problems daily.', 300, '2024-10-08', '09:00', '11:00', 'image8.jpg', 3, 10),
-(9, 9, 'Fitness Bootcamp', 'Intensive fitness challenge.', 400, '2024-10-09', '05:00', '06:00', 'image9.jpg', 7, 25),
-(10, 10, 'Photography Walk', 'Capture the best moments.', 150, '2024-10-10', '16:00', '18:00', 'image10.jpg', 6, 15),
-(11, 11, 'Advanced Writing', 'Write a blog every week.', 220, '2024-10-11', '14:00', '16:00', 'image11.jpg', 2, 8),
-(12, 12, 'Science Fair', 'Join a research project.', 500, '2024-10-12', '09:00', '12:00', 'image12.jpg', 4, 20),
-(13, 13, 'Craft Workshop', 'Create a handmade product.', 160, '2024-10-13', '13:00', '15:00', 'image13.jpg', 3, 10),
-(14, 14, 'Music Jam', 'Collaborate to make music.', 250, '2024-10-14', '18:00', '20:00', 'image14.jpg', 6, 20),
-(15, 15, 'Reading Marathon', 'Read a new book every week.', 100, '2024-10-15', '20:00', '22:00', 'image15.jpg', 5, 25),
-(16, 16, 'Travel Blog', 'Travel and write about it.', 350, '2024-10-16', '08:00', '10:00', 'image16.jpg', 4, 15),
-(17, 17, 'Green Earth', 'Participate in environmental activities.', 280, '2024-10-17', '09:00', '12:00', 'image17.jpg', 7, 20),
-(18, 18, 'Gaming Tournament', 'Compete in a gaming event.', 500, '2024-10-18', '15:00', '17:00', 'image18.jpg', 10, 30),
-(19, 19, 'Cooking Contest', 'Show off your cooking skills.', 400, '2024-10-19', '11:00', '13:00', 'image19.jpg', 5, 15),
-(20, 20, 'Art Exhibition', 'Create an art piece for exhibition.', 600, '2024-10-20', '13:00', '16:00', 'image20.jpg', 4, 12);
+('HOBBY', 1, 'Morning Workout', 'Start your day with a workout!', 100, '2024-10-01', '06:00', '07:00', 'image1.jpg', 5, 20),
+('SELF_IMPROVEMENT', 2, 'Math Course', 'Learn advanced math topics.', 200, '2024-10-02', '10:00', '12:00', 'image2.jpg', 10, 30),
+('HOBBY', 3, 'Meditation Session', 'Daily meditation session.', 150, '2024-10-03', '07:00', '08:00', 'image3.jpg', 3, 15),
+('SELF_IMPROVEMENT', 4, 'Community Service', 'Volunteer at the local community center.', 300, '2024-10-04', '09:00', '12:00', 'image4.jpg', 8, 25),
+('SPORT', 5, 'Art Challenge', 'Create a piece of art every day.', 250, '2024-10-05', '14:00', '16:00', 'image5.jpg', 4, 10),
+('STUDY', 6, 'Language Learning', 'Daily language learning challenge.', 180, '2024-10-06', '17:00', '18:00', 'image6.jpg', 4, 12),
+('HOBBY', 7, 'Tech Exploration', 'Explore new technologies every week.', 200, '2024-10-07', '11:00', '12:00', 'image7.jpg', 5, 15),
+('SELF_IMPROVEMENT', 8, 'Coding Challenge', 'Solve coding problems daily.', 300, '2024-10-08', '09:00', '11:00', 'image8.jpg', 3, 10),
+('SPORT', 9, 'Fitness Bootcamp', 'Intensive fitness challenge.', 400, '2024-10-09', '05:00', '06:00', 'image9.jpg', 7, 25),
+('HOBBY', 10, 'Photography Walk', 'Capture the best moments.', 150, '2024-10-10', '16:00', '18:00', 'image10.jpg', 6, 15),
+('STUDY', 11, 'Advanced Writing', 'Write a blog every week.', 220, '2024-10-11', '14:00', '16:00', 'image11.jpg', 2, 8),
+('SPORT', 12, 'Science Fair', 'Join a research project.', 500, '2024-10-12', '09:00', '12:00', 'image12.jpg', 4, 20),
+('HOBBY', 13, 'Craft Workshop', 'Create a handmade product.', 160, '2024-10-13', '13:00', '15:00', 'image13.jpg', 3, 10),
+('SELF_IMPROVEMENT', 14, 'Music Jam', 'Collaborate to make music.', 250, '2024-10-14', '18:00', '20:00', 'image14.jpg', 6, 20),
+('STUDY', 15, 'Reading Marathon', 'Read a new book every week.', 100, '2024-10-15', '20:00', '22:00', 'image15.jpg', 5, 25),
+('SPORT', 16, 'Travel Blog', 'Travel and write about it.', 350, '2024-10-16', '08:00', '10:00', 'image16.jpg', 4, 15),
+('HOBBY', 17, 'Green Earth', 'Participate in environmental activities.', 280, '2024-10-17', '09:00', '12:00', 'image17.jpg', 7, 20),
+('SELF_IMPROVEMENT', 18, 'Gaming Tournament', 'Compete in a gaming event.', 500, '2024-10-18', '15:00', '17:00', 'image18.jpg', 10, 30),
+('SPORT', 19, 'Cooking Contest', 'Show off your cooking skills.', 400, '2024-10-19', '11:00', '13:00', 'image19.jpg', 5, 15),
+('STUDY', 20, 'Art Exhibition', 'Create an art piece for exhibition.', 600, '2024-10-20', '13:00', '16:00', 'image20.jpg', 4, 12);
 
--- Participant Data
+-- participant 데이터
 INSERT INTO participant (challenge_id, user_id) VALUES
 (1, 1),
 (1, 2),
@@ -90,7 +67,7 @@ INSERT INTO participant (challenge_id, user_id) VALUES
 (18, 19),
 (19, 20);
 
--- User Profile Data
+-- user_profile 데이터
 INSERT INTO user_profile (user_id, user_nick_name, image_url, point) VALUES
 (1, 'nick1', 'profile1.jpg', 1000),
 (2, 'nick2', 'profile2.jpg', 1500),
@@ -112,26 +89,3 @@ INSERT INTO user_profile (user_id, user_nick_name, image_url, point) VALUES
 (18, 'nick18', 'profile18.jpg', 2700),
 (19, 'nick19', 'profile19.jpg', 2800),
 (20, 'nick20', 'profile20.jpg', 2900);
-
--- Refresh Token Data
-INSERT INTO refresh_token (member_id, token, expiration) VALUES
-(1, 'token1', '2024-12-31'),
-(2, 'token2', '2024-12-31'),
-(3, 'token3', '2024-12-31'),
-(4, 'token4', '2024-12-31'),
-(5, 'token5', '2024-12-31'),
-(6, 'token6', '2024-12-31'),
-(7, 'token7', '2024-12-31'),
-(8, 'token8', '2024-12-31'),
-(9, 'token9', '2024-12-31'),
-(10, 'token10', '2024-12-31'),
-(11, 'token11', '2024-12-31'),
-(12, 'token12', '2024-12-31'),
-(13, 'token13', '2024-12-31'),
-(14, 'token14', '2024-12-31'),
-(15, 'token15', '2024-12-31'),
-(16, 'token16', '2024-12-31'),
-(17, 'token17', '2024-12-31'),
-(18, 'token18', '2024-12-31'),
-(19, 'token19', '2024-12-31'),
-(20, 'token20', '2024-12-31');
