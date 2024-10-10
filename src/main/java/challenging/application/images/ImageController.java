@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartRequest;
@@ -41,13 +42,13 @@ public class ImageController {
     }
 
     @GetMapping("/api/image")
-    public String imageUrlGet(String extenion, String uuid){
+    public String imageUrlGet(@RequestParam String extenion,@RequestParam String uuid){
         String presignedGetUrl = s3PresignedImageService.createPresignedGetUrl(extenion, uuid);
         return presignedGetUrl;
     }
 
     @PutMapping("/api/image")
-    public String imageUrlPut(String extenion, String uuid){
+    public String imageUrlPut(@RequestParam String extenion, @RequestParam String uuid){
         String presignedPutUrl = s3PresignedImageService.createPresignedPutUrl(extenion, uuid);
         return presignedPutUrl;
     }
