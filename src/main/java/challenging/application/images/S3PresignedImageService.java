@@ -19,14 +19,14 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class S3Image {
+public class S3PresignedImageService {
 
     private final S3Presigner s3Presigner;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public S3Image(S3Presigner s3Presigner) {
+    public S3PresignedImageService(S3Presigner s3Presigner) {
         this.s3Presigner = s3Presigner;
     }
 
