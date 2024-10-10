@@ -2,6 +2,7 @@ package challenging.application.auth.filter;
 
 import challenging.application.auth.jwt.JWTUtils;
 import challenging.application.auth.utils.servletUtils.jwtUtils.FilterResponseUtils;
+import challenging.application.exception.ExceptionMessage;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static challenging.application.auth.utils.AuthConstant.*;
+import static challenging.application.exception.ExceptionMessage.UNAUTHORIZED_USER;
 
 @AllArgsConstructor
 @Slf4j
@@ -47,8 +49,8 @@ public class JWTAccessFilter extends OncePerRequestFilter {
         //Authorization 헤더 검증
         if (checkHeader(authorization)) {
 
-            log.info("token null");
-            filterChain.doFilter(request, response);
+            log.info("Access Token Not Exist");
+            filterResponseUtils.generateUnauthorizedErrorResponse(UNAUTHORIZED_USER, response);
             return;
         }
 
