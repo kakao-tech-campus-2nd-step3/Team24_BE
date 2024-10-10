@@ -122,6 +122,17 @@ public class ChallengeService {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
 
+    if (participantRepository.existsByChallengeIdAndMemberId(challengeId, user.getId())){
+      throw new AlreadyReservedException();
+    }
+
+    int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
+
+    if (currentParticipantNum >= challenge.getMaxParticipantNum()) {
+      throw new ParticipantLimitExceededException();
+    }
+
+
     Participant participant = new Participant(challenge, user);
     participantRepository.save(participant);
   }
