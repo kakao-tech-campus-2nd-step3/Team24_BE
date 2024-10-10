@@ -61,10 +61,15 @@ public class ChallengeService {
 
   // 카테고리별 챌린지 조회
   public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
-    LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
+    LocalDateTime localDateTime = parseDate(date);
 
-    List<Challenge> challenges = challengeRepository.findByCategoryIdAndStartDateTimeAfter(
-        categoryId, localDateTime);
+    Category category = Category.findByCategoryCode(categoryId);
+
+    List<Challenge> challenges = challengeRepository.findByCategoryAndDateTimeAfter(
+        category,
+        localDateTime.toLocalDate(),
+        localDateTime.toLocalTime()
+    );
 
     if (challenges.isEmpty()) {
       throw new CategoryNotFoundException();
