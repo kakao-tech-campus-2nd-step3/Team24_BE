@@ -57,4 +57,11 @@ public class GlobalExceptionHandler extends ResponseUtil {
 
     return new ResponseEntity<>(errorResult, HttpStatus.NOT_FOUND);
   }
+
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ErrorResult> handleUserNotFoundException(UnauthorizedException e) {
+    ErrorResult errorResult = new ErrorResult("403", e.getMessage());
+
+    return new ResponseEntity<>(errorResult, HttpStatus.FORBIDDEN);
+  }
 }

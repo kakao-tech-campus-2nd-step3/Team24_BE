@@ -59,8 +59,9 @@ public class ChallengeController {
 
   // 챌린지 삭제
   @DeleteMapping("{challengeId}")
-  public ResponseEntity<Long> deleteChallenge(@PathVariable Long challengeId) {
-    challengeService.deleteChallenge(challengeId);
+  public ResponseEntity<Long> deleteChallenge(@PathVariable Long challengeId,
+      @LoginMember Member loginMember) {
+    challengeService.deleteChallenge(challengeId, loginMember);
     return ResponseEntity.status(HttpStatus.OK).body(challengeId);
   }
 

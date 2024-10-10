@@ -11,4 +11,5 @@ public class ExceptionMessage {
     public static final String INVALID_DATE = "날짜가 유효하지 않습니다.";
     public static final String CATEGORY_NOT_FOUND = "존재하지 않는 카테고리 입니다.";
     public static final String USER_NOT_FOUND = "해당 유저를 찾을 수 없습니다.";
+    public static final String UNAUTHORIZED_EXCEPTION = "챌린지를 삭제할 권한이 없습니다.";
 }

@@ -106,9 +106,13 @@ public class ChallengeService {
 
 
   // 챌린지 삭제
-  public void deleteChallenge(Long challengeId) {
+  public void deleteChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
+
+    if (!challenge.getHost().getId().equals(user.getId())){
+      throw new UnauthorizedException();
+    }
 
     challengeRepository.delete(challenge);
   }
