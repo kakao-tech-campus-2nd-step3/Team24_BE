@@ -51,8 +51,7 @@ public class ChallengeService {
   public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
     LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
 
-    List<Challenge> challenges = challengeRepository.findByCategoryIdAndDate(categoryId,
-        localDateTime.toLocalDate());
+    List<Challenge> challenges = challengeRepository.findByDate(localDateTime.toLocalDate());
 
     if (challenges.isEmpty()) {
       throw new CategoryNotFoundException();
