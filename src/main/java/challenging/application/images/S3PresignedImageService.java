@@ -1,15 +1,15 @@
 package challenging.application.images;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import org.springframework.stereotype.Service;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -17,7 +17,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.time.Duration;
 import java.util.Map;
 
-@Component
+@Service
 @Slf4j
 public class S3PresignedImageService {
 
@@ -26,18 +26,24 @@ public class S3PresignedImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public S3PresignedImageService(S3Presigner s3Presigner) {
-        this.s3Presigner = s3Presigner;
+    public S3PresignedImageService(
+        @Value("${cloud.aws.credentials.access-key}") String accessKey,
+        @Value("${cloud.aws.credentials.secret-key}") String secretKey,
+        @Value("${cloud.aws.region.static}") String region
+    ) {
+        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
+        this.s3Presigner = S3Presigner.builder()
+            .region(Region.of(region))
+            .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+            .build();
     }
 
     private static final int DURATION_URL_TIME = 10;
 
     public String createPresignedPutUrl(String imageExtension, String uuid) {
-
-        String keyName = "images/" + uuid + "." + imageExtension;
-        keyName = keyName.replace("-", ""); // uuid는 보통 -값들어가서 삭제
-
+        String keyName = "images/" + uuid.replace("-", "") + "." + imageExtension;
         String contentType = "image/" + imageExtension;
+
         Map<String, String> metadata = Map.of(
             "fileType", contentType,
             "Content-Type", contentType
@@ -50,82 +56,52 @@ public class S3PresignedImageService {
             .build();
 
         try {
-            // presigned URL 생성 (PUT 요청)
+            // Create a presigned URL for a PUT request
             PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(DURATION_URL_TIME))  // URL expires in 10 minutes.
+                .signatureDuration(Duration.ofMinutes(DURATION_URL_TIME)) // URL expires in 10 minutes.
                 .putObjectRequest(objectRequest)
                 .build();
 
             PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(presignRequest);
             String uploadUrl = presignedRequest.url().toString();
 
-            log.info("업로드 url "+uploadUrl);
+            log.info("Upload URL: " + uploadUrl);
 
             return uploadUrl;
 
-        } catch (AmazonS3Exception e) {
-            // S3 서비스에서 발생하는 오류를 처리
-            log.error("S3 관련 오류 발생. 상태 코드: {}, 오류 메시지: {}", e.getStatusCode(), e.getErrorMessage());
-            throw new RuntimeException("S3에서 presigned URL을 생성하는 중 오류가 발생했습니다.", e);
-        } catch (AmazonServiceException e) {
-            // AWS 서비스 전체에서 발생하는 오류를 처리
-            log.error("AWS 서비스에서 오류 발생. 상태 코드: {}, AWS 오류 코드: {}, 요청 ID: {}",
-                e.getStatusCode(), e.getErrorCode(), e.getRequestId());
-            throw new RuntimeException("AWS 서비스에서 presigned URL을 생성하는 중 오류가 발생했습니다.", e);
-        } catch (SdkClientException e) {
-            // SDK 클라이언트 측에서 발생하는 오류를 처리 (예: 네트워크 문제)
-            log.error("클라이언트 측 오류 발생: {}", e.getMessage());
-            throw new RuntimeException("AWS SDK 클라이언트에서 presigned URL을 생성하는 중 오류가 발생했습니다.", e);
         } catch (Exception e) {
-            // 기타 모든 예외 처리
-            log.error("예상치 못한 오류 발생: {}", e.getMessage());
-            throw new RuntimeException("Presigned URL 생성 중 알 수 없는 오류가 발생했습니다.", e);
+            log.error("An error occurred while generating presigned URL: {}", e.getMessage());
+            throw new RuntimeException("Error generating presigned URL", e);
         }
     }
 
     public String createPresignedGetUrl(String imageExtension, String uuid) {
-        String keyName = "images/" + uuid + "." + imageExtension;
-        keyName = keyName.replace("-", "");
+        String keyName = "images/" + uuid.replace("-", "") + "." + imageExtension;
 
         try {
-            // presigned URL 생성 (GET 요청)
+            // Create a presigned URL for a GET request
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(bucket)
                 .key(keyName)
                 .build();
 
             GetObjectPresignRequest getPresignRequest = GetObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(DURATION_URL_TIME))  // URL expires in 10 minutes.
+                .signatureDuration(Duration.ofMinutes(DURATION_URL_TIME)) // URL expires in 10 minutes.
                 .getObjectRequest(getObjectRequest)
                 .build();
 
             PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(getPresignRequest);
             String downloadUrl = presignedGetObjectRequest.url().toString();
 
-            log.info("업로드 url" + downloadUrl);
+            log.info("Download URL: " + downloadUrl);
 
             return downloadUrl;
 
-        } catch (AmazonS3Exception e) {
-            // S3 서비스에서 발생하는 오류를 처리
-            log.error("S3 관련 오류 발생. 상태 코드: {}, 오류 메시지: {}", e.getStatusCode(), e.getErrorMessage());
-            throw new RuntimeException("S3에서 presigned URL을 생성하는 중 오류가 발생했습니다.", e);
-        } catch (AmazonServiceException e) {
-            // AWS 서비스 전체에서 발생하는 오류를 처리
-            log.error("AWS 서비스에서 오류 발생. 상태 코드: {}, AWS 오류 코드: {}, 요청 ID: {}",
-                e.getStatusCode(), e.getErrorCode(), e.getRequestId());
-            throw new RuntimeException("AWS 서비스에서 presigned URL을 생성하는 중 오류가 발생했습니다.", e);
-        } catch (SdkClientException e) {
-            // SDK 클라이언트 측에서 발생하는 오류를 처리 (예: 네트워크 문제)
-            log.error("클라이언트 측 오류 발생: {}", e.getMessage());
-            throw new RuntimeException("AWS SDK 클라이언트에서 presigned URL을 생성하는 중 오류가 발생했습니다.", e);
         } catch (Exception e) {
-            // 기타 모든 예외 처리
-            log.error("예상치 못한 오류 발생: {}", e.getMessage());
-            throw new RuntimeException("Presigned URL 생성 중 알 수 없는 오류가 발생했습니다.", e);
+            log.error("An error occurred while generating presigned URL: {}", e.getMessage());
+            throw new RuntimeException("Error generating presigned URL", e);
         }
     }
-
 
     private void validateImageExtension(String extension) {
         if (!extension.matches("^(jpg|jpeg|png|gif|bmp)$")) {
