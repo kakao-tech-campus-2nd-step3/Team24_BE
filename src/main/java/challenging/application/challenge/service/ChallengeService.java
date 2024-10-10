@@ -12,6 +12,7 @@ import challenging.application.exception.challenge.*;
 import challenging.application.repository.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,22 @@ public class ChallengeService {
     this.participantRepository = participantRepository;
   }
 
-  // 챌린지 단건 조회
-  public ChallengeResponse getChallengeByIdAndDate(Long challengeId, String date) {
-    if (date == null || date.isEmpty()) {
+  private LocalDateTime parseDate(String date) {
+    if (date == null || date.trim().isEmpty()) {
       throw new InvalidDateException();
     }
+
+    try {
+      return LocalDateTime.parse(date, dateTimeFormatter);
+    } catch (DateTimeParseException e) {
+      throw new InvalidDateException();
+    }
+  }
+
+
+  // 챌린지 단건 조회
+  public ChallengeResponse getChallengeByIdAndDate(Long challengeId, String date) {
+    LocalDateTime parsedDate = parseDate(date);
 
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
@@ -51,7 +63,8 @@ public class ChallengeService {
   public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
     LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
 
-    List<Challenge> challenges = challengeRepository.findByDate(localDateTime.toLocalDate());
+    List<Challenge> challenges = challengeRepository.findByCategoryIdAndStartDateTimeAfter(
+        categoryId, localDateTime);
 
     if (challenges.isEmpty()) {
       throw new CategoryNotFoundException();
