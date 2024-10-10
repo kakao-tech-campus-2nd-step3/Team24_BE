@@ -1,15 +1,12 @@
 package challenging.application.challenge.domain;
 
-
 import challenging.application.auth.domain.Member;
-import challenging.application.domain.Category;
 import jakarta.persistence.*;
 import java.time.*;
 import lombok.*;
 
 @Entity
 @Getter
-@Builder
 public class Challenge {
 
   @Id
@@ -44,11 +41,18 @@ public class Challenge {
   protected Challenge() {
   }
 
-  public Challenge(Long id, Category category, Member host, String name, String body, int point,
-      LocalDate date, LocalTime startTime, LocalTime endTime, String imageUrl,
+  @Builder
+  public Challenge(Category category,
+      Member host,
+      String name,
+      String body,
+      int point,
+      LocalDate date,
+      LocalTime startTime,
+      LocalTime endTime,
+      String imageUrl,
       int minParticipantNum,
       int maxParticipantNum) {
-    this.id = id;
     this.category = category;
     this.host = host;
     this.name = name;

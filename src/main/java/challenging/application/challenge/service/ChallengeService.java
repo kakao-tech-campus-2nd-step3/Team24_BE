@@ -2,6 +2,7 @@ package challenging.application.challenge.service;
 
 import challenging.application.auth.domain.Member;
 import challenging.application.auth.repository.MemberRepository;
+import challenging.application.challenge.domain.Category;
 import challenging.application.challenge.domain.Challenge;
 import challenging.application.challenge.repository.ChallengeRepository;
 import challenging.application.domain.*;
@@ -34,7 +35,7 @@ public class ChallengeService {
 
   // 챌린지 단건 조회
   public ChallengeResponse getChallengeByIdAndDate(Long challengeId, String date) {
-    if (date == null || date.trim().isEmpty()) {
+    if (date == null || date.isEmpty()) {
       throw new InvalidDateException();
     }
 
@@ -47,13 +48,10 @@ public class ChallengeService {
   }
 
   // 카테고리별 챌린지 조회
-  public List<ChallengeResponse> getChallengesByCategoryAndDate(String category, String date) {
-    Category challengeCategory = Category.valueOf(category.toUpperCase());
-
+  public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
     LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
 
-    List<Challenge> challenges = challengeRepository.findByCategoryAndDate(challengeCategory,
-        localDateTime.toLocalDate());
+    List<Challenge> challenges = challengeRepository.findByDate(localDateTime.toLocalDate());
 
     if (challenges.isEmpty()) {
       throw new CategoryNotFoundException();
@@ -73,8 +71,10 @@ public class ChallengeService {
     var host = memberRepository.findById(challengeRequestDTO.hostId())
         .orElseThrow(UserNotFoundException::new);
 
+    Category category = Category.findByCategoryCode(challengeRequestDTO.categoryId());
+
     Challenge challenge = Challenge.builder()
-        .category(challengeRequestDTO.category())
+        .category(category)
         .host(host)
         .name(challengeRequestDTO.challengeName())
         .body(challengeRequestDTO.challengeBody())
@@ -120,4 +120,3 @@ public class ChallengeService {
 
 
 }
-

@@ -26,27 +26,26 @@ public class ChallengeController {
   // 챌린지 단건 조회
   @GetMapping("/{challengeId}")
   public ResponseEntity<ChallengeResponse> getChallenge(
-          @PathVariable Long challengeId,
-          @RequestBody DateRequest dateRequest) {
+      @PathVariable Long challengeId,
+      @RequestBody DateRequest dateRequest) {
 
     ChallengeResponse response = challengeService.getChallengeByIdAndDate(challengeId,
-            dateRequest.date());
+        dateRequest.date());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
   // 챌린지 카테고리 조회
-  @GetMapping("/{category}")
+  @GetMapping("/{categoryId}")
   public ResponseEntity<List<ChallengeResponse>> getChallengesByCategory(
-      @PathVariable String category,
+      @PathVariable int categoryId,
       @RequestBody DateRequest dateRequest) {
 
     List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate(
-        category, dateRequest.date());
+        categoryId, dateRequest.date());
 
-    return ResponseEntity.status(HttpStatus.OK).body(responses);
+    return ResponseEntity.status(HttpStatus.CREATED).body(responses);
   }
-
 
   // 챌린지 생성
   @PostMapping
@@ -71,10 +70,11 @@ public class ChallengeController {
       @LoginMember Member loginMember) {
     challengeService.reserveChallenge(challengeId, loginMember);
 
-    ReserveChallengeResponse response = new ReserveChallengeResponse(challengeId, loginMember.getId());
+    ReserveChallengeResponse response = new ReserveChallengeResponse(challengeId,
+        loginMember.getId());
 
     return ResponseEntity.status(HttpStatus.OK)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(response);
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(response);
   }
 }

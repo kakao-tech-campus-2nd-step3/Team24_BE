@@ -1,4 +1,5 @@
 package challenging.application.dto.response;
+
 import challenging.application.challenge.domain.Challenge;
 
 public record ChallengeResponse(
@@ -13,7 +14,7 @@ public record ChallengeResponse(
     int maxParticipantNum,
     int currentParticipantNum,
     Long hostId,
-    String category
+    int categoryId
 ) {
 
   public static ChallengeResponse fromEntity(Challenge challenge, int currentParticipantNum) {
@@ -29,7 +30,7 @@ public record ChallengeResponse(
         challenge.getMaxParticipantNum(),
         currentParticipantNum,
         challenge.getHost().getId(),
-        challenge.getCategory().name()
+        challenge.getCategory().getCategoryCode()
     );
   }
 }
