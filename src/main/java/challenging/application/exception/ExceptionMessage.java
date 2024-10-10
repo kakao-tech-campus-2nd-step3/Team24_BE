@@ -1,6 +1,7 @@
 package challenging.application.exception;
 
 public class ExceptionMessage {
+    public static final String UNAUTHORIZED_USER = "인증 되지 않은 사용자 입니다.";
     public static final String EXPIRED_JWT_EXCEPTION = "토큰이 만료되었습니다.";
     public static final String MALFORMED_JWT_EXCEPTION = "올바른 Token 형식이 아닙니다.";
     public static final String UNSUPPORTED_JWT_EXCEPTION = "지원하지 않는 Token 입니다.";
