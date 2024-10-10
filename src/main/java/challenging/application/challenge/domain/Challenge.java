@@ -1,11 +1,9 @@
 package challenging.application.challenge.domain;
 
-
 import challenging.application.auth.domain.Member;
-import challenging.application.domain.Category;
 import jakarta.persistence.*;
 import java.time.*;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Getter
@@ -15,8 +13,7 @@ public class Challenge {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "category_id")
+  @Enumerated(EnumType.STRING)
   private Category category;
 
   @ManyToOne
@@ -44,9 +41,18 @@ public class Challenge {
   protected Challenge() {
   }
 
-  public Challenge(Category category, Member host, String name, String body, int point,
-                   LocalDate date, LocalTime startTime, LocalTime endTime, String imageUrl,
-                   int minParticipantNum, int maxParticipantNum) {
+  @Builder
+  public Challenge(Category category,
+                   Member host,
+                   String name,
+                   String body,
+                   int point,
+                   LocalDate date,
+                   LocalTime startTime,
+                   LocalTime endTime,
+                   String imageUrl,
+                   int minParticipantNum,
+                   int maxParticipantNum) {
     this.category = category;
     this.host = host;
     this.name = name;
