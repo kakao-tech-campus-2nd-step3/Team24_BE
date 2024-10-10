@@ -3,7 +3,9 @@ package challenging.application.images;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartRequest;
@@ -12,12 +14,15 @@ import org.springframework.web.multipart.MultipartRequest;
 public class ImageController {
 
     private final ImageService imageService;
+    private final S3PresignedImageService s3PresignedImageService;
 
-    public ImageController(ImageService imageService) {
+    public ImageController(ImageService imageService,
+        S3PresignedImageService s3PresignedImageService) {
         this.imageService = imageService;
+        this.s3PresignedImageService = s3PresignedImageService;
     }
 
-    @PostMapping("/image/upload")
+    @PostMapping("/api/image/upload")
     @ResponseBody
     public Map<String, Object> imageUpload(MultipartRequest multipartRequest)  {
 
@@ -33,5 +38,17 @@ public class ImageController {
             responseData.put("uploaded",false);
         }
         return responseData;
+    }
+
+    @GetMapping("/api/image")
+    public String imageUrlGet(String extenion, String uuid){
+        String presignedGetUrl = s3PresignedImageService.createPresignedGetUrl(extenion, uuid);
+        return presignedGetUrl;
+    }
+
+    @PutMapping("/api/image")
+    public String imageUrlPut(String extenion, String uuid){
+        String presignedPutUrl = s3PresignedImageService.createPresignedPutUrl(extenion, uuid);
+        return presignedPutUrl;
     }
 }
