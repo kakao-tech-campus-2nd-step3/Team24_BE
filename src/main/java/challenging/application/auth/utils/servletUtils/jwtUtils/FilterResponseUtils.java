@@ -18,7 +18,7 @@ import static challenging.application.exception.ExceptionMessage.*;
 
 @Component
 @RequiredArgsConstructor
-public class JWTResponseUtils {
+public class FilterResponseUtils {
 
     private final JWTUtils jwtUtils;
     private final ObjectMapper objectMapper;
@@ -57,7 +57,7 @@ public class JWTResponseUtils {
         return true;
     }
 
-    private void generateUnauthorizedErrorResponse(String message, HttpServletResponse response) throws IOException {
+    public void generateUnauthorizedErrorResponse(String message, HttpServletResponse response) throws IOException {
         ErrorResult errorResult = new ErrorResult("401", message);
         String jsonResponse = objectMapper.writeValueAsString(errorResult);
 

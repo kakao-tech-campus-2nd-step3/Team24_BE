@@ -1,7 +1,7 @@
 package challenging.application.auth.filter;
 
 import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.auth.utils.servletUtils.jwtUtils.JWTResponseUtils;
+import challenging.application.auth.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ import static challenging.application.auth.utils.AuthConstant.*;
 public class JWTAccessFilter extends OncePerRequestFilter {
 
     private final JWTUtils jwtUtils;
-    private final JWTResponseUtils jwtResponseUtils;
+    private final FilterResponseUtils filterResponseUtils;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -55,12 +55,12 @@ public class JWTAccessFilter extends OncePerRequestFilter {
         //Bearer 부분 제거 후 순수 토큰만 획득
         String token = authorization.split(" ")[1];
 
-        if (jwtResponseUtils.isTokenExpired(response, token)) {
+        if (filterResponseUtils.isTokenExpired(response, token)) {
             return;
         }
 
         // 토큰이 access인지 확인 (발급시 페이로드에 명시)
-        if(!jwtResponseUtils.checkTokenType(response, token, ACCESS_TOKEN)){
+        if(!filterResponseUtils.checkTokenType(response, token, ACCESS_TOKEN)){
             return;
         }
         
