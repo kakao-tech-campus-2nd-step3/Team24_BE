@@ -43,16 +43,16 @@ public class Challenge {
 
   @Builder
   public Challenge(Category category,
-                   Member host,
-                   String name,
-                   String body,
-                   int point,
-                   LocalDate date,
-                   LocalTime startTime,
-                   LocalTime endTime,
-                   String imageUrl,
-                   int minParticipantNum,
-                   int maxParticipantNum) {
+      Member host,
+      String name,
+      String body,
+      int point,
+      LocalDate date,
+      LocalTime startTime,
+      LocalTime endTime,
+      String imageUrl,
+      int minParticipantNum,
+      int maxParticipantNum) {
     this.category = category;
     this.host = host;
     this.name = name;

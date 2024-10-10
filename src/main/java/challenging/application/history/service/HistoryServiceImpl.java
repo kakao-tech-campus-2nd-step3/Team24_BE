@@ -16,32 +16,34 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class HistoryServiceImpl implements HistoryService{
+public class HistoryServiceImpl implements HistoryService {
 
-    private final HistoryRepository historyRepository;
-    private final ChallengeService challengeService;
+  private final HistoryRepository historyRepository;
+  private final ChallengeService challengeService;
 
-    @Override
-    public HistoryResponse findOneHistory(Long memberId, Long historyId) {
-        History history = historyRepository.findHistoryByMemberIdAndId(memberId, historyId)
-                .orElseThrow(HistoryNotFoundException::new);
+  @Override
+  public HistoryResponse findOneHistory(Long memberId, Long historyId) {
+    History history = historyRepository.findHistoryByMemberIdAndId(memberId, historyId)
+        .orElseThrow(HistoryNotFoundException::new);
 
-        ChallengeResponse challengeResponseDTO = challengeService.findOneChallenge(history.getChallenge().getId());
+    ChallengeResponse challengeResponseDTO = challengeService.findOneChallenge(
+        history.getChallenge().getId());
 
-        return HistoryResponse.of(challengeResponseDTO, history);
-    }
+    return HistoryResponse.of(challengeResponseDTO, history);
+  }
 
-    @Override
-    public List<HistoryResponse> findAllHistory(Long memberId) {
-        List<History> histories = historyRepository.findAllByMemberId(memberId);
+  @Override
+  public List<HistoryResponse> findAllHistory(Long memberId) {
+    List<History> histories = historyRepository.findAllByMemberId(memberId);
 
-        List<HistoryResponse> historyResponses = histories.stream()
-                .map(history -> {
-                    ChallengeResponse challengeResponseDTO = challengeService.findOneChallenge(history.getChallenge().getId());
-                    return HistoryResponse.of(challengeResponseDTO, history);
-                })
-                .collect(Collectors.toList());
+    List<HistoryResponse> historyResponses = histories.stream()
+        .map(history -> {
+          ChallengeResponse challengeResponseDTO = challengeService.findOneChallenge(
+              history.getChallenge().getId());
+          return HistoryResponse.of(challengeResponseDTO, history);
+        })
+        .collect(Collectors.toList());
 
-        return historyResponses;
-    }
+    return historyResponses;
+  }
 }
