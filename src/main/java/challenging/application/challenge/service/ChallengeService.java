@@ -101,6 +101,9 @@ public class ChallengeService {
         .build();
 
     Challenge savedChallenge = challengeRepository.save(challenge);
+
+    Participant participant = new Participant(savedChallenge, host);
+    participantRepository.save(participant);
     return savedChallenge.getId();
   }
 
@@ -110,7 +113,7 @@ public class ChallengeService {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
 
-    if (!challenge.getHost().getId().equals(user.getId())){
+    if (!challenge.getHost().getId().equals(user.getId())) {
       throw new UnauthorizedException();
     }
 
@@ -122,7 +125,7 @@ public class ChallengeService {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
 
-    if (participantRepository.existsByChallengeIdAndMemberId(challengeId, user.getId())){
+    if (participantRepository.existsByChallengeIdAndMemberId(challengeId, user.getId())) {
       throw new AlreadyReservedException();
     }
 
@@ -131,7 +134,6 @@ public class ChallengeService {
     if (currentParticipantNum >= challenge.getMaxParticipantNum()) {
       throw new ParticipantLimitExceededException();
     }
-
 
     Participant participant = new Participant(challenge, user);
     participantRepository.save(participant);
