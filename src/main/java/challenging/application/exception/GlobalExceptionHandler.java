@@ -57,4 +57,25 @@ public class GlobalExceptionHandler extends ResponseUtil {
 
     return new ResponseEntity<>(errorResult, HttpStatus.NOT_FOUND);
   }
+
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ErrorResult> handleUnauthorizedException(UnauthorizedException e) {
+    ErrorResult errorResult = new ErrorResult("403", e.getMessage());
+
+    return new ResponseEntity<>(errorResult, HttpStatus.FORBIDDEN);
+  }
+
+  @ExceptionHandler(AlreadyReservedException.class)
+  public ResponseEntity<ErrorResult> handleAlreadyReservedException(AlreadyReservedException e) {
+    ErrorResult errorResult = new ErrorResult("409", e.getMessage());
+
+    return new ResponseEntity<>(errorResult, HttpStatus.CONFLICT);
+  }
+
+  @ExceptionHandler(ParticipantLimitExceededException.class)
+  public ResponseEntity<ErrorResult> handleAlreadyReservedException(ParticipantLimitExceededException e) {
+    ErrorResult errorResult = new ErrorResult(" ", e.getMessage());
+
+    return new ResponseEntity<>(errorResult, HttpStatus.FORBIDDEN);
+  }
 }

@@ -12,6 +12,8 @@ import challenging.application.exception.challenge.*;
 import challenging.application.repository.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -26,19 +28,15 @@ public class ChallengeService {
       "yyyy-MM-dd:HH:mm");
 
   public ChallengeService(ChallengeRepository challengeRepository,
-                          MemberRepository memberRepository,
-                          ParticipantRepository participantRepository) {
+      MemberRepository memberRepository,
+      ParticipantRepository participantRepository) {
     this.challengeRepository = challengeRepository;
     this.memberRepository = memberRepository;
     this.participantRepository = participantRepository;
   }
 
   // 챌린지 단건 조회
-  public ChallengeResponse getChallengeByIdAndDate(Long challengeId, String date) {
-    if (date == null || date.isEmpty()) {
-      throw new InvalidDateException();
-    }
-
+  public ChallengeResponse getChallengeByIdAndDate(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
 
@@ -47,14 +45,32 @@ public class ChallengeService {
     return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
   }
 
+  private LocalDateTime parseDate(String date) {
+    if (date == null || date.trim().isEmpty()) {
+      throw new InvalidDateException();
+    }
+
+    try {
+      return LocalDateTime.parse(date, dateTimeFormatter);
+    } catch (DateTimeParseException e) {
+      throw new InvalidDateException();
+    }
+  }
+
   // 카테고리별 챌린지 조회
   public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
-    LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
+    LocalDateTime localDateTime = parseDate(date);
 
-    List<Challenge> challenges = challengeRepository.findByDate(localDateTime.toLocalDate());
+    Category category = Category.findByCategoryCode(categoryId);
+
+    List<Challenge> challenges = challengeRepository.findByCategoryAndDateTimeAfter(
+        category,
+        localDateTime.toLocalDate(),
+        localDateTime.toLocalTime()
+    );
 
     if (challenges.isEmpty()) {
-      throw new CategoryNotFoundException();
+      return Collections.emptyList();
     }
 
     return challenges.stream()
@@ -88,14 +104,21 @@ public class ChallengeService {
         .build();
 
     Challenge savedChallenge = challengeRepository.save(challenge);
+
+    Participant participant = new Participant(savedChallenge, host);
+    participantRepository.save(participant);
     return savedChallenge.getId();
   }
 
 
   // 챌린지 삭제
-  public void deleteChallenge(Long challengeId) {
+  public void deleteChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
+
+    if (!challenge.getHost().getId().equals(user.getId())) {
+      throw new UnauthorizedException();
+    }
 
     challengeRepository.delete(challenge);
   }
@@ -105,13 +128,23 @@ public class ChallengeService {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
 
+    if (participantRepository.existsByChallengeIdAndMemberId(challengeId, user.getId())) {
+      throw new AlreadyReservedException();
+    }
+
+    int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
+
+    if (currentParticipantNum >= challenge.getMaxParticipantNum()) {
+      throw new ParticipantLimitExceededException();
+    }
+
     Participant participant = new Participant(challenge, user);
     participantRepository.save(participant);
   }
 
-  public ChallengeResponse findOneChallenge(Long challengeId){
+  public ChallengeResponse findOneChallenge(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
-            .orElseThrow(ChallengeNotFoundException::new);
+        .orElseThrow(ChallengeNotFoundException::new);
 
     int participantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
@@ -120,4 +153,3 @@ public class ChallengeService {
 
 
 }
-

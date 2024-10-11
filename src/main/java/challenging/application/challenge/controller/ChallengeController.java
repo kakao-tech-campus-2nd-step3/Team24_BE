@@ -26,11 +26,9 @@ public class ChallengeController {
   // 챌린지 단건 조회
   @GetMapping("/{challengeId}")
   public ResponseEntity<ChallengeResponse> getChallenge(
-          @PathVariable Long challengeId,
-          @RequestBody DateRequest dateRequest) {
+      @PathVariable Long challengeId) {
 
-    ChallengeResponse response = challengeService.getChallengeByIdAndDate(challengeId,
-            dateRequest.date());
+    ChallengeResponse response = challengeService.getChallengeByIdAndDate(challengeId);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
@@ -59,8 +57,9 @@ public class ChallengeController {
 
   // 챌린지 삭제
   @DeleteMapping("{challengeId}")
-  public ResponseEntity<Long> deleteChallenge(@PathVariable Long challengeId) {
-    challengeService.deleteChallenge(challengeId);
+  public ResponseEntity<Long> deleteChallenge(@PathVariable Long challengeId,
+      @LoginMember Member loginMember) {
+    challengeService.deleteChallenge(challengeId, loginMember);
     return ResponseEntity.status(HttpStatus.OK).body(challengeId);
   }
 
@@ -70,10 +69,11 @@ public class ChallengeController {
       @LoginMember Member loginMember) {
     challengeService.reserveChallenge(challengeId, loginMember);
 
-    ReserveChallengeResponse response = new ReserveChallengeResponse(challengeId, loginMember.getId());
+    ReserveChallengeResponse response = new ReserveChallengeResponse(challengeId,
+        loginMember.getId());
 
     return ResponseEntity.status(HttpStatus.OK)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(response);
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(response);
   }
 }
