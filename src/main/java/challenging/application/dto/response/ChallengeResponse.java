@@ -1,4 +1,5 @@
 package challenging.application.dto.response;
+
 import challenging.application.challenge.domain.Challenge;
 
 public record ChallengeResponse(
