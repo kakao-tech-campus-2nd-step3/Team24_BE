@@ -18,7 +18,7 @@ import static challenging.application.exception.ExceptionMessage.*;
 
 @Component
 @RequiredArgsConstructor
-public class JWTResponseUtils {
+public class FilterResponseUtils {
 
     private final JWTUtils jwtUtils;
     private final ObjectMapper objectMapper;
@@ -28,19 +28,19 @@ public class JWTResponseUtils {
         try {
             jwtUtils.isExpired(token);
         } catch (ExpiredJwtException e) {
-            generateErrorResponse(EXPIRED_JWT_EXCEPTION, response);
+            generateUnauthorizedErrorResponse(EXPIRED_JWT_EXCEPTION, response);
             return true;
         } catch (MalformedJwtException e){
-            generateErrorResponse(MALFORMED_JWT_EXCEPTION, response);
+            generateUnauthorizedErrorResponse(MALFORMED_JWT_EXCEPTION, response);
             return true;
         } catch (UnsupportedJwtException e){
-            generateErrorResponse(UNSUPPORTED_JWT_EXCEPTION, response);
+            generateUnauthorizedErrorResponse(UNSUPPORTED_JWT_EXCEPTION, response);
             return true;
         } catch (SignatureException e){
-            generateErrorResponse(SIGNATURE_EXCEPTION, response);
+            generateUnauthorizedErrorResponse(SIGNATURE_EXCEPTION, response);
             return true;
         } catch (Exception e){
-            generateErrorResponse(JWT_EXCEPTION, response);
+            generateUnauthorizedErrorResponse(JWT_EXCEPTION, response);
             return true;
         }
         return false;
@@ -57,14 +57,14 @@ public class JWTResponseUtils {
         return true;
     }
 
-    private void generateErrorResponse(String message, HttpServletResponse response) throws IOException {
+    public void generateUnauthorizedErrorResponse(String message, HttpServletResponse response) throws IOException {
         ErrorResult errorResult = new ErrorResult("401", message);
         String jsonResponse = objectMapper.writeValueAsString(errorResult);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonResponse);
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
     public boolean isTokenInDB(HttpServletResponse response, String token) {
