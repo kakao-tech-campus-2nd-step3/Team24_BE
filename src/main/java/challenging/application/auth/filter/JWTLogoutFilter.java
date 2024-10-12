@@ -1,9 +1,7 @@
 package challenging.application.auth.filter;
 
-import challenging.application.auth.jwt.JWTUtils;
 import challenging.application.auth.repository.RefreshTokenRepository;
-import challenging.application.auth.servletUtils.cookie.CookieUtils;
-import challenging.application.auth.servletUtils.jwtUtils.JWTResponseUtils;
+import challenging.application.auth.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -15,13 +13,14 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 
-import static challenging.application.auth.servletUtils.cookie.CookieUtils.*;
+import static challenging.application.auth.utils.AuthConstant.*;
+import static challenging.application.auth.utils.servletUtils.cookie.CookieUtils.*;
 
 @AllArgsConstructor
 public class JWTLogoutFilter extends GenericFilterBean {
 
     private final RefreshTokenRepository refreshRepository;
-    private final JWTResponseUtils jwtResponseUtils;
+    private final FilterResponseUtils filterResponseUtils;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -48,15 +47,15 @@ public class JWTLogoutFilter extends GenericFilterBean {
             return;
         }
 
-        if (!jwtResponseUtils.isTokenInDB(response, refresh)) {
+        if (!filterResponseUtils.isTokenInDB(response, refresh)) {
             return;
         }
 
-        if (jwtResponseUtils.isTokenExpired(response, refresh)) {
+        if (filterResponseUtils.isTokenExpired(response, refresh)) {
             return;
         }
 
-        if (!jwtResponseUtils.checkTokenType(response, refresh, "refresh")) {
+        if (!filterResponseUtils.checkTokenType(response, refresh, REFRESH_TOKEN)) {
             return;
         }
 

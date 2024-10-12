@@ -7,8 +7,7 @@ import challenging.application.auth.jwt.JWTUtils;
 import challenging.application.auth.oauth.OAuth2SuccessHandler;
 import challenging.application.auth.oauth.OAuth2UserServiceImpl;
 import challenging.application.auth.repository.RefreshTokenRepository;
-import challenging.application.auth.servletUtils.jwtUtils.JWTResponseUtils;
-import lombok.AllArgsConstructor;
+import challenging.application.auth.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +35,7 @@ public class SecurityConfiguration {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private final JWTResponseUtils jwtResponseUtils;
+    private final FilterResponseUtils filterResponseUtils;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -57,9 +56,9 @@ public class SecurityConfiguration {
             .httpBasic((auth) -> auth.disable());
 
         http
-            .addFilterAfter(new JWTAccessFilter(jwtUtil, jwtResponseUtils), OAuth2LoginAuthenticationFilter.class)
-            .addFilterAfter(new JWTRefreshFilter(jwtResponseUtils), OAuth2LoginAuthenticationFilter.class)
-            .addFilterBefore(new JWTLogoutFilter(refreshTokenRepository, jwtResponseUtils), LogoutFilter.class);
+            .addFilterAfter(new JWTAccessFilter(jwtUtil, filterResponseUtils), OAuth2LoginAuthenticationFilter.class)
+            .addFilterAfter(new JWTRefreshFilter(filterResponseUtils), OAuth2LoginAuthenticationFilter.class)
+            .addFilterBefore(new JWTLogoutFilter(refreshTokenRepository, filterResponseUtils), LogoutFilter.class);
 
         http
             .oauth2Login((oauth2) -> oauth2
@@ -70,7 +69,7 @@ public class SecurityConfiguration {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/reissue").permitAll()
+                        .requestMatchers("/", "/login", "/reissue", "/h2-console/**").permitAll()
                         .requestMatchers("my").hasRole("USER")
                         .anyRequest().authenticated());
 

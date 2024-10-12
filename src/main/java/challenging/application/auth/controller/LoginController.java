@@ -1,10 +1,10 @@
-package challenging.application.controller;
+package challenging.application.auth.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class AuthController {
+public class LoginController {
 
     @GetMapping("/login")
     public String loginPage() {

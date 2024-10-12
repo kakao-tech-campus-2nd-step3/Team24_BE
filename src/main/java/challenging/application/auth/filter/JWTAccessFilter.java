@@ -1,7 +1,8 @@
 package challenging.application.auth.filter;
 
 import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.auth.servletUtils.jwtUtils.JWTResponseUtils;
+import challenging.application.auth.utils.servletUtils.jwtUtils.FilterResponseUtils;
+import challenging.application.exception.ExceptionMessage;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,12 +20,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static challenging.application.auth.utils.AuthConstant.*;
+import static challenging.application.exception.ExceptionMessage.UNAUTHORIZED_USER;
+
 @AllArgsConstructor
 @Slf4j
 public class JWTAccessFilter extends OncePerRequestFilter {
 
     private final JWTUtils jwtUtils;
-    private final JWTResponseUtils jwtResponseUtils;
+    private final FilterResponseUtils filterResponseUtils;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -40,25 +44,25 @@ public class JWTAccessFilter extends OncePerRequestFilter {
             return;
         }
 
-        String authorization = request.getHeader("Authorization");
+        String authorization = request.getHeader(AUTHORIZATION);
 
         //Authorization 헤더 검증
         if (checkHeader(authorization)) {
 
-            log.info("token null");
-            filterChain.doFilter(request, response);
+            log.info("Access Token Not Exist");
+            filterResponseUtils.generateUnauthorizedErrorResponse(UNAUTHORIZED_USER, response);
             return;
         }
 
         //Bearer 부분 제거 후 순수 토큰만 획득
         String token = authorization.split(" ")[1];
 
-        if (jwtResponseUtils.isTokenExpired(response, token)) {
+        if (filterResponseUtils.isTokenExpired(response, token)) {
             return;
         }
 
         // 토큰이 access인지 확인 (발급시 페이로드에 명시)
-        if(!jwtResponseUtils.checkTokenType(response, token, "access")){
+        if(!filterResponseUtils.checkTokenType(response, token, ACCESS_TOKEN)){
             return;
         }
         
@@ -83,7 +87,7 @@ public class JWTAccessFilter extends OncePerRequestFilter {
     }
 
     private boolean checkHeader(String authorization) {
-        return authorization == null || !authorization.startsWith("Bearer ");
+        return authorization == null || !authorization.startsWith(BEARER);
     }
 
     private boolean isUrlLogin(String requestUri) {
