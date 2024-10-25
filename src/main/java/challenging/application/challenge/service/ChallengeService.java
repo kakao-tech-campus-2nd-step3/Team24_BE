@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ChallengeService {
@@ -36,9 +37,10 @@ public class ChallengeService {
   }
 
   // 챌린지 단건 조회
+  @Transactional(readOnly = true)
   public ChallengeResponse getChallengeByIdAndDate(Long challengeId) {
-    Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(ChallengeNotFoundException::new);
+    Challenge challenge =
+            challengeRepository.findById(challengeId).orElseThrow(ChallengeNotFoundException::new);
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
@@ -58,34 +60,37 @@ public class ChallengeService {
   }
 
   // 카테고리별 챌린지 조회
+  @Transactional(readOnly = true)
   public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
     LocalDateTime localDateTime = parseDate(date);
 
     Category category = Category.findByCategoryCode(categoryId);
 
-    List<Challenge> challenges = challengeRepository.findByCategoryAndDateTimeAfter(
-        category,
-        localDateTime.toLocalDate(),
-        localDateTime.toLocalTime()
-    );
+    List<Challenge> challenges =
+            challengeRepository.findByCategoryAndDateTimeAfter(
+                    category, localDateTime.toLocalDate(), localDateTime.toLocalTime());
 
     if (challenges.isEmpty()) {
       return Collections.emptyList();
     }
 
     return challenges.stream()
-        .map(challenge -> {
-          int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId())
-              .intValue();
-          return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
-        })
+        .map(
+             challenge -> {
+                int currentParticipantNum =
+                    participantRepository.countByChallengeId(challenge.getId()).intValue();
+                return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
+            })
         .collect(Collectors.toList());
   }
 
   // 챌린지 생성
+  @Transactional
   public Long createChallenge(ChallengeRequest challengeRequestDTO) {
-    var host = memberRepository.findById(challengeRequestDTO.hostId())
-        .orElseThrow(UserNotFoundException::new);
+    var host =
+        memberRepository
+            .findById(challengeRequestDTO.hostId())
+            .orElseThrow(UserNotFoundException::new);
 
     Category category = Category.findByCategoryCode(challengeRequestDTO.categoryId());
 
@@ -112,6 +117,7 @@ public class ChallengeService {
 
 
   // 챌린지 삭제
+  @Transactional
   public void deleteChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
@@ -124,6 +130,7 @@ public class ChallengeService {
   }
 
   // 챌린지 예약
+  @Transactional
   public void reserveChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
@@ -142,6 +149,7 @@ public class ChallengeService {
     participantRepository.save(participant);
   }
 
+  @Transactional(readOnly = true)
   public ChallengeResponse findOneChallenge(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
