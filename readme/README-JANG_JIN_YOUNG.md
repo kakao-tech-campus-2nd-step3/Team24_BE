@@ -22,3 +22,8 @@
 ## 개발 스프린트 3주차
 
 ### 1. 팀원들 코드 리팩토링 및 결제 모듈 공부
+
+## 개발 스프린트 4주차
+
+### 1. 유저 HISTORY 개발
+### 2. 기존 Category Class 삭제 -> Category Enum Class 도입

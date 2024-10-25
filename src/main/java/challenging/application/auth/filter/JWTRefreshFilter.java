@@ -1,6 +1,6 @@
 package challenging.application.auth.filter;
 
-import challenging.application.auth.utils.servletUtils.jwtUtils.JWTResponseUtils;
+import challenging.application.auth.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ import static challenging.application.auth.utils.servletUtils.cookie.CookieUtils
 @Slf4j
 public class JWTRefreshFilter extends OncePerRequestFilter {
 
-    private final JWTResponseUtils jwtResponseUtils;
+    private final FilterResponseUtils filterResponseUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -37,15 +37,15 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (!jwtResponseUtils.isTokenInDB(response, refresh)) {
+        if (!filterResponseUtils.isTokenInDB(response, refresh)) {
             return;
         }
 
-        if (jwtResponseUtils.isTokenExpired(response, refresh)) {
+        if (filterResponseUtils.isTokenExpired(response, refresh)) {
             return;
         }
 
-        if (!jwtResponseUtils.checkTokenType(response, refresh, REFRESH_TOKEN)) {
+        if (!filterResponseUtils.checkTokenType(response, refresh, REFRESH_TOKEN)) {
             return;
         }
 
