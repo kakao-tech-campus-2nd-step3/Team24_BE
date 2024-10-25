@@ -39,8 +39,8 @@ public class ChallengeService {
   // 챌린지 단건 조회
   @Transactional(readOnly = true)
   public ChallengeResponse getChallengeByIdAndDate(Long challengeId) {
-    Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(ChallengeNotFoundException::new);
+    Challenge challenge =
+            challengeRepository.findById(challengeId).orElseThrow(ChallengeNotFoundException::new);
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
 
@@ -66,30 +66,31 @@ public class ChallengeService {
 
     Category category = Category.findByCategoryCode(categoryId);
 
-    List<Challenge> challenges = challengeRepository.findByCategoryAndDateTimeAfter(
-        category,
-        localDateTime.toLocalDate(),
-        localDateTime.toLocalTime()
-    );
+    List<Challenge> challenges =
+            challengeRepository.findByCategoryAndDateTimeAfter(
+                    category, localDateTime.toLocalDate(), localDateTime.toLocalTime());
 
     if (challenges.isEmpty()) {
       return Collections.emptyList();
     }
 
     return challenges.stream()
-        .map(challenge -> {
-          int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId())
-              .intValue();
-          return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
-        })
+        .map(
+             challenge -> {
+                int currentParticipantNum =
+                    participantRepository.countByChallengeId(challenge.getId()).intValue();
+                return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
+            })
         .collect(Collectors.toList());
   }
 
   // 챌린지 생성
   @Transactional
   public Long createChallenge(ChallengeRequest challengeRequestDTO) {
-    var host = memberRepository.findById(challengeRequestDTO.hostId())
-        .orElseThrow(UserNotFoundException::new);
+    var host =
+        memberRepository
+            .findById(challengeRequestDTO.hostId())
+            .orElseThrow(UserNotFoundException::new);
 
     Category category = Category.findByCategoryCode(challengeRequestDTO.categoryId());
 
