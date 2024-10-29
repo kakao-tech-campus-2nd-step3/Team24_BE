@@ -3,7 +3,7 @@ package challenging.application;
 
 import challenging.application.userprofile.domain.UserProfile;
 import challenging.application.userprofile.repository.UserProfileRepository;
-import challenging.application.userprofile.service.UserProfileServiceImpl;
+import challenging.application.userprofile.service.UserProfileService;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,13 +17,13 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class UserProfileServiceImplTest {
+class UserProfileServiceTest {
 
     @Mock
     private UserProfileRepository userProfileRepository;
 
     @InjectMocks
-    private UserProfileServiceImpl userProfileService;
+    private UserProfileService userProfileService;
 
     @BeforeEach
     void setUp() {

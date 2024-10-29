@@ -101,7 +101,7 @@ class ChallengeServiceTest {
     given(participantRepository.countByChallengeId(1L)).willReturn(2L);
 
     //when
-    ChallengeResponse response = challengeService.getChallengeByIdAndDate(1L);
+    ChallengeResponse response = challengeService.getChallengeById(1L);
 
     //then
     assertThat(response.challengeName()).isEqualTo(challenge.getName());
@@ -115,7 +115,7 @@ class ChallengeServiceTest {
     given(challengeRepository.findById(1L)).willReturn(Optional.empty());
 
     //expected
-    assertThatThrownBy(() -> challengeService.getChallengeByIdAndDate(1L))
+    assertThatThrownBy(() -> challengeService.getChallengeById(1L))
         .isInstanceOf(ChallengeNotFoundException.class)
         .hasMessage(CHALLENGE_NOT_FOUND);
   }
@@ -129,16 +129,16 @@ class ChallengeServiceTest {
     List<Challenge> challenges = new ArrayList<>();
 
     challenges.add(challenge);
-    given(
-        challengeRepository.findByCategoryAndDateTimeAfter(category, LocalDate.parse("2024-11-11"),
+    given(challengeRepository.findByCategoryAndDateTimeAfter(
+            category,
+            LocalDate.parse("2024-11-11"),
             LocalTime.of(0, 0)))
         .willReturn(challenges);
-    given(participantRepository.countByChallengeId(challenge.getId())).willReturn(
-        2L);
+    given(participantRepository.countByChallengeId(challenge.getId())).willReturn(2L);
 
     // when
-    List<ChallengeResponse> response = challengeService.getChallengesByCategoryAndDate(
-        category.getCategoryCode(), date);
+    List<ChallengeResponse> response =
+            challengeService.getChallengesByCategoryAndDate(category.getCategoryCode(), date);
 
     // then
     assertThat(response.size()).isEqualTo(1);
@@ -153,8 +153,7 @@ class ChallengeServiceTest {
     int categoryId = 1;
 
     //expected
-    assertThatThrownBy(
-        () -> challengeService.getChallengesByCategoryAndDate(categoryId, invalidDate))
+    assertThatThrownBy(() -> challengeService.getChallengesByCategoryAndDate(categoryId, invalidDate))
         .isInstanceOf(InvalidDateException.class)
         .hasMessage(INVALID_DATE);
   }
@@ -168,8 +167,7 @@ class ChallengeServiceTest {
     String date = "2024-11-11:00:00";
 
     //expected
-    assertThatThrownBy(
-        () -> challengeService.getChallengesByCategoryAndDate(invalidCategoryId, date))
+    assertThatThrownBy(() -> challengeService.getChallengesByCategoryAndDate(invalidCategoryId, date))
         .isInstanceOf(CategoryNotFoundException.class)
         .hasMessage(CATEGORY_NOT_FOUND);
   }
@@ -287,7 +285,8 @@ class ChallengeServiceTest {
 
     // expected
     assertThatThrownBy(() -> challengeService.reserveChallenge(1L, member1))
-        .isInstanceOf(AlreadyReservedException.class).hasMessage(ALREADY_RESERVED_EXCEPTION);
+        .isInstanceOf(AlreadyReservedException.class)
+        .hasMessage(ALREADY_RESERVED_EXCEPTION);
   }
 
   @Test
@@ -312,6 +311,7 @@ class ChallengeServiceTest {
 
     // expected
     assertThatThrownBy(() -> challengeService.reserveChallenge(1L, member1))
-        .isInstanceOf(ChallengeNotFoundException.class).hasMessage(CHALLENGE_NOT_FOUND);
+        .isInstanceOf(ChallengeNotFoundException.class)
+        .hasMessage(CHALLENGE_NOT_FOUND);
   }
 }

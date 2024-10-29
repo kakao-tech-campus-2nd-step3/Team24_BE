@@ -1,24 +1,54 @@
 package challenging.application.userprofile.service;
 
-import challenging.application.dto.response.UserProfileResponseDTO;
+import challenging.application.dto.request.UserProfileRequest.UserProfilePutRequest;
+import challenging.application.dto.response.UserProfileResponse.UserProfileGetResponse;
+import challenging.application.dto.response.UserProfileResponse.UserProfilePutResponse;
+import challenging.application.images.S3PresignedImageService;
 import challenging.application.userprofile.domain.UserProfile;
-import java.util.Map;
-import java.util.Optional;
+import challenging.application.userprofile.repository.UserProfileRepository;
+import org.springframework.stereotype.Service;
 
-public interface UserProfileService {
+@Service
+public class UserProfileService {
 
-    // Member의 id로 프로필을 조회
-    Optional<UserProfile> getUserProfileByMemberId(Long memberId);
+    private final UserProfileRepository userProfileRepository;
+    private final S3PresignedImageService s3PresignedImageService;
 
-    // 프로필 저장
-    UserProfile saveUserProfile(UserProfile userProfile);
+    public UserProfileService(UserProfileRepository userProfileRepository,
+        S3PresignedImageService s3PresignedImageService) {
+        this.userProfileRepository = userProfileRepository;
+        this.s3PresignedImageService = s3PresignedImageService;
+    }
 
-    // UserProfile을 DTO로 변환
-    UserProfileResponseDTO convertToDTO(UserProfile userProfile);
+    public UserProfileGetResponse getUserProfile(Long memberId) {
+        UserProfile userProfile = userProfileRepository.findByMemberId(memberId).orElseThrow(
+            () -> new RuntimeException()
+        );
+        // 이미지 작업하고 던져야함
+        String presignedGetUrl = s3PresignedImageService.createPresignedGetUrl(
+            userProfile.getImageExtension(),
+            userProfile.getMember().getUuid()
+        );
+        UserProfileGetResponse userProfileGetResponse = UserProfileGetResponse.of(userProfile,presignedGetUrl);
 
-    // 새로운 프로필 생성 시 Member의 id를 사용
-    UserProfile createNewUserProfile(Long memberId);
+        return userProfileGetResponse;
+    }
 
-    // 회원정보 업데이트
-    boolean updateUserProfileFields(UserProfile userProfile, Map<String, String> updates);
+    public UserProfilePutResponse putUserProfile(Long memberId, UserProfilePutRequest userProfilePutRequest){
+        UserProfile userProfile = userProfileRepository.findByMemberId(memberId).orElseThrow(
+            () -> new RuntimeException()
+        );
+        userProfile.updateUserNickName(userProfilePutRequest.userNickName());
+        userProfile.updateImageExtension(userProfilePutRequest.Extension());
+
+        String presignedPutUrl = s3PresignedImageService.createPresignedPutUrl(
+            userProfile.getImageExtension(),
+            userProfile.getMember().getUuid()
+        );
+
+
+        return new UserProfilePutResponse(userProfilePutRequest.userNickName(),presignedPutUrl);
+    }
+
+
 }

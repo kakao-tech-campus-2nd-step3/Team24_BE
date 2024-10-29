@@ -76,7 +76,7 @@ public class S3PresignedImageService {
     }
 
     public String createPresignedGetUrl(String imageExtension, String uuid) {
-        String keyName = "images/" + uuid.replace("-", "") + "." + imageExtension;
+        String keyName = "userprofile/" + uuid.replace("-", "") + "." + imageExtension;
 
         try {
             // Create a presigned URL for a GET request
@@ -104,7 +104,7 @@ public class S3PresignedImageService {
     }
 
     private void validateImageExtension(String extension) {
-        if (!extension.matches("^(jpg|jpeg|png|gif|bmp)$")) {
+        if (!extension.matches("^(jpg|jpeg|png|bmp)$")) {
             throw new IllegalArgumentException("Invalid image extension");
         }
     }
