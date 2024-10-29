@@ -7,6 +7,9 @@ import challenging.application.challenge.domain.Challenge;
 import challenging.application.challenge.repository.ChallengeRepository;
 import challenging.application.domain.*;
 import challenging.application.dto.request.ChallengeRequest;
+import challenging.application.dto.response.ChallengeCreateResponse;
+import challenging.application.dto.response.ChallengeDeleteResponse;
+import challenging.application.dto.response.ChallengeReservationResponse;
 import challenging.application.dto.response.ChallengeResponse;
 import challenging.application.exception.challenge.*;
 import challenging.application.repository.*;
@@ -38,11 +41,11 @@ public class ChallengeService {
 
   // 챌린지 단건 조회
   @Transactional(readOnly = true)
-  public ChallengeResponse getChallengeByIdAndDate(Long challengeId) {
-    Challenge challenge =
-            challengeRepository.findById(challengeId).orElseThrow(ChallengeNotFoundException::new);
+  public ChallengeResponse getChallengeById(Long challengeId) {
+    Challenge challenge = challengeRepository.findById(challengeId)
+        .orElseThrow(ChallengeNotFoundException::new);
 
-    int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
+    int currentParticipantNum = participantRepository.countByChallengeId(challengeId);
 
     return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
   }
@@ -66,19 +69,16 @@ public class ChallengeService {
 
     Category category = Category.findByCategoryCode(categoryId);
 
-    List<Challenge> challenges =
-            challengeRepository.findByCategoryAndDateTimeAfter(
-                    category, localDateTime.toLocalDate(), localDateTime.toLocalTime());
-
-    if (challenges.isEmpty()) {
-      return Collections.emptyList();
-    }
+    List<Challenge> challenges = challengeRepository.findByCategoryAndDateTimeAfter(
+        category,
+        localDateTime.toLocalDate(),
+        localDateTime.toLocalTime()
+    );
 
     return challenges.stream()
         .map(
              challenge -> {
-                int currentParticipantNum =
-                    participantRepository.countByChallengeId(challenge.getId()).intValue();
+                int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId());
                 return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
             })
         .collect(Collectors.toList());
@@ -86,10 +86,8 @@ public class ChallengeService {
 
   // 챌린지 생성
   @Transactional
-  public Long createChallenge(ChallengeRequest challengeRequestDTO) {
-    var host =
-        memberRepository
-            .findById(challengeRequestDTO.hostId())
+  public ChallengeCreateResponse createChallenge(ChallengeRequest challengeRequestDTO) {
+    Member host = memberRepository.findById(challengeRequestDTO.hostId())
             .orElseThrow(UserNotFoundException::new);
 
     Category category = Category.findByCategoryCode(challengeRequestDTO.categoryId());
@@ -103,7 +101,7 @@ public class ChallengeService {
         .date(LocalDate.parse(challengeRequestDTO.challengeDate()))
         .startTime(LocalTime.parse(challengeRequestDTO.startTime()))
         .endTime(LocalTime.parse(challengeRequestDTO.endTime()))
-        .imageUrl(challengeRequestDTO.imageUrl())
+        .imageExtension(challengeRequestDTO.imageExtension())
         .minParticipantNum(challengeRequestDTO.minParticipantNum())
         .maxParticipantNum(challengeRequestDTO.maxParticipantNum())
         .build();
@@ -112,13 +110,14 @@ public class ChallengeService {
 
     Participant participant = new Participant(savedChallenge, host);
     participantRepository.save(participant);
-    return savedChallenge.getId();
+
+    return new ChallengeCreateResponse(savedChallenge.getId());
   }
 
 
   // 챌린지 삭제
   @Transactional
-  public void deleteChallenge(Long challengeId, Member user) {
+  public ChallengeDeleteResponse deleteChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
 
@@ -127,11 +126,13 @@ public class ChallengeService {
     }
 
     challengeRepository.delete(challenge);
+
+    return new ChallengeDeleteResponse(challengeId);
   }
 
   // 챌린지 예약
   @Transactional
-  public void reserveChallenge(Long challengeId, Member user) {
+  public ChallengeReservationResponse reserveChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
 
@@ -139,7 +140,7 @@ public class ChallengeService {
       throw new AlreadyReservedException();
     }
 
-    int currentParticipantNum = participantRepository.countByChallengeId(challengeId).intValue();
+    int currentParticipantNum = participantRepository.countByChallengeId(challengeId);
 
     if (currentParticipantNum >= challenge.getMaxParticipantNum()) {
       throw new ParticipantLimitExceededException();
@@ -147,6 +148,8 @@ public class ChallengeService {
 
     Participant participant = new Participant(challenge, user);
     participantRepository.save(participant);
+
+    return new ChallengeReservationResponse(challengeId,user.getId());
   }
 
   @Transactional(readOnly = true)

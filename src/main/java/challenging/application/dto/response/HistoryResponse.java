@@ -7,10 +7,12 @@ public record HistoryResponse(
 
     Boolean is_succeed,
 
-    Boolean is_host
+    Boolean is_host,
+
+    Integer point
 ) {
 
   public static HistoryResponse of(ChallengeResponse challenge, History history) {
-    return new HistoryResponse(challenge, history.getSucceed(), history.getHost());
+    return new HistoryResponse(challenge, history.getSucceed(), history.getHost(),history.getPoint());
   }
 }
