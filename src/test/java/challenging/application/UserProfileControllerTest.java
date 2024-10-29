@@ -4,9 +4,8 @@ package challenging.application;
 
 import challenging.application.auth.jwt.JWTUtils;
 import challenging.application.userprofile.controller.UserProfileController;
-import challenging.application.dto.response.UserProfileResponseDTO;
+import challenging.application.dto.response.UserProfileResponse;
 import challenging.application.userprofile.domain.UserProfile;
-import challenging.application.userprofile.service.UserProfileService;
 import challenging.application.auth.domain.Member;
 import challenging.application.auth.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,7 +72,7 @@ class UserProfileControllerTest {
         userProfile.setPoint(100);
 
         when(userProfileService.getUserProfileByMemberId(1L)).thenReturn(Optional.of(userProfile));
-        UserProfileResponseDTO responseDTO = new UserProfileResponseDTO("testnickname", "testimage", 100);
+        UserProfileResponse responseDTO = new UserProfileResponse("testnickname", "testimage", 100);
         when(userProfileService.convertToDTO(userProfile)).thenReturn(responseDTO);
 
         // when
