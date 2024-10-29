@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.Null;
 
 @Entity
 public class UserProfile {
@@ -14,8 +13,8 @@ public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(mappedBy = "member_id")
-    Member user;
+    @OneToOne(mappedBy = "userProfile")
+    Member member;
     private String userNickName;
 
     private Integer point;
@@ -23,9 +22,9 @@ public class UserProfile {
 
     public UserProfile() {}
 
-    public UserProfile(Long id, Member user, String userNickName, Integer point) {
+    public UserProfile(Long id, Member member, String userNickName, Integer point) {
         this.id = id;
-        this.user = user;
+        this.member = member;
         this.userNickName = userNickName;
         this.point = point;
     }
@@ -42,8 +41,8 @@ public class UserProfile {
         return imageExtension;
     }
 
-    public Member getUser() {
-        return user;
+    public Member getMember() {
+        return member;
     }
 
     public void updateUserNickName(String userNickName) {

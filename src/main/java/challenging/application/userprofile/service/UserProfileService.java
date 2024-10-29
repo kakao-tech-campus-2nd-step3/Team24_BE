@@ -7,7 +7,6 @@ import challenging.application.images.S3PresignedImageService;
 import challenging.application.userprofile.domain.UserProfile;
 import challenging.application.userprofile.repository.UserProfileRepository;
 import org.springframework.stereotype.Service;
-import java.util.Map;
 
 @Service
 public class UserProfileService {
@@ -22,13 +21,13 @@ public class UserProfileService {
     }
 
     public UserProfileGetResponse getUserProfile(Long memberId) {
-        UserProfile userProfile = userProfileRepository.findByUserId(memberId).orElseThrow(
+        UserProfile userProfile = userProfileRepository.findByMemberId(memberId).orElseThrow(
             () -> new RuntimeException()
         );
         // 이미지 작업하고 던져야함
         String presignedGetUrl = s3PresignedImageService.createPresignedGetUrl(
             userProfile.getImageExtension(),
-            userProfile.getUser().getUuid()
+            userProfile.getMember().getUuid()
         );
         UserProfileGetResponse userProfileGetResponse = UserProfileGetResponse.of(userProfile,presignedGetUrl);
 
@@ -36,7 +35,7 @@ public class UserProfileService {
     }
 
     public UserProfilePutResponse putUserProfile(Long memberId, UserProfilePutRequest userProfilePutRequest){
-        UserProfile userProfile = userProfileRepository.findByUserId(memberId).orElseThrow(
+        UserProfile userProfile = userProfileRepository.findByMemberId(memberId).orElseThrow(
             () -> new RuntimeException()
         );
         userProfile.updateUserNickName(userProfilePutRequest.userNickName());
@@ -44,7 +43,7 @@ public class UserProfileService {
 
         String presignedPutUrl = s3PresignedImageService.createPresignedPutUrl(
             userProfile.getImageExtension(),
-            userProfile.getUser().getUuid()
+            userProfile.getMember().getUuid()
         );
 
 
