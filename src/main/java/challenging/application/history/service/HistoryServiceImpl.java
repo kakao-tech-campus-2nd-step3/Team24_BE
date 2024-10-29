@@ -26,8 +26,7 @@ public class HistoryServiceImpl implements HistoryService {
     History history = historyRepository.findHistoryByMemberIdAndId(memberId, historyId)
         .orElseThrow(HistoryNotFoundException::new);
 
-    ChallengeResponse challengeResponseDTO = challengeService.findOneChallenge(
-        history.getChallenge().getId());
+    ChallengeResponse challengeResponseDTO = challengeService.findOneChallenge(history.getChallenge().getId());
 
     return HistoryResponse.of(challengeResponseDTO, history);
   }
@@ -38,8 +37,7 @@ public class HistoryServiceImpl implements HistoryService {
 
     List<HistoryResponse> historyResponses = histories.stream()
         .map(history -> {
-          ChallengeResponse challengeResponseDTO = challengeService.findOneChallenge(
-              history.getChallenge().getId());
+          ChallengeResponse challengeResponseDTO = challengeService.findOneChallenge(history.getChallenge().getId());
           return HistoryResponse.of(challengeResponseDTO, history);
         })
         .collect(Collectors.toList());

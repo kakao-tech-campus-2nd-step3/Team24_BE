@@ -16,7 +16,7 @@ public class History {
 
     private Boolean isHost;
 
-    private String imageUrl;
+    private Integer point;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -30,10 +30,10 @@ public class History {
     }
 
     @Builder
-    public History(Boolean isSucceed, Boolean isHost, String imageUrl, Member member, Challenge challenge) {
+    public History(Boolean isSucceed, Boolean isHost, Integer point, Member member, Challenge challenge) {
         this.isSucceed = isSucceed;
         this.isHost = isHost;
-        this.imageUrl = imageUrl;
+        this.point = point;
         this.member = member;
         this.challenge = challenge;
     }
@@ -49,4 +49,6 @@ public class History {
     public Boolean getHost() {
         return isHost;
     }
+
+    public Integer getPoint() { return point; }
 }
