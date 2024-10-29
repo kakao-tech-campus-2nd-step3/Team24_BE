@@ -101,7 +101,7 @@ class ChallengeServiceTest {
     given(participantRepository.countByChallengeId(1L)).willReturn(2L);
 
     //when
-    ChallengeResponse response = challengeService.getChallengeByIdAndDate(1L);
+    ChallengeResponse response = challengeService.getChallengeById(1L);
 
     //then
     assertThat(response.challengeName()).isEqualTo(challenge.getName());
@@ -115,7 +115,7 @@ class ChallengeServiceTest {
     given(challengeRepository.findById(1L)).willReturn(Optional.empty());
 
     //expected
-    assertThatThrownBy(() -> challengeService.getChallengeByIdAndDate(1L))
+    assertThatThrownBy(() -> challengeService.getChallengeById(1L))
         .isInstanceOf(ChallengeNotFoundException.class)
         .hasMessage(CHALLENGE_NOT_FOUND);
   }
