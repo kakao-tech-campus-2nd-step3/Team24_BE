@@ -10,9 +10,9 @@ import challenging.application.dto.response.ChallengeReservationResponse;
 import challenging.application.dto.response.ChallengeResponse;
 import challenging.application.challenge.service.ChallengeService;
 
+import challenging.application.util.response.ApiResponse;
 import java.util.List;
 
-import challenging.application.dto.response.ReserveChallengeResponse;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,45 +28,45 @@ public class ChallengeController {
 
   // 챌린지 단건 조회
   @GetMapping("/{challengeId}")
-  public ResponseEntity<ChallengeResponse> getChallenge(
+  public ResponseEntity<ApiResponse<ChallengeResponse>> getChallenge(
       @PathVariable Long challengeId) {
 
     ChallengeResponse response = challengeService.getChallengeById(challengeId);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(201,response));
   }
 
   // 챌린지 카테고리 조회
   @GetMapping("/category/{categoryId}")
-  public ResponseEntity<List<ChallengeResponse>> getChallengesByCategory(
+  public ResponseEntity<ApiResponse<List<ChallengeResponse>>> getChallengesByCategory(
       @PathVariable int categoryId,
       @RequestBody DateRequest dateRequest) {
 
     List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate(
         categoryId, dateRequest.date());
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(responses);
+    return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(201,responses));
   }
 
   // 챌린지 생성
   @PostMapping
-  public ResponseEntity<ChallengeCreateResponse> createChallenge(
+  public ResponseEntity<ApiResponse<ChallengeCreateResponse>> createChallenge(
       @RequestBody ChallengeRequest challengeRequestDTO) {
 
-    ChallengeCreateResponse challengeResponse = challengeService.createChallenge(challengeRequestDTO);
+    ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(challengeResponse);
+    return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(201,response));
   }
 
   // 챌린지 삭제
   @DeleteMapping("{challengeId}")
-  public ResponseEntity<ChallengeDeleteResponse> deleteChallenge(
+  public ResponseEntity<ApiResponse<ChallengeDeleteResponse>> deleteChallenge(
       @PathVariable Long challengeId,
       @LoginMember Member loginMember
   ) {
-    ChallengeDeleteResponse challengeResponse = challengeService.deleteChallenge(challengeId, loginMember);
+    ChallengeDeleteResponse response = challengeService.deleteChallenge(challengeId, loginMember);
 
-    return ResponseEntity.status(HttpStatus.OK).body(challengeResponse);
+    return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(200,response));
   }
 
   // 챌린지 예약
