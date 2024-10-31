@@ -44,6 +44,12 @@ public class JWTAccessFilter extends OncePerRequestFilter {
             return;
         }
 
+        if (isReissue(request.getRequestURI())) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authorization = request.getHeader(AUTHORIZATION);
 
         //Authorization 헤더 검증
@@ -97,5 +103,10 @@ public class JWTAccessFilter extends OncePerRequestFilter {
     private boolean isUrlOAuth2(String requestUri) {
         return requestUri.matches("^\\/oauth2(?:\\/.*)?$");
     }
+
+    private boolean isReissue(String requestUri) {
+        return requestUri.matches("^\\/reissue(?:\\/.*)?$");
+    }
+
 
 }

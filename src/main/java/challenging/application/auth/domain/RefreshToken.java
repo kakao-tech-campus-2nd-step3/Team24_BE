@@ -26,4 +26,9 @@ public class RefreshToken {
         this.token = token;
         this.expiration = expiration;
     }
+
+    public void updateToken(String newToken, String newExpiration){
+        this.token = newToken;
+        this.expiration = newExpiration;
+    }
 }
