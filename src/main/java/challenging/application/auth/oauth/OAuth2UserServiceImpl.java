@@ -60,11 +60,11 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         UserProfile userProfile = new UserProfile();
 
-        Member member = new Member(username, username, oAuth2Response.getEmail(), "ROLE_USER",userProfile);
-
-        memberRepository.save(member);
+        Member member = new Member(oAuth2Response.getEmail(), username, "ROLE_USER",userProfile);
 
         userProfileRepository.save(userProfile);
+
+        memberRepository.save(member);
 
         return new OAuth2UserImpl(member);
     }
