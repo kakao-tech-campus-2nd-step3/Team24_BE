@@ -24,11 +24,11 @@ public class JWTUtils {
                 Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
-    public String generateAccessToken(String email, String role) {
+    public String generateAccessToken(String uuid, String role) {
 
         return Jwts.builder()
                 .claim(CATEGORY, ACCESS_TOKEN)
-                .claim(EMAIL, email)
+                .claim(UUID, uuid)
                 .claim(ROLE, role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessExpiredTime))
@@ -36,11 +36,11 @@ public class JWTUtils {
                 .compact();
     }
 
-    public String generateRefreshToken(String email, String role) {
+    public String generateRefreshToken(String uuid, String role) {
 
         return Jwts.builder()
                 .claim(CATEGORY, REFRESH_TOKEN)
-                .claim(EMAIL, email)
+                .claim(UUID, uuid)
                 .claim(ROLE, role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + refreshExpiredTime))
@@ -52,7 +52,7 @@ public class JWTUtils {
         Map<String, String> information = new HashMap<>();
 
         information.put(CATEGORY, getCategory(token));
-        information.put(EMAIL, getEmail(token));
+        information.put(UUID, getUUID(token));
         information.put(ROLE, getRole(token));
 
         return information;
@@ -62,8 +62,8 @@ public class JWTUtils {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
     }
 
-    public String getEmail(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
+    public String getUUID(String uuid){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(uuid).getPayload().get("email", String.class);
     }
 
     public String getRole(String token) {

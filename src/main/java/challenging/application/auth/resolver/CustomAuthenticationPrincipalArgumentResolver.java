@@ -50,9 +50,9 @@ public class CustomAuthenticationPrincipalArgumentResolver implements HandlerMet
         // jwt token 추출
         String token = (String) authentication.getPrincipal();
 
-        String username = jwtUtils.getEmail(token);
+        String uuid = jwtUtils.getUUID(token);
 
-        return memberRepository.findByEmail(username).orElseThrow();
+        return memberRepository.findByEmail(uuid).orElseThrow();
     }
 
     private boolean isAuthenticationMember(Authentication authentication) {

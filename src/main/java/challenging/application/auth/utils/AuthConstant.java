@@ -7,7 +7,7 @@ public class AuthConstant {
     public static final String REFRESH_TOKEN = "refresh_token";
     public static final String CATEGORY = "category";
     public static final String ROLE = "role";
-    public static final String EMAIL = "email";
+    public static final String UUID = "uuid";
     public static final String NAVER = "naver";
     public static final String KAKAO = "kakao";
 }

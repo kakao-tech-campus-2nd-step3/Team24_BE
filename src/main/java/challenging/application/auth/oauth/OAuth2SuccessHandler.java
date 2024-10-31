@@ -33,15 +33,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         OAuth2UserImpl customUserDetails = (OAuth2UserImpl) authentication.getPrincipal();
 
-        String email = customUserDetails.getEmail();
+        String uuid = customUserDetails.getUUID();
 
         String role = getRole(authentication);
 
-        String accessToken = jwtUtil.generateAccessToken(email, role);
+        String accessToken = jwtUtil.generateAccessToken(uuid, role);
 
-        String refreshToken = jwtUtil.generateRefreshToken(email, role);
+        String refreshToken = jwtUtil.generateRefreshToken(uuid, role);
 
-        refreshTokenService.addRefreshEntity(refreshToken, email, jwtUtil.getRefreshExpiredTime());
+        refreshTokenService.addRefreshEntity(refreshToken, uuid, jwtUtil.getRefreshExpiredTime());
 
         log.info("Access = {}", accessToken);
         log.info("Refresh = {}", refreshToken);
