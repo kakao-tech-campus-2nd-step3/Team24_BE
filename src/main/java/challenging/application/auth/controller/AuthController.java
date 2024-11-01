@@ -14,7 +14,7 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
     @GetMapping
-    public ResponseEntity<Map<String, String>> authorization(){
+    public ResponseEntity<Map<String, String>> authorization() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Authorization 컨트롤러 입니다.");
 

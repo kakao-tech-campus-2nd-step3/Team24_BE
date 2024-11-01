@@ -1,12 +1,16 @@
 package challenging.application.auth.oauth;
 
+import challenging.application.auth.domain.Member;
+import challenging.application.auth.domain.RefreshToken;
 import challenging.application.auth.jwt.JWTUtils;
+import challenging.application.auth.repository.MemberRepository;
 import challenging.application.auth.service.RefreshTokenService;
 import challenging.application.auth.utils.servletUtils.cookie.CookieUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,20 +32,32 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JWTUtils jwtUtil;
     private final RefreshTokenService refreshTokenService;
+    private final MemberRepository memberRepository;
+
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
 
         OAuth2UserImpl customUserDetails = (OAuth2UserImpl) authentication.getPrincipal();
 
-        String email = customUserDetails.getEmail();
+        String uuid = customUserDetails.getUUID();
 
         String role = getRole(authentication);
 
-        String accessToken = jwtUtil.generateAccessToken(email, role);
+        Optional<Member> findMember = memberRepository.findByUuid(uuid);
 
-        String refreshToken = jwtUtil.generateRefreshToken(email, role);
+        Optional<RefreshToken> findRefreshToken = refreshTokenService.findRefreshToken(findMember.get().getId());
 
-        refreshTokenService.addRefreshEntity(refreshToken, email, jwtUtil.getRefreshExpiredTime());
+        String refreshToken = null;
+
+        if (findRefreshToken.isEmpty()) {
+            refreshToken = jwtUtil.generateRefreshToken(uuid, role);
+            refreshTokenService.addRefreshEntity(refreshToken, uuid, jwtUtil.getRefreshExpiredTime());
+        } else {
+            refreshToken = findRefreshToken.get().getToken();
+        }
+
+        String accessToken = jwtUtil.generateAccessToken(uuid, role);
 
         log.info("Access = {}", accessToken);
         log.info("Refresh = {}", refreshToken);
@@ -49,7 +65,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         setInformationInResponse(response, accessToken, refreshToken);
     }
 
-    private void setInformationInResponse(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
+    private void setInformationInResponse(HttpServletResponse response, String accessToken, String refreshToken)
+            throws IOException {
         Cookie access = CookieUtils.createCookie(ACCESS_TOKEN, accessToken);
         Cookie refresh = CookieUtils.createCookie(REFRESH_TOKEN, refreshToken);
 

@@ -10,6 +10,7 @@ import challenging.application.auth.repository.MemberRepository;
 import challenging.application.dto.response.ChallengeResponse;
 import challenging.application.dto.response.HistoryResponse;
 import challenging.application.history.service.HistoryServiceImpl;
+import challenging.application.userprofile.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,7 +67,7 @@ class HistoryApiControllerTest {
         String email = "pnu@pusan.ac.kr";
         Long historyId = 1L;
 
-        given(jwtUtils.getEmail(token)).willReturn(email);
+        given(jwtUtils.getUUID(token)).willReturn(email);
         given(memberRepository.findByEmail(email)).willReturn(Optional.of(member));
 
         //when
@@ -87,7 +88,7 @@ class HistoryApiControllerTest {
         String token = "AccessToken";
         String email = "pnu@pusan.ac.kr";
 
-        given(jwtUtils.getEmail(token)).willReturn(email);
+        given(jwtUtils.getUUID(token)).willReturn(email);
         given(memberRepository.findByEmail(email)).willReturn(Optional.of(member));
 
         //when
@@ -103,7 +104,9 @@ class HistoryApiControllerTest {
     }
 
     private void dataSetUp() throws Exception{
-        member = new Member("pnu", "pnu", "pnu@pusan.ac.kr","ROLE_USER");
+        UserProfile userProfile = new UserProfile();
+
+        member = new Member("pnu@pusan.ac.kr", "pnu", "ROLE_USER",userProfile);
 
         challenge1 = Challenge.builder()
                 .body("운동 챌린지")
@@ -114,7 +117,7 @@ class HistoryApiControllerTest {
                 .startTime(LocalTime.now())
                 .endTime(LocalTime.now())
                 .host(member)
-                .imageUrl("abc.png")
+                .imageExtension("png")
                 .minParticipantNum(2)
                 .maxParticipantNum(4)
                 .build();
@@ -132,7 +135,7 @@ class HistoryApiControllerTest {
                 .startTime(LocalTime.now())
                 .endTime(LocalTime.now())
                 .host(member)
-                .imageUrl("abc2.png")
+                .imageExtension("png")
                 .minParticipantNum(2)
                 .maxParticipantNum(4)
                 .build();
@@ -146,7 +149,6 @@ class HistoryApiControllerTest {
                 .member(member)
                 .isSucceed(Boolean.FALSE)
                 .isHost(Boolean.TRUE)
-                .imageUrl("abc.png")
                 .build();
 
         history2 = History.builder()
@@ -154,7 +156,6 @@ class HistoryApiControllerTest {
                 .member(member)
                 .isSucceed(Boolean.FALSE)
                 .isHost(Boolean.TRUE)
-                .imageUrl("abc.png")
                 .build();
 
         challengeResponse1 = ChallengeResponse.fromEntity(challenge1, 1);

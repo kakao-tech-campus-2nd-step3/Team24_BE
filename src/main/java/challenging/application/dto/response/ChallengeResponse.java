@@ -3,6 +3,7 @@ package challenging.application.dto.response;
 import challenging.application.challenge.domain.Challenge;
 
 public record ChallengeResponse(
+    Long challengeId,
     String challengeName,
     String challengeBody,
     int point,
@@ -17,15 +18,16 @@ public record ChallengeResponse(
     int categoryId
 ) {
 
-  public static ChallengeResponse fromEntity(Challenge challenge, int currentParticipantNum) {
+  public static ChallengeResponse fromEntity(Challenge challenge, int currentParticipantNum, String imgUrl) {
     return new ChallengeResponse(
+        challenge.getId(),
         challenge.getName(),
         challenge.getBody(),
         challenge.getPoint(),
         challenge.getDate().toString(),
         challenge.getStartTime().toString(),
         challenge.getEndTime().toString(),
-        challenge.getImageUrl(),
+        imgUrl,
         challenge.getMinParticipantNum(),
         challenge.getMaxParticipantNum(),
         currentParticipantNum,
