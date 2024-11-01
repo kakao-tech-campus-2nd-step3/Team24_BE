@@ -1,17 +1,11 @@
 # Team24_BE
 
-## 개발 스프린트 4 리뷰 받고 싶은 내용
-
-이가현
-- 커밋 단위 & 커밋 메시지
+상수 리팩토링은 다음주 패키지 구조를 전반적으로 수정 후 리팩토링 할예정입니다.
+사전 배포 테스트를 위해 api가 전반적으로 수정되어서 test case 를 전부 수정하지 못했습니다 다음주에 진행할 예정입니다.
 
 24조
-- Test Case 위주로 리뷰 받고싶습니다.
-- 이번 주 작성한 테스트 코드는 다음과 같습니다
-  - Challenge Repository, Challenge Service
-  - History Service, History Controller
-  - Security Test (아직 다 작성하지 않았지만 방향성이 맞는지 확인하기 위해 merge 했습니다!!)
-  - Controller 와 Security 를 통합하여 단위테스트를 진행하려고 하니 너무 의존성이 복잡해서 분리했습니다.
-    - Controller 테스트에서는 Controller 에만 집중하기 위해 Security 를 통과한 상황을 가정하고
-    - Security Test 에서 Token 으로 인한 통과 성공, 실패 테스트를 진행했습니다.
-    - 이렇게 테스트 하는게 맞는지 궁금합니다!!
+1. api 버전을 함께 지정한다는 말이 api/v1/.... 과 같이 작성한다는 말인가요?
+2. aop를 활용하여 응답구조를 공통으로 처리해주면 좋다고 하셔서 ApiResponse 를 도입했습니다. 멘토님의 코드리뷰가 위와 같은 방식의 의도가 맞나요??
+3. presigned url을 사용할때 많은양의 presigend를 하나씩 받아서 사용하는데 현업에서도 이런식으로 사용하는지 궁금합니다
+4. S3 Presigned URL을 사용하는 경우 권한을 위한 최소 권한 설정은 어떻게 구성하는 것이 좋을까요?
+   
