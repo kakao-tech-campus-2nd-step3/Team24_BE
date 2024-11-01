@@ -7,6 +7,7 @@ import challenging.application.dto.response.UserProfileResponse.UserProfilePutRe
 import challenging.application.userprofile.domain.UserProfile;
 import challenging.application.auth.domain.Member; // Member 엔터티
 import challenging.application.userprofile.service.UserProfileService;
+import challenging.application.util.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,22 +27,24 @@ public class UserProfileController {
     private final UserProfileService userProfileService;
 
     @GetMapping
-    public ResponseEntity<?> getUserProfile(@LoginMember Member user) {
+    public ResponseEntity<ApiResponse<?>> getUserProfile(@LoginMember Member user) {
 
         UserProfileGetResponse userProfileResponse = userProfileService.getUserProfile(user.getId());
 
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(userProfileResponse);
-
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ApiResponse<>("success", 200, "유저 프로필 조회가 완료되었습니다.", userProfileResponse));
     }
 
     @PostMapping
-    public ResponseEntity<?> updateUserProfile(
-        @LoginMember Member user,
-        @RequestBody UserProfileRequest.UserProfilePutRequest userProfilePutRequest)
-    {
-        UserProfilePutResponse userProfileResponse = userProfileService.putUserProfile(user.getId(),userProfilePutRequest);
+    public ResponseEntity<ApiResponse<?>> updateUserProfile(
+            @LoginMember Member user,
+            @RequestBody UserProfileRequest.UserProfilePutRequest userProfilePutRequest) {
+        UserProfilePutResponse userProfileResponse = userProfileService.putUserProfile(user.getId(),
+                userProfilePutRequest);
 
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(userProfileResponse);
-
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ApiResponse<>("success", 200, "유저 프로필 수정이 완료되었습니다.", userProfileResponse));
     }
 }

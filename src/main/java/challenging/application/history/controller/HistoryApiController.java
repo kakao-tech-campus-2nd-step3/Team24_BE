@@ -4,6 +4,7 @@ import challenging.application.auth.annotation.LoginMember;
 import challenging.application.auth.domain.Member;
 import challenging.application.dto.response.HistoryResponse;
 import challenging.application.history.service.HistoryService;
+import challenging.application.util.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,15 +24,19 @@ public class HistoryApiController {
     private final HistoryService historyService;
 
     @GetMapping("/{historyId}")
-    public ResponseEntity<HistoryResponse> getHistoryOne(@LoginMember Member member, @PathVariable Long historyId){
+    public ResponseEntity<ApiResponse<HistoryResponse>> getHistoryOne(@LoginMember Member member,
+                                                                      @PathVariable Long historyId) {
         HistoryResponse findHistory = historyService.findOneHistory(member.getId(), historyId);
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(findHistory);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>("success", 200, "특정 기록 조회가 완료되었습니다.", findHistory));
     }
 
     @GetMapping
-    public ResponseEntity<List<HistoryResponse>> getHistories(@LoginMember Member member){
+    public ResponseEntity<ApiResponse<List<HistoryResponse>>> getHistories(@LoginMember Member member) {
         List<HistoryResponse> histories = historyService.findAllHistory(member.getId());
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(histories);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>("success", 200, "전체 기록 조회가 완료되었습니다.", histories));
     }
 
 }
