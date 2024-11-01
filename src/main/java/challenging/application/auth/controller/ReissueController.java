@@ -31,17 +31,14 @@ public class ReissueController {
 
         Map<String, String> jwtInformation = jwtUtil.getJWTInformation(refresh);
 
-        String email = jwtInformation.get(EMAIL);
+        String uuid = jwtInformation.get(UUID);
         String role = jwtInformation.get(ROLE);
 
-        //make new JWT
-        String newAccess = jwtUtil.generateAccessToken(email, role);
-        String newRefresh = jwtUtil.generateRefreshToken(email, role);
+        String newAccess = jwtUtil.generateAccessToken(uuid, role);
+        String newRefresh = jwtUtil.generateRefreshToken(uuid, role);
 
-        //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
-        refreshTokenService.renewalRefreshToken(refresh, newRefresh, email, jwtUtil.getRefreshExpiredTime());
+        refreshTokenService.renewalRefreshToken(refresh, newRefresh, jwtUtil.getRefreshExpiredTime());
 
-        //response
         response.setHeader(AUTHORIZATION, BEARER + newAccess);
 
         response.addCookie(CookieUtils.createCookie(REFRESH_TOKEN, newRefresh));

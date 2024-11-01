@@ -15,8 +15,6 @@ import lombok.ToString;
 
 @Entity
 @Getter
-@Setter
-@ToString
 public class Member {
 
     @Id
@@ -27,8 +25,6 @@ public class Member {
 
     private String username;
 
-    private String nickName;
-
     private String uuid;
 
     private String role;
@@ -36,12 +32,13 @@ public class Member {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userprofile_id")
     private UserProfile userProfile;
-    protected Member() {}
 
-    public Member(String email, String username, String nickName, String role, UserProfile userProfile) {
+    protected Member() {
+    }
+
+    public Member(String email, String username, String role, UserProfile userProfile) {
         this.email = email;
         this.username = username;
-        this.nickName = nickName;
         this.role = role;
         this.userProfile = userProfile;
         this.uuid = UUID.randomUUID().toString();

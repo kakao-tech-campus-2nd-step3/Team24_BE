@@ -29,8 +29,10 @@ public class JWTAccessFilter extends OncePerRequestFilter {
 
     private final JWTUtils jwtUtils;
     private final FilterResponseUtils filterResponseUtils;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         if (isUrlLogin(request.getRequestURI())) {
 
@@ -39,6 +41,12 @@ public class JWTAccessFilter extends OncePerRequestFilter {
         }
 
         if (isUrlOAuth2(request.getRequestURI())) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (isReissue(request.getRequestURI())) {
 
             filterChain.doFilter(request, response);
             return;
@@ -62,16 +70,16 @@ public class JWTAccessFilter extends OncePerRequestFilter {
         }
 
         // 토큰이 access인지 확인 (발급시 페이로드에 명시)
-        if(!filterResponseUtils.checkTokenType(response, token, ACCESS_TOKEN)){
+        if (!filterResponseUtils.checkTokenType(response, token, ACCESS_TOKEN)) {
             return;
         }
-        
+
         //토큰에서 username과 role 획득
         Collection<GrantedAuthority> collection = getGrantedAuthorities(token);
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(token, null, collection);
 
-        log.info("in the jwt Filter authentication = {}",authToken);
+        log.info("in the jwt Filter authentication = {}", authToken);
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
@@ -97,5 +105,10 @@ public class JWTAccessFilter extends OncePerRequestFilter {
     private boolean isUrlOAuth2(String requestUri) {
         return requestUri.matches("^\\/oauth2(?:\\/.*)?$");
     }
+
+    private boolean isReissue(String requestUri) {
+        return requestUri.matches("^\\/reissue(?:\\/.*)?$");
+    }
+
 
 }

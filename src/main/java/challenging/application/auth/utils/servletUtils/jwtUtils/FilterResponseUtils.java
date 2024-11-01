@@ -3,6 +3,7 @@ package challenging.application.auth.utils.servletUtils.jwtUtils;
 import challenging.application.exception.ErrorResult;
 import challenging.application.auth.jwt.JWTUtils;
 import challenging.application.auth.repository.RefreshTokenRepository;
+import challenging.application.util.response.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -30,16 +31,16 @@ public class FilterResponseUtils {
         } catch (ExpiredJwtException e) {
             generateUnauthorizedErrorResponse(EXPIRED_JWT_EXCEPTION, response);
             return true;
-        } catch (MalformedJwtException e){
+        } catch (MalformedJwtException e) {
             generateUnauthorizedErrorResponse(MALFORMED_JWT_EXCEPTION, response);
             return true;
-        } catch (UnsupportedJwtException e){
+        } catch (UnsupportedJwtException e) {
             generateUnauthorizedErrorResponse(UNSUPPORTED_JWT_EXCEPTION, response);
             return true;
-        } catch (SignatureException e){
+        } catch (SignatureException e) {
             generateUnauthorizedErrorResponse(SIGNATURE_EXCEPTION, response);
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             generateUnauthorizedErrorResponse(JWT_EXCEPTION, response);
             return true;
         }
@@ -59,11 +60,12 @@ public class FilterResponseUtils {
 
     public void generateUnauthorizedErrorResponse(String message, HttpServletResponse response) throws IOException {
         ErrorResult errorResult = new ErrorResult("401", message);
-        String jsonResponse = objectMapper.writeValueAsString(errorResult);
+
+        String errorResponse = objectMapper.writeValueAsString(ApiResponse.errorResponse(errorResult));
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(jsonResponse);
+        response.getWriter().write(errorResponse);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 

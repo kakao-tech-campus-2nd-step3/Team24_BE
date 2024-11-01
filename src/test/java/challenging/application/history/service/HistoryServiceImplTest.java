@@ -9,6 +9,7 @@ import challenging.application.dto.response.HistoryResponse;
 import challenging.application.exception.challenge.HistoryNotFoundException;
 import challenging.application.history.domain.History;
 import challenging.application.history.repository.HistoryRepository;
+import challenging.application.userprofile.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -101,8 +102,9 @@ class HistoryServiceImplTest {
 
     @BeforeEach
     void setUp() throws Exception{
+        UserProfile userProfile = new UserProfile();
 
-        member = new Member("pnu", "pnu", "pnu@pusan.ac.kr","ROLE_USER");
+        member = new Member("pnu@pusan.ac.kr", "pnu", "ROLE_USER",userProfile);
 
         challenge1 = Challenge.builder()
                 .body("운동 챌린지")
@@ -113,7 +115,7 @@ class HistoryServiceImplTest {
                 .startTime(LocalTime.now())
                 .endTime(LocalTime.now())
                 .host(member)
-                .imageUrl("abc.png")
+                .imageExtension("png")
                 .minParticipantNum(2)
                 .maxParticipantNum(4)
                 .build();
@@ -131,7 +133,7 @@ class HistoryServiceImplTest {
                 .startTime(LocalTime.now())
                 .endTime(LocalTime.now())
                 .host(member)
-                .imageUrl("abc2.png")
+                .imageExtension("png")
                 .minParticipantNum(2)
                 .maxParticipantNum(4)
                 .build();
@@ -145,7 +147,6 @@ class HistoryServiceImplTest {
                 .member(member)
                 .isSucceed(Boolean.FALSE)
                 .isHost(Boolean.TRUE)
-                .imageUrl("abc.png")
                 .build();
 
         history2 = History.builder()
@@ -153,7 +154,6 @@ class HistoryServiceImplTest {
                 .member(member)
                 .isSucceed(Boolean.FALSE)
                 .isHost(Boolean.TRUE)
-                .imageUrl("abc.png")
                 .build();
     }
 

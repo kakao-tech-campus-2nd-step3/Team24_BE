@@ -32,19 +32,17 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        log.info("oauth user = {}",oAuth2User.getAttributes());
+        log.info("oauth user = {}", oAuth2User.getAttributes());
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         OAuth2Response oAuth2Response = null;
 
-        if(registrationId.equals(NAVER)){
+        if (registrationId.equals(NAVER)) {
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
-        }
-        else if (registrationId.equals(KAKAO)){
+        } else if (registrationId.equals(KAKAO)) {
             oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
-        }
-        else{
+        } else {
             return null;
         }
 
@@ -52,7 +50,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         Optional<Member> memberOptional = memberRepository.findByUsername(username);
 
-        if(memberOptional.isPresent()){
+        if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
 
             return new OAuth2UserImpl(member);
@@ -60,11 +58,11 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         UserProfile userProfile = new UserProfile();
 
-        Member member = new Member(username, username, oAuth2Response.getEmail(), "ROLE_USER",userProfile);
-
-        memberRepository.save(member);
+        Member member = new Member(oAuth2Response.getEmail(), username, "ROLE_USER", userProfile);
 
         userProfileRepository.save(userProfile);
+
+        memberRepository.save(member);
 
         return new OAuth2UserImpl(member);
     }
