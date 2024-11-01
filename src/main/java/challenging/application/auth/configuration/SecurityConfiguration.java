@@ -57,7 +57,7 @@ public class SecurityConfiguration {
 
         http
             .addFilterAfter(new JWTAccessFilter(jwtUtil, filterResponseUtils), OAuth2LoginAuthenticationFilter.class)
-            .addFilterAfter(new JWTRefreshFilter(filterResponseUtils), OAuth2LoginAuthenticationFilter.class)
+            .addFilterAfter(new JWTRefreshFilter(refreshTokenRepository, filterResponseUtils), OAuth2LoginAuthenticationFilter.class)
             .addFilterBefore(new JWTLogoutFilter(refreshTokenRepository, filterResponseUtils), LogoutFilter.class);
 
         http

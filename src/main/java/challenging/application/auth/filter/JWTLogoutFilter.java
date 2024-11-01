@@ -52,6 +52,7 @@ public class JWTLogoutFilter extends GenericFilterBean {
         }
 
         if (filterResponseUtils.isTokenExpired(response, refresh)) {
+            refreshRepository.deleteByToken(refresh);
             return;
         }
 

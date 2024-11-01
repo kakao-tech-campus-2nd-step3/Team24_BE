@@ -1,5 +1,6 @@
 package challenging.application.auth.filter;
 
+import challenging.application.auth.repository.RefreshTokenRepository;
 import challenging.application.auth.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,6 +20,7 @@ import static challenging.application.auth.utils.servletUtils.cookie.CookieUtils
 @Slf4j
 public class JWTRefreshFilter extends OncePerRequestFilter {
 
+    private final RefreshTokenRepository refreshRepository;
     private final FilterResponseUtils filterResponseUtils;
 
     @Override
@@ -42,6 +44,7 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
         }
 
         if (filterResponseUtils.isTokenExpired(response, refresh)) {
+            refreshRepository.deleteByToken(refresh);
             return;
         }
 
