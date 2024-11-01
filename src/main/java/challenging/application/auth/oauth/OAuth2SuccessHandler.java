@@ -33,8 +33,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final JWTUtils jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final MemberRepository memberRepository;
+
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
 
         OAuth2UserImpl customUserDetails = (OAuth2UserImpl) authentication.getPrincipal();
 
@@ -48,10 +50,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String refreshToken = null;
 
-        if(findRefreshToken.isEmpty()){
+        if (findRefreshToken.isEmpty()) {
             refreshToken = jwtUtil.generateRefreshToken(uuid, role);
             refreshTokenService.addRefreshEntity(refreshToken, uuid, jwtUtil.getRefreshExpiredTime());
-        }else{
+        } else {
             refreshToken = findRefreshToken.get().getToken();
         }
 
@@ -63,7 +65,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         setInformationInResponse(response, accessToken, refreshToken);
     }
 
-    private void setInformationInResponse(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
+    private void setInformationInResponse(HttpServletResponse response, String accessToken, String refreshToken)
+            throws IOException {
         Cookie access = CookieUtils.createCookie(ACCESS_TOKEN, accessToken);
         Cookie refresh = CookieUtils.createCookie(REFRESH_TOKEN, refreshToken);
 

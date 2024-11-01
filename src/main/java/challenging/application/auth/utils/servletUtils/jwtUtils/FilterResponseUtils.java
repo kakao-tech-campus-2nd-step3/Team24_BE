@@ -30,16 +30,16 @@ public class FilterResponseUtils {
         } catch (ExpiredJwtException e) {
             generateUnauthorizedErrorResponse(EXPIRED_JWT_EXCEPTION, response);
             return true;
-        } catch (MalformedJwtException e){
+        } catch (MalformedJwtException e) {
             generateUnauthorizedErrorResponse(MALFORMED_JWT_EXCEPTION, response);
             return true;
-        } catch (UnsupportedJwtException e){
+        } catch (UnsupportedJwtException e) {
             generateUnauthorizedErrorResponse(UNSUPPORTED_JWT_EXCEPTION, response);
             return true;
-        } catch (SignatureException e){
+        } catch (SignatureException e) {
             generateUnauthorizedErrorResponse(SIGNATURE_EXCEPTION, response);
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             generateUnauthorizedErrorResponse(JWT_EXCEPTION, response);
             return true;
         }

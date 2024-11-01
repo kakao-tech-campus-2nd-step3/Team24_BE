@@ -24,7 +24,8 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
     private final FilterResponseUtils filterResponseUtils;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         if (!isUrlRefresh(request.getRequestURI())) {
 
@@ -52,7 +53,7 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
             return;
         }
 
-        request.setAttribute(REFRESH_TOKEN,refresh);
+        request.setAttribute(REFRESH_TOKEN, refresh);
 
         filterChain.doFilter(request, response);
     }

@@ -31,17 +31,18 @@ public class CustomAuthenticationPrincipalArgumentResolver implements HandlerMet
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(isAuthenticationMember(authentication)){
+        if (isAuthenticationMember(authentication)) {
             log.info("Authentication 객체가 없거나, 익명 사용자 입니다.");
             return null;
         }
 
         Member member = getMemberFromAuthentication(authentication);
 
-        log.info("member name = {}",member.getUsername());
+        log.info("member name = {}", member.getUsername());
 
         return member;
     }

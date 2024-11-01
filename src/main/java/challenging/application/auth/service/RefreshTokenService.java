@@ -21,7 +21,7 @@ public class RefreshTokenService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public RefreshToken renewalRefreshToken(String previousToken, String newToken, Long expiredMs){
+    public RefreshToken renewalRefreshToken(String previousToken, String newToken, Long expiredMs) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(previousToken)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 REFRESH_TOKEN 입니다."));
 
@@ -34,7 +34,8 @@ public class RefreshTokenService {
 
     @Transactional
     public RefreshToken addRefreshEntity(String refresh, String uuid, Long expiredMs) {
-        Member member = memberRepository.findByUuid(uuid).orElseThrow(() -> new EntityNotFoundException(uuid + "의 회원이 없습니다."));
+        Member member = memberRepository.findByUuid(uuid)
+                .orElseThrow(() -> new EntityNotFoundException(uuid + "의 회원이 없습니다."));
 
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
@@ -45,7 +46,7 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
-    public Optional<RefreshToken> findRefreshToken(Long memberId){
+    public Optional<RefreshToken> findRefreshToken(Long memberId) {
         return refreshTokenRepository.findRefreshTokenByMemberId(memberId);
     }
 

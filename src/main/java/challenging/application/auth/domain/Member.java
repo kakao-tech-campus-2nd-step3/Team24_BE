@@ -32,7 +32,9 @@ public class Member {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userprofile_id")
     private UserProfile userProfile;
-    protected Member() {}
+
+    protected Member() {
+    }
 
     public Member(String email, String username, String role, UserProfile userProfile) {
         this.email = email;

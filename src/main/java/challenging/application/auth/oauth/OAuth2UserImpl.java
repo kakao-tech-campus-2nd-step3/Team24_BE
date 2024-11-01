@@ -42,7 +42,7 @@ public class OAuth2UserImpl implements OAuth2User {
         return member.getUsername();
     }
 
-    public String getUUID(){
+    public String getUUID() {
         return member.getUuid();
     }
 }

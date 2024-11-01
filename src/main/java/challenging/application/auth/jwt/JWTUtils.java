@@ -19,7 +19,7 @@ public class JWTUtils {
     private final Long accessExpiredTime = 60 * 10 * 1000L;
     private final Long refreshExpiredTime = 60 * 60 * 24 * 1000L;
 
-    public JWTUtils(@Value("${spring.jwt.secret}") String secret){
+    public JWTUtils(@Value("${spring.jwt.secret}") String secret) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS256.key().build().getAlgorithm());
     }
@@ -48,7 +48,7 @@ public class JWTUtils {
                 .compact();
     }
 
-    public Map<String, String> getJWTInformation(String token){
+    public Map<String, String> getJWTInformation(String token) {
         Map<String, String> information = new HashMap<>();
 
         information.put(CATEGORY, getCategory(token));
@@ -59,19 +59,25 @@ public class JWTUtils {
     }
 
     public String getCategory(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
+                .get("category", String.class);
     }
 
-    public String getUUID(String uuid){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(uuid).getPayload().get("email", String.class);
+    public String getUUID(String uuid) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(uuid).getPayload()
+                .get("email", String.class);
     }
 
     public String getRole(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
+                .get("role", String.class);
     }
+
     public Boolean isExpired(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration()
+                .before(new Date());
     }
+
     public Long getRefreshExpiredTime() {
         return refreshExpiredTime;
     }

@@ -47,25 +47,28 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-            .csrf((auth) -> auth.disable());
+                .csrf((auth) -> auth.disable());
 
         http
-            .formLogin((auth) -> auth.disable());
+                .formLogin((auth) -> auth.disable());
 
         http
-            .httpBasic((auth) -> auth.disable());
+                .httpBasic((auth) -> auth.disable());
 
         http
-            .addFilterAfter(new JWTAccessFilter(jwtUtil, filterResponseUtils), OAuth2LoginAuthenticationFilter.class)
-            .addFilterAfter(new JWTRefreshFilter(refreshTokenRepository, filterResponseUtils), OAuth2LoginAuthenticationFilter.class)
-            .addFilterBefore(new JWTLogoutFilter(refreshTokenRepository, filterResponseUtils), LogoutFilter.class);
+                .addFilterAfter(new JWTAccessFilter(jwtUtil, filterResponseUtils),
+                        OAuth2LoginAuthenticationFilter.class)
+                .addFilterAfter(new JWTRefreshFilter(refreshTokenRepository, filterResponseUtils),
+                        OAuth2LoginAuthenticationFilter.class)
+                .addFilterBefore(new JWTLogoutFilter(refreshTokenRepository, filterResponseUtils), LogoutFilter.class);
 
         http
-            .oauth2Login((oauth2) -> oauth2
-                    .loginPage("/login")
-                    .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(oAuth2UserService))
-                    .successHandler(oAuth2SuccessHandler)
-            );
+                .oauth2Login((oauth2) -> oauth2
+                        .loginPage("/login")
+                        .userInfoEndpoint(
+                                (userInfoEndpointConfig) -> userInfoEndpointConfig.userService(oAuth2UserService))
+                        .successHandler(oAuth2SuccessHandler)
+                );
 
         http
                 .authorizeHttpRequests((auth) -> auth
@@ -75,7 +78,7 @@ public class SecurityConfiguration {
 
         http
                 .sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
