@@ -33,7 +33,7 @@ public class UserProfileController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new ApiResponse<>("success", 200, "유저 프로필 조회가 완료되었습니다.", userProfileResponse));
+                .body(ApiResponse.successResponse(userProfileResponse));
     }
 
     @PostMapping
@@ -45,6 +45,6 @@ public class UserProfileController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new ApiResponse<>("success", 200, "유저 프로필 수정이 완료되었습니다.", userProfileResponse));
+                .body(ApiResponse.successResponse(userProfileResponse));
     }
 }

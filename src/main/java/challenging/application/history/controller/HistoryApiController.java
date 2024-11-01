@@ -24,19 +24,20 @@ public class HistoryApiController {
     private final HistoryService historyService;
 
     @GetMapping("/{historyId}")
-    public ResponseEntity<ApiResponse<HistoryResponse>> getHistoryOne(@LoginMember Member member,
+    public ResponseEntity<ApiResponse<?>> getHistoryOne(@LoginMember Member member,
                                                                       @PathVariable Long historyId) {
         HistoryResponse findHistory = historyService.findOneHistory(member.getId(), historyId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ApiResponse<>("success", 200, "특정 기록 조회가 완료되었습니다.", findHistory));
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.successResponse(findHistory));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<HistoryResponse>>> getHistories(@LoginMember Member member) {
+    public ResponseEntity<ApiResponse<?>> getHistories(@LoginMember Member member) {
         List<HistoryResponse> histories = historyService.findAllHistory(member.getId());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ApiResponse<>("success", 200, "전체 기록 조회가 완료되었습니다.", histories));
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.successResponse(histories));
     }
-
 }
