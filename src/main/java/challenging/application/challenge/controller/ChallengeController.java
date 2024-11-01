@@ -28,57 +28,56 @@ public class ChallengeController {
 
   // 챌린지 단건 조회
   @GetMapping("/{challengeId}")
-  public ResponseEntity<ApiResponse<ChallengeResponse>> getChallenge(
+  public ResponseEntity<ApiResponse<?>> getChallenge(
       @PathVariable Long challengeId) {
 
     ChallengeResponse response = challengeService.getChallengeById(challengeId);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(201,response));
+    return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.successResponse(response));
   }
 
   // 챌린지 카테고리 조회
   @GetMapping("/category/{categoryId}")
-  public ResponseEntity<ApiResponse<List<ChallengeResponse>>> getChallengesByCategory(
+  public ResponseEntity<ApiResponse<?>> getChallengesByCategory(
       @PathVariable int categoryId,
       @RequestBody DateRequest dateRequest) {
 
-    List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate(
-        categoryId, dateRequest.date());
+    List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate(categoryId, dateRequest.date());
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(201,responses));
+    return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.successResponse(responses));
   }
 
   // 챌린지 생성
   @PostMapping
-  public ResponseEntity<ApiResponse<ChallengeCreateResponse>> createChallenge(
+  public ResponseEntity<ApiResponse<?>> createChallenge(
       @RequestBody ChallengeRequest challengeRequestDTO) {
 
     ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(201,response));
+    return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createResponse(response));
   }
 
   // 챌린지 삭제
   @DeleteMapping("{challengeId}")
-  public ResponseEntity<ApiResponse<ChallengeDeleteResponse>> deleteChallenge(
+  public ResponseEntity<ApiResponse<?>> deleteChallenge(
       @PathVariable Long challengeId,
       @LoginMember Member loginMember
   ) {
     ChallengeDeleteResponse response = challengeService.deleteChallenge(challengeId, loginMember);
 
-    return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(200,response));
+    return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.successResponse(response));
   }
 
   // 챌린지 예약
   @PostMapping("/reservation/{challengeId}")
-  public ResponseEntity<?> reserveChallenge(
+  public ResponseEntity<ApiResponse<?>> reserveChallenge(
       @PathVariable Long challengeId,
       @LoginMember Member loginMember
   ) {
     ChallengeReservationResponse challengeResponse = challengeService.reserveChallenge(challengeId, loginMember);
 
     return ResponseEntity.status(HttpStatus.OK)
-        .contentType(MediaType.APPLICATION_JSON)
-        .body(challengeResponse);
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(ApiResponse.successResponse(challengeResponse));
   }
 }
