@@ -12,11 +12,11 @@ import challenging.application.dto.response.ChallengeDeleteResponse;
 import challenging.application.dto.response.ChallengeReservationResponse;
 import challenging.application.dto.response.ChallengeResponse;
 import challenging.application.exception.challenge.*;
+import challenging.application.images.S3PresignedImageService;
 import challenging.application.repository.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -28,15 +28,18 @@ public class ChallengeService {
   private final ChallengeRepository challengeRepository;
   private final MemberRepository memberRepository;
   private final ParticipantRepository participantRepository;
+  private final S3PresignedImageService s3PresignedImageService;
   private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd:HH:mm");
 
   public ChallengeService(ChallengeRepository challengeRepository,
       MemberRepository memberRepository,
-      ParticipantRepository participantRepository) {
+      ParticipantRepository participantRepository,
+      S3PresignedImageService s3PresignedImageService) {
     this.challengeRepository = challengeRepository;
     this.memberRepository = memberRepository;
     this.participantRepository = participantRepository;
+    this.s3PresignedImageService = s3PresignedImageService;
   }
 
   // 챌린지 단건 조회
@@ -47,7 +50,16 @@ public class ChallengeService {
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId);
 
-    return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
+    String challengePresignedGetUrl = null;
+
+    if (challenge.getImageExtension() != null){
+      challengePresignedGetUrl = s3PresignedImageService.createChallengePresignedGetUrl(
+          challenge.getImageExtension(),
+          challengeId
+      );
+    }
+
+    return ChallengeResponse.fromEntity(challenge, currentParticipantNum,challengePresignedGetUrl);
   }
 
   private LocalDateTime parseDate(String date) {
@@ -79,7 +91,15 @@ public class ChallengeService {
         .map(
              challenge -> {
                 int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId());
-                return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
+               String challengePresignedGetUrl = null;
+
+               if (challenge.getImageExtension() != null) {
+                 challengePresignedGetUrl = s3PresignedImageService.createChallengePresignedGetUrl(
+                     challenge.getImageExtension(),
+                     challenge.getId()
+                 );
+               }
+                return ChallengeResponse.fromEntity(challenge, currentParticipantNum,challengePresignedGetUrl);
             })
         .collect(Collectors.toList());
   }
@@ -111,7 +131,16 @@ public class ChallengeService {
     Participant participant = new Participant(savedChallenge, host);
     participantRepository.save(participant);
 
-    return new ChallengeCreateResponse(savedChallenge.getId());
+    String challengePresignedPutUrl = null;
+
+    if (challenge.getImageExtension() != null) {
+      challengePresignedPutUrl = s3PresignedImageService.createChallengePresignedPutUrl(
+          challenge.getImageExtension(),
+          challenge.getId()
+      );
+    }
+
+    return new ChallengeCreateResponse(savedChallenge.getId(),challengePresignedPutUrl);
   }
 
 
@@ -157,9 +186,18 @@ public class ChallengeService {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(ChallengeNotFoundException::new);
 
-    int participantNum = participantRepository.countByChallengeId(challengeId).intValue();
+    int participantNum = participantRepository.countByChallengeId(challengeId);
 
-    return ChallengeResponse.fromEntity(challenge, participantNum);
+    String challengePresignedGetUrl = null;
+
+    if (challenge.getImageExtension() != null) {
+      challengePresignedGetUrl = s3PresignedImageService.createChallengePresignedGetUrl(
+          challenge.getImageExtension(),
+          challenge.getId()
+      );
+    }
+
+    return ChallengeResponse.fromEntity(challenge, participantNum,challengePresignedGetUrl);
   }
 
 

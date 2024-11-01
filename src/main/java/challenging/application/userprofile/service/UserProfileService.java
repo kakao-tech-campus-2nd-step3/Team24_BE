@@ -24,12 +24,16 @@ public class UserProfileService {
         UserProfile userProfile = userProfileRepository.findByMemberId(memberId).orElseThrow(
             () -> new RuntimeException()
         );
-        // 이미지 작업하고 던져야함
-        String presignedGetUrl = s3PresignedImageService.createPresignedGetUrl(
-            userProfile.getImageExtension(),
-            userProfile.getMember().getUuid()
-        );
+        String presignedGetUrl = null;
+        if (userProfile.getImageExtension() != null && userProfile.getImageExtension() != null) {
+            presignedGetUrl = s3PresignedImageService.createUserPresignedGetUrl(
+                userProfile.getImageExtension(),
+                userProfile.getMember().getUuid()
+            );
+        }
+
         UserProfileGetResponse userProfileGetResponse = UserProfileGetResponse.of(userProfile,presignedGetUrl);
+
 
         return userProfileGetResponse;
     }
@@ -41,10 +45,15 @@ public class UserProfileService {
         userProfile.updateUserNickName(userProfilePutRequest.userNickName());
         userProfile.updateImageExtension(userProfilePutRequest.Extension());
 
-        String presignedPutUrl = s3PresignedImageService.createPresignedPutUrl(
-            userProfile.getImageExtension(),
-            userProfile.getMember().getUuid()
-        );
+        String presignedPutUrl = null;
+
+        if (userProfile.getImageExtension() != null && userProfile.getImageExtension() != null) {
+            presignedPutUrl = s3PresignedImageService.createUserPresignedPutUrl(
+                userProfile.getImageExtension(),
+                userProfile.getMember().getUuid()
+            );
+        }
+
 
 
         return new UserProfilePutResponse(userProfilePutRequest.userNickName(),presignedPutUrl);
