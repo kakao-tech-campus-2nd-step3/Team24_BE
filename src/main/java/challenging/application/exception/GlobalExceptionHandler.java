@@ -1,30 +1,26 @@
 package challenging.application.exception;
 
 import challenging.application.exception.challenge.*;
-import challenging.application.util.ResponseUtil;
+import challenging.application.util.response.ApiResponse;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends ResponseUtil {
+public class GlobalExceptionHandler {
 
   @ResponseBody
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResult> invalidRequestHandler(MethodArgumentNotValidException e) {
-    ErrorResult errorResult = new ErrorResult("400", "잘못된 요청입니다.");
+  public ResponseEntity<ApiResponse<?>> invalidRequestHandler(MethodArgumentNotValidException e) {
 
-    for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-      errorResult.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
-    }
-
-    return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(ApiResponse.validationErrorResponse(e));
   }
 
   @ExceptionHandler(ChallengeNotFoundException.class)
-  public ResponseEntity<ErrorResult> handleChallengeNotFoundException(
-      ChallengeNotFoundException e) {
+  public ResponseEntity<ErrorResult> handleChallengeNotFoundException(ChallengeNotFoundException e) {
     ErrorResult errorResult = new ErrorResult("404", e.getMessage());
 
     return new ResponseEntity<>(errorResult, HttpStatus.NOT_FOUND);

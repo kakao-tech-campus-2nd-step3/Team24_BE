@@ -4,6 +4,7 @@ import challenging.application.auth.annotation.LoginMember;
 import challenging.application.auth.domain.Member;
 import challenging.application.dto.response.HistoryResponse;
 import challenging.application.history.service.HistoryService;
+import challenging.application.util.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,15 +24,20 @@ public class HistoryApiController {
     private final HistoryService historyService;
 
     @GetMapping("/{historyId}")
-    public ResponseEntity<HistoryResponse> getHistoryOne(@LoginMember Member member, @PathVariable Long historyId){
+    public ResponseEntity<ApiResponse<?>> getHistoryOne(@LoginMember Member member,
+                                                                      @PathVariable Long historyId) {
         HistoryResponse findHistory = historyService.findOneHistory(member.getId(), historyId);
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(findHistory);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.successResponse(findHistory));
     }
 
     @GetMapping
-    public ResponseEntity<List<HistoryResponse>> getHistories(@LoginMember Member member){
+    public ResponseEntity<ApiResponse<?>> getHistories(@LoginMember Member member) {
         List<HistoryResponse> histories = historyService.findAllHistory(member.getId());
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(histories);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.successResponse(histories));
     }
-
 }

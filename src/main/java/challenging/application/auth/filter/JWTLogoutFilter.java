@@ -23,12 +23,14 @@ public class JWTLogoutFilter extends GenericFilterBean {
     private final FilterResponseUtils filterResponseUtils;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
 
         doFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
     }
 
-    private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+    private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws IOException, ServletException {
 
         if (!isUrlLogout(request.getRequestURI())) {
             filterChain.doFilter(request, response);
@@ -52,6 +54,7 @@ public class JWTLogoutFilter extends GenericFilterBean {
         }
 
         if (filterResponseUtils.isTokenExpired(response, refresh)) {
+            refreshRepository.deleteByToken(refresh);
             return;
         }
 
