@@ -1,14 +1,14 @@
 package challenging.application.security;
 
-import challenging.application.auth.configuration.SecurityConfiguration;
-import challenging.application.auth.configuration.WebConfig;
-import challenging.application.auth.controller.AuthController;
-import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.auth.oauth.OAuth2SuccessHandler;
-import challenging.application.auth.oauth.OAuth2UserServiceImpl;
-import challenging.application.auth.repository.MemberRepository;
-import challenging.application.auth.repository.RefreshTokenRepository;
-import challenging.application.auth.utils.servletUtils.jwtUtils.FilterResponseUtils;
+import challenging.application.domain.auth.security.configuration.SecurityConfiguration;
+import challenging.application.domain.auth.security.configuration.WebConfig;
+import challenging.application.domain.auth.controller.AuthController;
+import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
+import challenging.application.domain.auth.security.oauth.OAuth2SuccessHandler;
+import challenging.application.domain.auth.security.oauth.OAuth2UserServiceImpl;
+import challenging.application.domain.auth.repository.MemberRepository;
+import challenging.application.domain.auth.repository.RefreshTokenRepository;
+import challenging.application.domain.auth.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +21,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static challenging.application.exception.ExceptionMessage.SIGNATURE_EXCEPTION;
-import static challenging.application.exception.ExceptionMessage.UNAUTHORIZED_USER;
+import static challenging.application.global.exception.ExceptionMessage.SIGNATURE_EXCEPTION;
+import static challenging.application.global.exception.ExceptionMessage.UNAUTHORIZED_USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

@@ -1,15 +1,16 @@
 package challenging.application.history.service;
 
-import challenging.application.auth.domain.Member;
-import challenging.application.challenge.domain.Category;
-import challenging.application.challenge.domain.Challenge;
-import challenging.application.challenge.service.ChallengeService;
-import challenging.application.dto.response.ChallengeResponse;
-import challenging.application.dto.response.HistoryResponse;
-import challenging.application.exception.challenge.HistoryNotFoundException;
-import challenging.application.history.domain.History;
-import challenging.application.history.repository.HistoryRepository;
-import challenging.application.userprofile.domain.UserProfile;
+import challenging.application.domain.auth.entity.Member;
+import challenging.application.domain.category.Category;
+import challenging.application.domain.challenge.entity.Challenge;
+import challenging.application.domain.challenge.service.ChallengeService;
+import challenging.application.domain.history.service.HistoryServiceImpl;
+import challenging.application.global.dto.response.ChallengeResponse;
+import challenging.application.global.dto.response.HistoryResponse;
+import challenging.application.global.exception.challenge.HistoryNotFoundException;
+import challenging.application.domain.history.entity.History;
+import challenging.application.domain.history.repository.HistoryRepository;
+import challenging.application.domain.userprofile.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static challenging.application.exception.ExceptionMessage.HISTORY_NOT_FOUND;
+import static challenging.application.global.exception.ExceptionMessage.HISTORY_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
