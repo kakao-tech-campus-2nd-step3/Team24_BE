@@ -1,4 +1,4 @@
-package challenging.application.images;
+package challenging.application.global.images;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -43,13 +43,13 @@ public class ImageController {
 
     @GetMapping("/api/image")
     public String imageUrlGet(@RequestParam String extenion,@RequestParam String uuid){
-        String presignedGetUrl = s3PresignedImageService.createPresignedGetUrl(extenion, uuid);
+        String presignedGetUrl = s3PresignedImageService.createUserPresignedGetUrl(extenion, uuid);
         return presignedGetUrl;
     }
 
     @PutMapping("/api/image")
     public String imageUrlPut(@RequestParam String extenion, @RequestParam String uuid){
-        String presignedPutUrl = s3PresignedImageService.createPresignedPutUrl(extenion, uuid);
+        String presignedPutUrl = s3PresignedImageService.createUserPresignedPutUrl(extenion, uuid);
         return presignedPutUrl;
     }
 }

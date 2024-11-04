@@ -19,7 +19,7 @@ import challenging.application.global.dto.response.ChallengeCreateResponse;
 import challenging.application.global.dto.response.ChallengeDeleteResponse;
 import challenging.application.global.dto.response.ChallengeReservationResponse;
 import challenging.application.global.dto.response.ChallengeResponse;
-import challenging.application.images.S3PresignedImageService;
+import challenging.application.global.images.S3PresignedImageService;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;

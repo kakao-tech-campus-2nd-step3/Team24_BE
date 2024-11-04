@@ -5,7 +5,7 @@ import challenging.application.domain.userprofile.repository.UserProfileReposito
 import challenging.application.global.dto.request.UserProfileRequest.UserProfilePutRequest;
 import challenging.application.global.dto.response.UserProfileResponse.UserProfileGetResponse;
 import challenging.application.global.dto.response.UserProfileResponse.UserProfilePutResponse;
-import challenging.application.images.S3PresignedImageService;
+import challenging.application.global.images.S3PresignedImageService;
 import org.springframework.stereotype.Service;
 
 @Service

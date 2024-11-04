@@ -1,4 +1,4 @@
-package challenging.application.images;
+package challenging.application.global.images;
 
 import java.io.File;
 import java.io.IOException;

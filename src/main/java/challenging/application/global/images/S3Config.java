@@ -1,4 +1,4 @@
-package challenging.application.images;
+package challenging.application.global.images;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
