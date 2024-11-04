@@ -33,71 +33,8 @@ public class GlobalExceptionHandler {
         .body(ApiResponse.validationErrorResponse(errorValidationResult));
   }
 
-  @ExceptionHandler(ChallengeNotFoundException.class)
-  public ResponseEntity<ApiResponse<?>> handleChallengeNotFoundException(ChallengeNotFoundException e) {
-    ErrorResult errorResult = new ErrorResult(e.getStatusCode(), e.getMessage());
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(ApiResponse.errorResponse(errorResult));
-  }
-
-  @ExceptionHandler(HistoryNotFoundException.class)
-  public ResponseEntity<ApiResponse<?>> historyNotFoundException(HistoryNotFoundException e) {
-    ErrorResult errorResult = new ErrorResult(e.getStatusCode(), e.getMessage());
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(ApiResponse.errorResponse(errorResult));
-  }
-
-  @ExceptionHandler(InvalidDateException.class)
-  public ResponseEntity<ApiResponse<?>> handleInvalidDateException(InvalidDateException e) {
-    ErrorResult errorResult = new ErrorResult(e.getStatusCode(), e.getMessage());
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(ApiResponse.errorResponse(errorResult));
-  }
-
-  @ExceptionHandler(CategoryNotFoundException.class)
-  public ResponseEntity<ApiResponse<?>> handleCategoryNotFoundException(CategoryNotFoundException e) {
-    ErrorResult errorResult = new ErrorResult(e.getStatusCode(), e.getMessage());
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(ApiResponse.errorResponse(errorResult));
-  }
-
-  @ExceptionHandler(UserNotFoundException.class)
-  public ResponseEntity<ApiResponse<?>> handleUserNotFoundException(UserNotFoundException e) {
-    ErrorResult errorResult = new ErrorResult(e.getStatusCode(), e.getMessage());
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(ApiResponse.errorResponse(errorResult));
-  }
-
-  @ExceptionHandler(UnauthorizedException.class)
-  public ResponseEntity<ApiResponse<?>> handleUnauthorizedException(UnauthorizedException e) {
-    ErrorResult errorResult = new ErrorResult(e.getStatusCode(), e.getMessage());
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(ApiResponse.errorResponse(errorResult));
-  }
-
-  @ExceptionHandler(AlreadyReservedException.class)
-  public ResponseEntity<ApiResponse<?>> handleAlreadyReservedException(AlreadyReservedException e) {
-    ErrorResult errorResult = new ErrorResult(e.getStatusCode(), e.getMessage());
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(ApiResponse.errorResponse(errorResult));
-  }
-
-  @ExceptionHandler(ParticipantLimitExceededException.class)
-  public ResponseEntity<ApiResponse<?>> handleAlreadyReservedException(ParticipantLimitExceededException e) {
+  @ExceptionHandler(Team24Exception.class)
+  public ResponseEntity<ApiResponse<?>> team24ExceptionHandler(Team24Exception e) {
     ErrorResult errorResult = new ErrorResult(e.getStatusCode(), e.getMessage());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -1,22 +1,10 @@
 package challenging.application.global.error.participant;
 
 import challenging.application.global.error.ErrorCode;
+import challenging.application.global.error.Team24Exception;
 
-public class ParticipantLimitExceededException extends RuntimeException {
-  private final ErrorCode errorCode;
-
+public class ParticipantLimitExceededException extends Team24Exception {
   public ParticipantLimitExceededException(ErrorCode errorCode) {
-    super(errorCode.getMessage());
-    this.errorCode = errorCode;
+    super(errorCode);
   }
-
-  @Override
-  public String getMessage() {
-    return super.getMessage();
-  }
-
-  public int getStatusCode(){
-    return errorCode.getStatus().value();
-  }
-
 }
