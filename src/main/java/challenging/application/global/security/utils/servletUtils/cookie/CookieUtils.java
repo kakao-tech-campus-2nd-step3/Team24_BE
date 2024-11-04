@@ -1,4 +1,4 @@
-package challenging.application.domain.auth.security.utils.servletUtils.cookie;
+package challenging.application.global.security.utils.servletUtils.cookie;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

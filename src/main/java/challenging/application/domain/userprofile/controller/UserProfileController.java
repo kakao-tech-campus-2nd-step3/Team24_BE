@@ -1,6 +1,6 @@
 package challenging.application.domain.userprofile.controller;
 
-import challenging.application.domain.auth.security.annotation.LoginMember;
+import challenging.application.global.security.annotation.LoginMember;
 import challenging.application.global.dto.request.UserProfileRequest;
 import challenging.application.global.dto.response.UserProfileResponse.UserProfileGetResponse;
 import challenging.application.global.dto.response.UserProfileResponse.UserProfilePutResponse;

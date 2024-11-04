@@ -1,11 +1,11 @@
-package challenging.application.domain.auth.security.oauth;
+package challenging.application.global.security.oauth;
 
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.auth.entity.RefreshToken;
-import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
+import challenging.application.global.security.utils.jwt.JWTUtils;
 import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.auth.service.RefreshTokenService;
-import challenging.application.domain.auth.security.utils.servletUtils.cookie.CookieUtils;
+import challenging.application.global.security.utils.servletUtils.cookie.CookieUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

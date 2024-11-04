@@ -1,13 +1,13 @@
-package challenging.application.domain.auth.security.configuration;
+package challenging.application.global.security.configuration;
 
-import challenging.application.domain.auth.security.filter.JWTAccessFilter;
-import challenging.application.domain.auth.security.filter.JWTLogoutFilter;
-import challenging.application.domain.auth.security.filter.JWTRefreshFilter;
-import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
-import challenging.application.domain.auth.security.oauth.OAuth2SuccessHandler;
-import challenging.application.domain.auth.security.oauth.OAuth2UserServiceImpl;
+import challenging.application.global.security.filter.JWTAccessFilter;
+import challenging.application.global.security.filter.JWTLogoutFilter;
+import challenging.application.global.security.filter.JWTRefreshFilter;
+import challenging.application.global.security.utils.jwt.JWTUtils;
+import challenging.application.global.security.oauth.OAuth2SuccessHandler;
+import challenging.application.global.security.oauth.OAuth2UserServiceImpl;
 import challenging.application.domain.auth.repository.RefreshTokenRepository;
-import challenging.application.domain.auth.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
+import challenging.application.global.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
 package challenging.application.domain.challenge.controller;
 
-import challenging.application.domain.auth.security.annotation.LoginMember;
+import challenging.application.global.security.annotation.LoginMember;
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.challenge.service.ChallengeService;
 import challenging.application.global.dto.request.ChallengeRequest;

@@ -6,7 +6,7 @@ import challenging.application.domain.history.controller.HistoryApiController;
 import challenging.application.domain.history.entity.History;
 import challenging.application.history.mockUser.WithMockCustomUser;
 import challenging.application.domain.auth.entity.Member;
-import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
+import challenging.application.global.security.utils.jwt.JWTUtils;
 import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.global.dto.response.ChallengeResponse;
 import challenging.application.global.dto.response.HistoryResponse;

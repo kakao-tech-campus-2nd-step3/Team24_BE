@@ -1,4 +1,4 @@
-package challenging.application.domain.auth.security.utils.jwt;
+package challenging.application.global.security.utils.jwt;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

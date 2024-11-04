@@ -1,9 +1,9 @@
-package challenging.application.domain.auth.security.filter;
+package challenging.application.global.security.filter;
 
 import challenging.application.domain.auth.repository.RefreshTokenRepository;
-import challenging.application.domain.auth.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
+import challenging.application.global.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import challenging.application.domain.auth.constant.AuthConstant;
-import challenging.application.domain.auth.security.utils.servletUtils.cookie.CookieUtils;
+import challenging.application.global.security.utils.servletUtils.cookie.CookieUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

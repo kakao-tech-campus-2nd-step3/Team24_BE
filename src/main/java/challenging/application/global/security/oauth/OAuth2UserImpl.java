@@ -1,4 +1,4 @@
-package challenging.application.domain.auth.security.oauth;
+package challenging.application.global.security.oauth;
 
 import challenging.application.domain.auth.entity.Member;
 import lombok.AllArgsConstructor;

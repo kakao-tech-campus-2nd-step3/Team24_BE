@@ -1,7 +1,7 @@
-package challenging.application.domain.auth.security.filter;
+package challenging.application.global.security.filter;
 
-import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
-import challenging.application.domain.auth.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
+import challenging.application.global.security.utils.jwt.JWTUtils;
+import challenging.application.global.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import challenging.application.domain.auth.constant.AuthConstant;
 import challenging.application.global.error.ErrorCode;
 import jakarta.servlet.FilterChain;

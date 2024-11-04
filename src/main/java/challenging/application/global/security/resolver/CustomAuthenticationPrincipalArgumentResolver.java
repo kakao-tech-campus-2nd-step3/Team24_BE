@@ -1,8 +1,8 @@
-package challenging.application.domain.auth.security.resolver;
+package challenging.application.global.security.resolver;
 
-import challenging.application.domain.auth.security.annotation.LoginMember;
+import challenging.application.global.security.annotation.LoginMember;
 import challenging.application.domain.auth.entity.Member;
-import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
+import challenging.application.global.security.utils.jwt.JWTUtils;
 import challenging.application.domain.auth.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

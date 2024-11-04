@@ -1,4 +1,4 @@
-package challenging.application.domain.auth.security.oauth.oauthResponse;
+package challenging.application.global.security.oauth.oauthResponse;
 
 public interface OAuth2Response {
 

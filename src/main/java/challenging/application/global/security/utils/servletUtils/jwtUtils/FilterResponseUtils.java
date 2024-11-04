@@ -1,8 +1,8 @@
-package challenging.application.domain.auth.security.utils.servletUtils.jwtUtils;
+package challenging.application.global.security.utils.servletUtils.jwtUtils;
 
 import challenging.application.global.error.ErrorCode;
 import challenging.application.global.error.response.ErrorResult;
-import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
+import challenging.application.global.security.utils.jwt.JWTUtils;
 import challenging.application.domain.auth.repository.RefreshTokenRepository;
 import challenging.application.global.dto.response.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,14 +1,14 @@
 package challenging.application.security;
 
-import challenging.application.domain.auth.security.configuration.SecurityConfiguration;
-import challenging.application.domain.auth.security.configuration.WebConfig;
+import challenging.application.global.security.configuration.SecurityConfiguration;
+import challenging.application.global.security.configuration.WebConfig;
 import challenging.application.domain.auth.controller.AuthController;
-import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
-import challenging.application.domain.auth.security.oauth.OAuth2SuccessHandler;
-import challenging.application.domain.auth.security.oauth.OAuth2UserServiceImpl;
+import challenging.application.global.security.utils.jwt.JWTUtils;
+import challenging.application.global.security.oauth.OAuth2SuccessHandler;
+import challenging.application.global.security.oauth.OAuth2UserServiceImpl;
 import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.auth.repository.RefreshTokenRepository;
-import challenging.application.domain.auth.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
+import challenging.application.global.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

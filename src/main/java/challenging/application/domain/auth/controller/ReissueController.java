@@ -1,8 +1,8 @@
 package challenging.application.domain.auth.controller;
 
-import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
+import challenging.application.global.security.utils.jwt.JWTUtils;
 import challenging.application.domain.auth.service.RefreshTokenService;
-import challenging.application.domain.auth.security.utils.servletUtils.cookie.CookieUtils;
+import challenging.application.global.security.utils.servletUtils.cookie.CookieUtils;
 import challenging.application.domain.auth.constant.AuthConstant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

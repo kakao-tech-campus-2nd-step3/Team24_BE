@@ -1,6 +1,6 @@
-package challenging.application.domain.auth.security.configuration;
+package challenging.application.global.security.configuration;
 
-import challenging.application.domain.auth.security.resolver.CustomAuthenticationPrincipalArgumentResolver;
+import challenging.application.global.security.resolver.CustomAuthenticationPrincipalArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

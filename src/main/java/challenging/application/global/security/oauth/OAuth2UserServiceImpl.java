@@ -1,9 +1,9 @@
-package challenging.application.domain.auth.security.oauth;
+package challenging.application.global.security.oauth;
 
 import challenging.application.domain.auth.entity.Member;
-import challenging.application.domain.auth.security.oauth.oauthResponse.KakaoResponse;
-import challenging.application.domain.auth.security.oauth.oauthResponse.NaverResponse;
-import challenging.application.domain.auth.security.oauth.oauthResponse.OAuth2Response;
+import challenging.application.global.security.oauth.oauthResponse.KakaoResponse;
+import challenging.application.global.security.oauth.oauthResponse.NaverResponse;
+import challenging.application.global.security.oauth.oauthResponse.OAuth2Response;
 import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.userprofile.domain.UserProfile;
 import challenging.application.domain.userprofile.repository.UserProfileRepository;
