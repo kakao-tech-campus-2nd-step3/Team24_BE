@@ -1,4 +1,4 @@
-package challenging.application.global.exception;
+package challenging.application.global.error;
 
 import java.util.HashMap;
 import java.util.Map;

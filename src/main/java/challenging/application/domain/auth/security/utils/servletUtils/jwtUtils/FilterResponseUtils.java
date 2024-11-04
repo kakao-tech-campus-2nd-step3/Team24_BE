@@ -1,6 +1,6 @@
 package challenging.application.domain.auth.security.utils.servletUtils.jwtUtils;
 
-import challenging.application.global.exception.ErrorResult;
+import challenging.application.global.error.ErrorResult;
 import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
 import challenging.application.domain.auth.repository.RefreshTokenRepository;
 import challenging.application.global.dto.response.ApiResponse;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static challenging.application.global.exception.ExceptionMessage.*;
+import static challenging.application.global.error.ExceptionMessage.*;
 
 @Component
 @RequiredArgsConstructor

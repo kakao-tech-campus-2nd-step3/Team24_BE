@@ -1,4 +1,4 @@
-package challenging.application.global.exception;
+package challenging.application.global.error;
 
 public class ExceptionMessage {
   public static final String UNAUTHORIZED_USER = "인증 되지 않은 사용자 입니다.";

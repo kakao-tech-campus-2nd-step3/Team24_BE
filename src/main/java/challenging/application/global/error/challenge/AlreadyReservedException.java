@@ -1,5 +1,5 @@
-package challenging.application.global.exception.challenge;
-import static challenging.application.global.exception.ExceptionMessage.*;
+package challenging.application.global.error.challenge;
+import static challenging.application.global.error.ExceptionMessage.*;
 
 public class AlreadyReservedException extends RuntimeException {
   public AlreadyReservedException(String message) {

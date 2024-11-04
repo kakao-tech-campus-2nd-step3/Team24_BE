@@ -1,6 +1,6 @@
-package challenging.application.global.exception.challenge;
+package challenging.application.global.error.challenge;
 
-import challenging.application.global.exception.ExceptionMessage;
+import challenging.application.global.error.ExceptionMessage;
 
 public class ParticipantLimitExceededException extends RuntimeException {
   public ParticipantLimitExceededException() {

@@ -1,6 +1,6 @@
 package challenging.application.global.dto.response;
 
-import challenging.application.global.exception.ErrorResult;
+import challenging.application.global.error.ErrorResult;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Builder;

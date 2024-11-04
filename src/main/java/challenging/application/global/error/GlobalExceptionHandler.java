@@ -1,13 +1,13 @@
-package challenging.application.global.exception;
+package challenging.application.global.error;
 
-import challenging.application.global.exception.challenge.AlreadyReservedException;
-import challenging.application.global.exception.challenge.CategoryNotFoundException;
-import challenging.application.global.exception.challenge.ChallengeNotFoundException;
-import challenging.application.global.exception.challenge.HistoryNotFoundException;
-import challenging.application.global.exception.challenge.InvalidDateException;
-import challenging.application.global.exception.challenge.ParticipantLimitExceededException;
-import challenging.application.global.exception.challenge.UnauthorizedException;
-import challenging.application.global.exception.challenge.UserNotFoundException;
+import challenging.application.global.error.challenge.AlreadyReservedException;
+import challenging.application.global.error.challenge.CategoryNotFoundException;
+import challenging.application.global.error.challenge.ChallengeNotFoundException;
+import challenging.application.global.error.challenge.HistoryNotFoundException;
+import challenging.application.global.error.challenge.InvalidDateException;
+import challenging.application.global.error.challenge.ParticipantLimitExceededException;
+import challenging.application.global.error.challenge.UnauthorizedException;
+import challenging.application.global.error.challenge.UserNotFoundException;
 import challenging.application.global.dto.response.ApiResponse;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static challenging.application.global.exception.ExceptionMessage.UNAUTHORIZED_USER;
+import static challenging.application.global.error.ExceptionMessage.UNAUTHORIZED_USER;
 
 @AllArgsConstructor
 @Slf4j

@@ -1,9 +1,6 @@
-package challenging.application.global.exception;
+package challenging.application.global.error;
 
 import lombok.Getter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Getter
 public class ErrorResult {

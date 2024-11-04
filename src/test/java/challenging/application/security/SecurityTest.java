@@ -21,8 +21,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static challenging.application.global.exception.ExceptionMessage.SIGNATURE_EXCEPTION;
-import static challenging.application.global.exception.ExceptionMessage.UNAUTHORIZED_USER;
+import static challenging.application.global.error.ExceptionMessage.SIGNATURE_EXCEPTION;
+import static challenging.application.global.error.ExceptionMessage.UNAUTHORIZED_USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
