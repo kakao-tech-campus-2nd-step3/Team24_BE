@@ -1,5 +1,6 @@
 package challenging.application.domain.category;
 
+import challenging.application.global.error.ErrorCode;
 import challenging.application.global.error.category.CategoryNotFoundException;
 
 import java.util.Arrays;
@@ -23,7 +24,7 @@ public enum Category {
         return Arrays.stream(Category.values())
                 .filter(category -> category.getCategoryCode().equals(code))
                 .findFirst()
-                .orElseThrow(CategoryNotFoundException::new);
+                .orElseThrow(() -> new CategoryNotFoundException(ErrorCode.CATEGORY_NOT_FOUND_ERROR));
     }
 
     public Integer getCategoryCode(){

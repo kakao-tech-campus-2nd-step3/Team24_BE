@@ -7,6 +7,7 @@ import challenging.application.domain.challenge.entity.Challenge;
 import challenging.application.domain.challenge.repository.ChallengeRepository;
 import challenging.application.domain.participant.entity.Participant;
 import challenging.application.domain.participant.repository.ParticipantRepository;
+import challenging.application.global.error.ErrorCode;
 import challenging.application.global.error.challenge.AlreadyReservedException;
 import challenging.application.global.error.challenge.ChallengeNotFoundException;
 import challenging.application.global.error.date.InvalidDateException;
@@ -51,7 +52,7 @@ public class ChallengeService {
   @Transactional(readOnly = true)
   public ChallengeResponse getChallengeById(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(ChallengeNotFoundException::new);
+        .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId);
 
@@ -69,13 +70,13 @@ public class ChallengeService {
 
   private LocalDateTime parseDate(String date) {
     if (date == null || date.trim().isEmpty()) {
-      throw new InvalidDateException();
+      throw new InvalidDateException(ErrorCode.DATE_INVALID_ERROR);
     }
 
     try {
       return LocalDateTime.parse(date, dateTimeFormatter);
     } catch (DateTimeParseException e) {
-      throw new InvalidDateException();
+      throw new InvalidDateException(ErrorCode.DATE_INVALID_ERROR);
     }
   }
 
@@ -113,7 +114,7 @@ public class ChallengeService {
   @Transactional
   public ChallengeCreateResponse createChallenge(ChallengeRequest challengeRequestDTO) {
     Member host = memberRepository.findById(challengeRequestDTO.hostId())
-            .orElseThrow(UserNotFoundException::new);
+            .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND_ERROR));
 
     Category category = Category.findByCategoryCode(challengeRequestDTO.categoryId());
 
@@ -153,10 +154,10 @@ public class ChallengeService {
   @Transactional
   public ChallengeDeleteResponse deleteChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(ChallengeNotFoundException::new);
+        .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
     if (!challenge.getHost().getId().equals(user.getId())) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_USER_ERROR);
     }
 
     challengeRepository.delete(challenge);
@@ -168,16 +169,16 @@ public class ChallengeService {
   @Transactional
   public ChallengeReservationResponse reserveChallenge(Long challengeId, Member user) {
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(ChallengeNotFoundException::new);
+        .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
     if (participantRepository.existsByChallengeIdAndMemberId(challengeId, user.getId())) {
-      throw new AlreadyReservedException();
+      throw new AlreadyReservedException(ErrorCode.CHALLENGE_ALREADY_RESERVED_ERROR);
     }
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId);
 
     if (currentParticipantNum >= challenge.getMaxParticipantNum()) {
-      throw new ParticipantLimitExceededException();
+      throw new ParticipantLimitExceededException(ErrorCode.PARTICIPANT_LIMIT_ERROR);
     }
 
     Participant participant = new Participant(challenge, user);
@@ -189,7 +190,7 @@ public class ChallengeService {
   @Transactional(readOnly = true)
   public ChallengeResponse findOneChallenge(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
-        .orElseThrow(ChallengeNotFoundException::new);
+        .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
     int participantNum = participantRepository.countByChallengeId(challengeId);
 

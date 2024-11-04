@@ -3,6 +3,7 @@ package challenging.application.domain.auth.security.filter;
 import challenging.application.domain.auth.security.utils.jwt.JWTUtils;
 import challenging.application.domain.auth.security.utils.servletUtils.jwtUtils.FilterResponseUtils;
 import challenging.application.domain.auth.constant.AuthConstant;
+import challenging.application.global.error.ErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,8 +20,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import static challenging.application.global.error.ExceptionMessage.UNAUTHORIZED_USER;
 
 @AllArgsConstructor
 @Slf4j
@@ -57,7 +56,7 @@ public class JWTAccessFilter extends OncePerRequestFilter {
         if (checkHeader(authorization)) {
 
             log.info("Access Token Not Exist");
-            filterResponseUtils.generateUnauthorizedErrorResponse(UNAUTHORIZED_USER, response);
+            filterResponseUtils.generateUnauthorizedErrorResponse(ErrorCode.CHALLENGE_UNAUTHORIZED_ERROR, response);
             return;
         }
 

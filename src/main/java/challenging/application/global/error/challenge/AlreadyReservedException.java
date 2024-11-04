@@ -1,5 +1,4 @@
 package challenging.application.global.error.challenge;
-import static challenging.application.global.error.ExceptionMessage.*;
 
 import challenging.application.global.error.ErrorCode;
 
