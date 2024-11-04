@@ -5,10 +5,10 @@ import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.challenge.service.ChallengeService;
 import challenging.application.global.dto.request.ChallengeRequest;
 import challenging.application.global.dto.request.DateRequest;
-import challenging.application.global.dto.response.ChallengeCreateResponse;
-import challenging.application.global.dto.response.ChallengeDeleteResponse;
-import challenging.application.global.dto.response.ChallengeReservationResponse;
-import challenging.application.global.dto.response.ChallengeResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeCreateResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeDeleteResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeReservationResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
 
 import challenging.application.global.dto.response.ApiResponse;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ChallengeController {
     public ResponseEntity<ApiResponse<?>> getChallenge(
             @PathVariable Long challengeId) {
 
-        ChallengeResponse response = challengeService.getChallengeById(challengeId);
+        ChallengeGetResponse response = challengeService.getChallengeById(challengeId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -44,7 +44,7 @@ public class ChallengeController {
             @PathVariable int categoryId,
             @RequestBody DateRequest dateRequest) {
 
-        List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate(categoryId, dateRequest.date());
+        List<ChallengeGetResponse> responses = challengeService.getChallengesByCategoryAndDate(categoryId, dateRequest.date());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

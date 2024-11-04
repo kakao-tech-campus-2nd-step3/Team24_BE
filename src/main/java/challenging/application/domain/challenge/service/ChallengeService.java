@@ -15,10 +15,10 @@ import challenging.application.global.error.participant.ParticipantLimitExceeded
 import challenging.application.global.error.user.UnauthorizedException;
 import challenging.application.global.error.user.UserNotFoundException;
 import challenging.application.global.dto.request.ChallengeRequest;
-import challenging.application.global.dto.response.ChallengeCreateResponse;
-import challenging.application.global.dto.response.ChallengeDeleteResponse;
-import challenging.application.global.dto.response.ChallengeReservationResponse;
-import challenging.application.global.dto.response.ChallengeResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeCreateResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeDeleteResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeReservationResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
 import challenging.application.global.images.S3PresignedImageService;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -50,7 +50,7 @@ public class ChallengeService {
 
   // 챌린지 단건 조회
   @Transactional(readOnly = true)
-  public ChallengeResponse getChallengeById(Long challengeId) {
+  public ChallengeGetResponse getChallengeById(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
@@ -65,7 +65,7 @@ public class ChallengeService {
       );
     }
 
-    return ChallengeResponse.fromEntity(challenge, currentParticipantNum,challengePresignedGetUrl);
+    return ChallengeGetResponse.fromEntity(challenge, currentParticipantNum,challengePresignedGetUrl);
   }
 
   private LocalDateTime parseDate(String date) {
@@ -82,7 +82,7 @@ public class ChallengeService {
 
   // 카테고리별 챌린지 조회
   @Transactional(readOnly = true)
-  public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
+  public List<ChallengeGetResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
     LocalDateTime localDateTime = parseDate(date);
 
     Category category = Category.findByCategoryCode(categoryId);
@@ -105,7 +105,7 @@ public class ChallengeService {
                      challenge.getId()
                  );
                }
-                return ChallengeResponse.fromEntity(challenge, currentParticipantNum,challengePresignedGetUrl);
+                return ChallengeGetResponse.fromEntity(challenge, currentParticipantNum,challengePresignedGetUrl);
             })
         .collect(Collectors.toList());
   }
@@ -188,7 +188,7 @@ public class ChallengeService {
   }
 
   @Transactional(readOnly = true)
-  public ChallengeResponse findOneChallenge(Long challengeId) {
+  public ChallengeGetResponse findOneChallenge(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
@@ -203,7 +203,7 @@ public class ChallengeService {
       );
     }
 
-    return ChallengeResponse.fromEntity(challenge, participantNum,challengePresignedGetUrl);
+    return ChallengeGetResponse.fromEntity(challenge, participantNum,challengePresignedGetUrl);
   }
 
 

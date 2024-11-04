@@ -3,8 +3,8 @@ package challenging.application.domain.userprofile.service;
 import challenging.application.domain.userprofile.domain.UserProfile;
 import challenging.application.domain.userprofile.repository.UserProfileRepository;
 import challenging.application.global.dto.request.UserProfileRequest.UserProfilePutRequest;
-import challenging.application.global.dto.response.UserProfileResponse.UserProfileGetResponse;
-import challenging.application.global.dto.response.UserProfileResponse.UserProfilePutResponse;
+import challenging.application.global.dto.response.userprofile.UserProfileGetResponse;
+import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
 import challenging.application.global.images.S3PresignedImageService;
 import org.springframework.stereotype.Service;
 

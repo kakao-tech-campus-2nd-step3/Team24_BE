@@ -1,9 +1,9 @@
 package challenging.application.domain.userprofile.controller;
 
+import challenging.application.global.dto.response.userprofile.UserProfileGetResponse;
+import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
 import challenging.application.global.security.annotation.LoginMember;
 import challenging.application.global.dto.request.UserProfileRequest;
-import challenging.application.global.dto.response.UserProfileResponse.UserProfileGetResponse;
-import challenging.application.global.dto.response.UserProfileResponse.UserProfilePutResponse;
 import challenging.application.domain.auth.entity.Member; // Member 엔터티
 import challenging.application.domain.userprofile.service.UserProfileService;
 import challenging.application.global.dto.response.ApiResponse;
