@@ -1,11 +1,11 @@
-package challenging.application.global.error.challenge;
+package challenging.application.global.error.participant;
 
 import challenging.application.global.error.ErrorCode;
 
-public class ChallengeNotFoundException extends RuntimeException {
+public class ParticipantLimitExceededException extends RuntimeException {
   private final ErrorCode errorCode;
 
-  public ChallengeNotFoundException(ErrorCode errorCode) {
+  public ParticipantLimitExceededException(ErrorCode errorCode) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
   }

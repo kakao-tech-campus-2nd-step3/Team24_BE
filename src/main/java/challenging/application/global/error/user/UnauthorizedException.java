@@ -1,11 +1,11 @@
-package challenging.application.global.error.challenge;
+package challenging.application.global.error.user;
 
 import challenging.application.global.error.ErrorCode;
 
-public class ChallengeNotFoundException extends RuntimeException {
+public class UnauthorizedException extends RuntimeException {
   private final ErrorCode errorCode;
 
-  public ChallengeNotFoundException(ErrorCode errorCode) {
+  public UnauthorizedException(ErrorCode errorCode) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
   }

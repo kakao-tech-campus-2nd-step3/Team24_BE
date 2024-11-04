@@ -1,11 +1,11 @@
-package challenging.application.global.error.challenge;
+package challenging.application.global.error.history;
 
 import challenging.application.global.error.ErrorCode;
 
-public class ChallengeNotFoundException extends RuntimeException {
+public class HistoryNotFoundException extends RuntimeException {
   private final ErrorCode errorCode;
 
-  public ChallengeNotFoundException(ErrorCode errorCode) {
+  public HistoryNotFoundException(ErrorCode errorCode) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
   }

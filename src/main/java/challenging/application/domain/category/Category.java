@@ -1,6 +1,6 @@
 package challenging.application.domain.category;
 
-import challenging.application.global.error.challenge.CategoryNotFoundException;
+import challenging.application.global.error.category.CategoryNotFoundException;
 
 import java.util.Arrays;
 

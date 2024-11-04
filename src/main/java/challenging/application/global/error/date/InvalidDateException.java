@@ -1,11 +1,11 @@
-package challenging.application.global.error.challenge;
+package challenging.application.global.error.date;
 
 import challenging.application.global.error.ErrorCode;
 
-public class ChallengeNotFoundException extends RuntimeException {
+public class InvalidDateException extends RuntimeException {
   private final ErrorCode errorCode;
 
-  public ChallengeNotFoundException(ErrorCode errorCode) {
+  public InvalidDateException(ErrorCode errorCode) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
   }
@@ -18,5 +18,4 @@ public class ChallengeNotFoundException extends RuntimeException {
   public int getStatusCode(){
     return errorCode.getStatus().value();
   }
-
 }

@@ -7,7 +7,7 @@ import challenging.application.domain.challenge.service.ChallengeService;
 import challenging.application.domain.history.service.HistoryServiceImpl;
 import challenging.application.global.dto.response.ChallengeResponse;
 import challenging.application.global.dto.response.HistoryResponse;
-import challenging.application.global.error.challenge.HistoryNotFoundException;
+import challenging.application.global.error.history.HistoryNotFoundException;
 import challenging.application.domain.history.entity.History;
 import challenging.application.domain.history.repository.HistoryRepository;
 import challenging.application.domain.userprofile.domain.UserProfile;

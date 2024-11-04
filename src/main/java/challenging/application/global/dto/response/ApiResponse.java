@@ -1,13 +1,10 @@
 package challenging.application.global.dto.response;
 
-import challenging.application.global.error.ErrorResult;
-import java.util.HashMap;
-import java.util.Map;
+import challenging.application.global.error.response.ErrorValidationResult;
+import challenging.application.global.error.response.ErrorResult;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Getter
 @Builder
@@ -27,17 +24,11 @@ public class ApiResponse<T> {
         return new ApiResponse<>("success", 201, null, data);
     }
 
-    public static ApiResponse<?> validationErrorResponse(MethodArgumentNotValidException e){
-        Map<String, String> errorResult = new HashMap<>();
-        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            errorResult.put(fieldError.getField(), fieldError.getDefaultMessage());
-        }
-
-        return new ApiResponse<>("fail", 400, "유효성 검사에 통과하지 못했습니다.", errorResult);
+    public static ApiResponse<?> validationErrorResponse(ErrorValidationResult e){
+        return new ApiResponse<>("fail", ErrorValidationResult.ERROR_STATUS_CODE, ErrorValidationResult.ERROR_MESSAGE, e.getValidation());
     }
 
-    public static <T> ApiResponse<?> errorResponse(ErrorResult error){
-        return new ApiResponse<>("error", Integer.parseInt(error.getCode()), error.getMessage(), null);
+    public static ApiResponse<?> errorResponse(ErrorResult error){
+        return new ApiResponse<>("error", error.getStatusCode(), error.getMessage(), null);
     }
-
 }
