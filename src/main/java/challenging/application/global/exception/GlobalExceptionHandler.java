@@ -1,6 +1,5 @@
 package challenging.application.global.exception;
 
-import challenging.application.exception.challenge.*;
 import challenging.application.global.exception.challenge.AlreadyReservedException;
 import challenging.application.global.exception.challenge.CategoryNotFoundException;
 import challenging.application.global.exception.challenge.ChallengeNotFoundException;
