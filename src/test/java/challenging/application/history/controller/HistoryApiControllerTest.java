@@ -1,16 +1,17 @@
 package challenging.application.history.controller;
 
-import challenging.application.challenge.domain.Category;
-import challenging.application.challenge.domain.Challenge;
-import challenging.application.history.domain.History;
+import challenging.application.domain.category.Category;
+import challenging.application.domain.challenge.entity.Challenge;
+import challenging.application.domain.history.controller.HistoryApiController;
+import challenging.application.domain.history.entity.History;
 import challenging.application.history.mockUser.WithMockCustomUser;
-import challenging.application.auth.domain.Member;
-import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.auth.repository.MemberRepository;
-import challenging.application.dto.response.ChallengeResponse;
-import challenging.application.dto.response.HistoryResponse;
-import challenging.application.history.service.HistoryServiceImpl;
-import challenging.application.userprofile.domain.UserProfile;
+import challenging.application.domain.auth.entity.Member;
+import challenging.application.global.security.utils.jwt.JWTUtils;
+import challenging.application.domain.auth.repository.MemberRepository;
+import challenging.application.global.dto.response.ChallengeResponse;
+import challenging.application.global.dto.response.HistoryResponse;
+import challenging.application.domain.history.service.HistoryServiceImpl;
+import challenging.application.domain.userprofile.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
