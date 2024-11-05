@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 // 예시 컨트롤러임 쓰지마
 @RestController
@@ -24,20 +25,16 @@ public class ImageController {
     }
 
     @PostMapping("/api/image/upload")
-    @ResponseBody
-    public Map<String, Object> imageUpload(MultipartRequest multipartRequest)  {
+    public Map<String, Object> imageUpload(@RequestParam("upload") MultipartFile multipartFile)  {
 
         Map<String, Object> responseData = new HashMap<>();
 
-        try{
-            String s3Url = imageService.imageload(multipartRequest);
 
+        String s3Url = imageService.imageload(multipartFile,1L);
 
-            responseData.put("uploaded",true);
-            responseData.put("url",s3Url);
-        } catch (IOException e){
-            responseData.put("uploaded",false);
-        }
+        responseData.put("uploaded",true);
+        responseData.put("url",s3Url);
+
         return responseData;
     }
 

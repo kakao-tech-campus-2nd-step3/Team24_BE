@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/challenges")
@@ -38,10 +39,10 @@ public class ChallengeController {
     }
 
     // 챌린지 카테고리 조회
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<ApiResponse<?>> getChallengesByCategory(@PathVariable int categoryId) {
+    @GetMapping()
+    public ResponseEntity<ApiResponse<?>> getChallengesByCategory() {
 
-        List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate(categoryId);
+        List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -51,9 +52,10 @@ public class ChallengeController {
     // 챌린지 생성
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createChallenge(
-            @RequestBody ChallengeRequest challengeRequestDTO) {
+        @RequestPart(value = "dto") ChallengeRequest challengeRequestDTO,
+        @RequestParam("upload") MultipartFile multipartFile) {
 
-        ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO);
+        ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO,multipartFile);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)

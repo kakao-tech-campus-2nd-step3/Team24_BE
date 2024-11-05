@@ -19,7 +19,9 @@ import challenging.application.global.dto.response.ChallengeCreateResponse;
 import challenging.application.global.dto.response.ChallengeDeleteResponse;
 import challenging.application.global.dto.response.ChallengeReservationResponse;
 import challenging.application.global.dto.response.ChallengeResponse;
+import challenging.application.global.images.ImageService;
 import challenging.application.global.images.S3PresignedImageService;
+import java.io.IOException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ChallengeService {
@@ -35,17 +38,19 @@ public class ChallengeService {
   private final MemberRepository memberRepository;
   private final ParticipantRepository participantRepository;
   private final S3PresignedImageService s3PresignedImageService;
+  private final ImageService imageService;
   private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd:HH:mm");
 
   public ChallengeService(ChallengeRepository challengeRepository,
       MemberRepository memberRepository,
-      ParticipantRepository participantRepository,
-      S3PresignedImageService s3PresignedImageService) {
+      ParticipantRepository participantRepository, S3PresignedImageService s3PresignedImageService,
+      ImageService imageService) {
     this.challengeRepository = challengeRepository;
     this.memberRepository = memberRepository;
     this.participantRepository = participantRepository;
     this.s3PresignedImageService = s3PresignedImageService;
+    this.imageService = imageService;
   }
 
   // 챌린지 단건 조회
@@ -56,27 +61,16 @@ public class ChallengeService {
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId);
 
-    String challengePresignedGetUrl = null;
-
-    if (challenge.getImageExtension() != null){
-      challengePresignedGetUrl = s3PresignedImageService.createChallengePresignedGetUrl(
-          challenge.getImageExtension(),
-          challengeId
-      );
-    }
-
-    return ChallengeResponse.fromEntity(challenge, currentParticipantNum,challengePresignedGetUrl);
+    return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
   }
 
-  // 카테고리별 챌린지 조회
+  // 전체 챌린지 조회
   @Transactional(readOnly = true)
-  public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId) {
+  public List<ChallengeResponse> getChallengesByCategoryAndDate() {
     LocalDateTime current = LocalDateTime.now();
 
-    Category category = Category.findByCategoryCode(categoryId);
 
-    List<Challenge> challenges = challengeRepository.findByCategoryAndDateTimeAfter(
-        category,
+    List<Challenge> challenges = challengeRepository.findDateTimeAfter(
         current.toLocalDate(),
         current.toLocalTime()
     );
@@ -85,26 +79,22 @@ public class ChallengeService {
         .map(
              challenge -> {
                 int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId());
-               String challengePresignedGetUrl = null;
 
-               if (challenge.getImageExtension() != null) {
-                 challengePresignedGetUrl = s3PresignedImageService.createChallengePresignedGetUrl(
-                     challenge.getImageExtension(),
-                     challenge.getId()
-                 );
-               }
-                return ChallengeResponse.fromEntity(challenge, currentParticipantNum,challengePresignedGetUrl);
+                return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
             })
         .collect(Collectors.toList());
   }
 
   // 챌린지 생성
   @Transactional
-  public ChallengeCreateResponse createChallenge(ChallengeRequest challengeRequestDTO) {
+  public ChallengeCreateResponse createChallenge(
+      ChallengeRequest challengeRequestDTO,
+      MultipartFile multipartFile) {
     Member host = memberRepository.findById(challengeRequestDTO.hostId())
             .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND_ERROR));
 
     Category category = Category.findByCategoryCode(challengeRequestDTO.categoryId());
+    
 
     Challenge challenge = Challenge.builder()
         .category(category)
@@ -115,26 +105,26 @@ public class ChallengeService {
         .date(LocalDate.parse(challengeRequestDTO.challengeDate()))
         .startTime(LocalTime.parse(challengeRequestDTO.startTime()))
         .endTime(LocalTime.parse(challengeRequestDTO.endTime()))
-        .imageExtension(challengeRequestDTO.imageExtension())
+        .imgUrl(null)
         .minParticipantNum(challengeRequestDTO.minParticipantNum())
         .maxParticipantNum(challengeRequestDTO.maxParticipantNum())
         .build();
+
+    Long challengId = challenge.getId();
+
+    String imgUrl = null;
+
+    imgUrl = imageService.imageload(multipartFile, challengId);
+
+    challenge.updateImgUrl(imgUrl);
 
     Challenge savedChallenge = challengeRepository.save(challenge);
 
     Participant participant = new Participant(savedChallenge, host);
     participantRepository.save(participant);
 
-    String challengePresignedPutUrl = null;
 
-    if (challenge.getImageExtension() != null) {
-      challengePresignedPutUrl = s3PresignedImageService.createChallengePresignedPutUrl(
-          challenge.getImageExtension(),
-          challenge.getId()
-      );
-    }
-
-    return new ChallengeCreateResponse(savedChallenge.getId(),challengePresignedPutUrl);
+    return new ChallengeCreateResponse(savedChallenge.getId(),savedChallenge.getImgUrl());
   }
 
 
@@ -147,6 +137,8 @@ public class ChallengeService {
     if (!challenge.getHost().getId().equals(user.getId())) {
       throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_USER_ERROR);
     }
+
+    imageService.deleteImageByUrl(challenge.getImgUrl());
 
     challengeRepository.delete(challenge);
 
@@ -182,16 +174,7 @@ public class ChallengeService {
 
     int participantNum = participantRepository.countByChallengeId(challengeId);
 
-    String challengePresignedGetUrl = null;
-
-    if (challenge.getImageExtension() != null) {
-      challengePresignedGetUrl = s3PresignedImageService.createChallengePresignedGetUrl(
-          challenge.getImageExtension(),
-          challenge.getId()
-      );
-    }
-
-    return ChallengeResponse.fromEntity(challenge, participantNum,challengePresignedGetUrl);
+    return ChallengeResponse.fromEntity(challenge, participantNum);
   }
 
 
