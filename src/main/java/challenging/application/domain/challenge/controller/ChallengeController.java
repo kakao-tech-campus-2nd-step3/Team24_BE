@@ -4,7 +4,6 @@ import challenging.application.global.security.annotation.LoginMember;
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.challenge.service.ChallengeService;
 import challenging.application.global.dto.request.ChallengeRequest;
-import challenging.application.global.dto.request.DateRequest;
 import challenging.application.global.dto.response.ChallengeCreateResponse;
 import challenging.application.global.dto.response.ChallengeDeleteResponse;
 import challenging.application.global.dto.response.ChallengeReservationResponse;
@@ -40,11 +39,9 @@ public class ChallengeController {
 
     // 챌린지 카테고리 조회
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<ApiResponse<?>> getChallengesByCategory(
-            @PathVariable int categoryId,
-            @RequestBody DateRequest dateRequest) {
+    public ResponseEntity<ApiResponse<?>> getChallengesByCategory(@PathVariable int categoryId) {
 
-        List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate(categoryId, dateRequest.date());
+        List<ChallengeResponse> responses = challengeService.getChallengesByCategoryAndDate(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

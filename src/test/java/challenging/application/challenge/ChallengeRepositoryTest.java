@@ -5,13 +5,13 @@ import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.category.Category;
 import challenging.application.domain.challenge.entity.Challenge;
 import challenging.application.domain.challenge.repository.ChallengeRepository;
+import challenging.application.domain.userprofile.domain.UserProfile;
+import challenging.application.domain.userprofile.repository.UserProfileRepository;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +31,15 @@ class ChallengeRepositoryTest {
   @Autowired
   private MemberRepository memberRepository;
 
+  @Autowired
+  private UserProfileRepository userProfileRepository;
+
   @BeforeEach
   void setUp() {
-    Member host = new Member("테스트하는 사람", "테스트 닉네임", "test@example.com", "ROLE_USER");
+    UserProfile userProfile = new UserProfile();
+    userProfileRepository.save(userProfile);
+
+    Member host = new Member("테스트하는 사람", "테스트 닉네임", "test@example.com", userProfile);
     memberRepository.save(host);
     memberRepository.save(host);
 
@@ -46,8 +52,6 @@ class ChallengeRepositoryTest {
         .date(LocalDate.of(2024, 11, 11))
         .startTime(LocalTime.of(6, 0))
         .endTime(LocalTime.of(7, 0))
-        .imageUrl(
-            "https://i.namu.wiki/i/h1OsaRJTYVMZqNJgV18rsMgnuW93lXxkWb1ujRDctn0egswSk1VXIEeZVBZ9zRad-PK9S1YhMTyFWTKK2lyEJieoSiOHBERaR4ilxP-7zjbsZvVC-muvIA50Of-aCAnJBj6NGrRv7j4uwXQfCDlneA.webp")
         .minParticipantNum(5)
         .maxParticipantNum(20)
         .build();
@@ -61,7 +65,6 @@ class ChallengeRepositoryTest {
         .date(LocalDate.of(2024, 11, 11))
         .startTime(LocalTime.of(18, 0))
         .endTime(LocalTime.of(19, 0))
-        .imageUrl("https://health.chosun.com/site/data/img_dir/2022/03/30/2022033000861_0.jpg")
         .minParticipantNum(5)
         .maxParticipantNum(20)
         .build();
