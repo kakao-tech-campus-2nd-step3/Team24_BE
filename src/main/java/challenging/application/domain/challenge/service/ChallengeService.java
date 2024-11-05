@@ -68,29 +68,17 @@ public class ChallengeService {
     return ChallengeResponse.fromEntity(challenge, currentParticipantNum,challengePresignedGetUrl);
   }
 
-  private LocalDateTime parseDate(String date) {
-    if (date == null || date.trim().isEmpty()) {
-      throw new InvalidDateException(ErrorCode.DATE_INVALID_ERROR);
-    }
-
-    try {
-      return LocalDateTime.parse(date, dateTimeFormatter);
-    } catch (DateTimeParseException e) {
-      throw new InvalidDateException(ErrorCode.DATE_INVALID_ERROR);
-    }
-  }
-
   // 카테고리별 챌린지 조회
   @Transactional(readOnly = true)
-  public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId, String date) {
-    LocalDateTime localDateTime = parseDate(date);
+  public List<ChallengeResponse> getChallengesByCategoryAndDate(int categoryId) {
+    LocalDateTime current = LocalDateTime.now();
 
     Category category = Category.findByCategoryCode(categoryId);
 
     List<Challenge> challenges = challengeRepository.findByCategoryAndDateTimeAfter(
         category,
-        localDateTime.toLocalDate(),
-        localDateTime.toLocalTime()
+        current.toLocalDate(),
+        current.toLocalTime()
     );
 
     return challenges.stream()
