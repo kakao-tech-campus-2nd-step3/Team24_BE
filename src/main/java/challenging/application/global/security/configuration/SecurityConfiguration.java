@@ -72,7 +72,7 @@ public class SecurityConfiguration {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/reissue", "/h2-console/**").permitAll()
+                        .requestMatchers("/login", "/reissue").permitAll()
                         .anyRequest().authenticated());
 
         http
