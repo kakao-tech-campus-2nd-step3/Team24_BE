@@ -47,9 +47,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String role = getRole(authentication);
 
-        Optional<Member> findMember = memberRepository.findByUuid(uuid);
+//        Optional<Member> findMember = memberRepository.findByUuid(uuid);
 
-        Optional<RefreshToken> findRefreshToken = refreshTokenService.findRefreshToken(findMember.get().getId());
+        Optional<RefreshToken> findRefreshToken = refreshTokenService.findRefreshToken(customUserDetails.getMember().getId());
 
         String refreshToken = null;
 
