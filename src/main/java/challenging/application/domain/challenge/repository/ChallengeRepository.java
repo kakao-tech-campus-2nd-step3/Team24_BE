@@ -12,9 +12,8 @@ import org.springframework.data.repository.query.Param;
 public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
 
-  @Query("SELECT c FROM Challenge c WHERE c.category = :category AND (c.date > :date OR (c.date = :date AND c.startTime > :startTime))")
-  List<Challenge> findByCategoryAndDateTimeAfter(
-      @Param("category") Category category,
+  @Query("SELECT c FROM Challenge c WHERE (c.date > :date OR (c.date = :date AND c.startTime > :startTime))")
+  List<Challenge> findDateTimeAfter(
       @Param("date") LocalDate date,
       @Param("startTime") LocalTime startTime
   );

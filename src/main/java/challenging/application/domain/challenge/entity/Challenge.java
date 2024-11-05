@@ -33,7 +33,7 @@ public class Challenge {
 
   private LocalTime endTime;
 
-  private String imageExtension;
+  private String imgUrl;
 
   private int minParticipantNum;
 
@@ -51,7 +51,7 @@ public class Challenge {
       LocalDate date,
       LocalTime startTime,
       LocalTime endTime,
-      String imageExtension,
+      String imgUrl,
       int minParticipantNum,
       int maxParticipantNum) {
     this.category = category;
@@ -62,8 +62,12 @@ public class Challenge {
     this.date = date;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.imageExtension = imageExtension;
+    this.imgUrl = imgUrl;
     this.minParticipantNum = minParticipantNum;
     this.maxParticipantNum = maxParticipantNum;
+  }
+
+  public void updateImgUrl(String imgUrl) {
+    this.imgUrl = imgUrl;
   }
 }
