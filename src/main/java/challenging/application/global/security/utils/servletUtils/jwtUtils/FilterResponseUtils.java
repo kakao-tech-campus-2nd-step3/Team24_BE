@@ -69,6 +69,17 @@ public class FilterResponseUtils {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
+    public void generateLogoutResponse(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        ApiResponse<?> loginApiResponse = new ApiResponse<>("success", 200, "로그아웃 처리가 완료 되었습니다.", null);
+
+        String loginResponse = objectMapper.writeValueAsString(loginApiResponse);
+
+        response.getWriter().write(loginResponse);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
     public boolean isTokenInDB(HttpServletResponse response, String token) {
         Boolean isExist = refreshTokenRepository.existsByToken(token);
         if (!isExist) {

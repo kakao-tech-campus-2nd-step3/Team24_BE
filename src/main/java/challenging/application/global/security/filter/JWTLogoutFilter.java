@@ -64,6 +64,8 @@ public class JWTLogoutFilter extends GenericFilterBean {
         refreshRepository.deleteByToken(refresh);
 
         CookieUtils.clearCookie(response);
+
+        filterResponseUtils.generateLogoutResponse(response);
     }
 
     private boolean isHttpMethodPost(String requestMethod) {
