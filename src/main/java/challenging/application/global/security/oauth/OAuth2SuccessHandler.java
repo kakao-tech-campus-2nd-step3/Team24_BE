@@ -2,10 +2,12 @@ package challenging.application.global.security.oauth;
 
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.auth.entity.RefreshToken;
+import challenging.application.global.dto.response.ApiResponse;
 import challenging.application.global.security.utils.jwt.JWTUtils;
 import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.auth.service.RefreshTokenService;
 import challenging.application.global.security.utils.servletUtils.cookie.CookieUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +35,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final JWTUtils jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final MemberRepository memberRepository;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -44,9 +47,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String role = getRole(authentication);
 
-        Optional<Member> findMember = memberRepository.findByUuid(uuid);
+//        Optional<Member> findMember = memberRepository.findByUuid(uuid);
 
-        Optional<RefreshToken> findRefreshToken = refreshTokenService.findRefreshToken(findMember.get().getId());
+        Optional<RefreshToken> findRefreshToken = refreshTokenService.findRefreshToken(customUserDetails.getMember().getId());
 
         String refreshToken = null;
 
@@ -65,17 +68,21 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         setInformationInResponse(response, accessToken, refreshToken);
     }
 
-    private void setInformationInResponse(HttpServletResponse response, String accessToken, String refreshToken)
-            throws IOException {
+    private void setInformationInResponse(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
         Cookie access = CookieUtils.createCookie(ACCESS_TOKEN, accessToken);
         Cookie refresh = CookieUtils.createCookie(REFRESH_TOKEN, refreshToken);
 
         response.addCookie(access);
         response.addCookie(refresh);
 
-        response.setStatus(HttpStatus.OK.value());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        ApiResponse<?> loginApiResponse = new ApiResponse<>("success", 200, "로그인 처리가 완료 되었습니다.", null);
 
-        response.sendRedirect("http://localhost:8080/");
+        String loginResponse = objectMapper.writeValueAsString(loginApiResponse);
+
+        response.getWriter().write(loginResponse);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     private String getRole(Authentication authentication) {

@@ -1,8 +1,8 @@
-package challenging.application.global.dto.response;
+package challenging.application.global.dto.response.chalenge;
 
 import challenging.application.domain.challenge.entity.Challenge;
 
-public record ChallengeResponse(
+public record ChallengeGetResponse(
     Long challengeId,
     String challengeName,
     String challengeBody,
@@ -18,8 +18,8 @@ public record ChallengeResponse(
     int categoryId
 ) {
 
-  public static ChallengeResponse fromEntity(Challenge challenge, int currentParticipantNum) {
-    return new ChallengeResponse(
+  public static ChallengeGetResponse fromEntity(Challenge challenge, int currentParticipantNum) {
+    return new ChallengeGetResponse(
         challenge.getId(),
         challenge.getName(),
         challenge.getBody(),

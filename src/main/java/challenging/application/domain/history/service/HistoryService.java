@@ -1,13 +1,13 @@
 package challenging.application.domain.history.service;
 
-import challenging.application.global.dto.response.HistoryResponse;
+import challenging.application.global.dto.response.history.HistoryGetResponse;
 
 import java.util.List;
 
 public interface HistoryService {
 
-    HistoryResponse findOneHistory(Long memberId, Long historyId);
+    HistoryGetResponse findOneHistory(Long memberId, Long historyId);
 
-    List<HistoryResponse> findAllHistory(Long memberId);
+    List<HistoryGetResponse> findAllHistory(Long memberId);
 
 }

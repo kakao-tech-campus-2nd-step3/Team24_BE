@@ -18,7 +18,7 @@ public enum ErrorCode {
     HISTORY_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "존재 하지 않는 히스토리 입니다."),
 
     //CHALLENGE
-    CHALLENGE_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "존재 하지 않는 챌린지 입니다."),
+    CHALLENGE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "존재 하지 않는 챌린지 입니다."),
     CHALLENGE_UNAUTHORIZED_ERROR(HttpStatus.UNAUTHORIZED, "챌린지를 삭제할 권한이 없습니다."),
     CHALLENGE_ALREADY_RESERVED_ERROR(HttpStatus.BAD_REQUEST, "이미 예약한 챌린지입니다."),
 

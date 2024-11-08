@@ -2,7 +2,7 @@ package challenging.application.domain.history.controller;
 
 import challenging.application.global.security.annotation.LoginMember;
 import challenging.application.domain.auth.entity.Member;
-import challenging.application.global.dto.response.HistoryResponse;
+import challenging.application.global.dto.response.history.HistoryGetResponse;
 import challenging.application.domain.history.service.HistoryService;
 import challenging.application.global.dto.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class HistoryApiController {
     @GetMapping("/{historyId}")
     public ResponseEntity<ApiResponse<?>> getHistoryOne(@LoginMember Member member,
                                                                       @PathVariable Long historyId) {
-        HistoryResponse findHistory = historyService.findOneHistory(member.getId(), historyId);
+        HistoryGetResponse findHistory = historyService.findOneHistory(member.getId(), historyId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -35,7 +35,7 @@ public class HistoryApiController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getHistories(@LoginMember Member member) {
-        List<HistoryResponse> histories = historyService.findAllHistory(member.getId());
+        List<HistoryGetResponse> histories = historyService.findAllHistory(member.getId());
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.successResponse(histories));

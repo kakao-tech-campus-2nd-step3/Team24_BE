@@ -7,6 +7,10 @@ import challenging.application.domain.challenge.entity.Challenge;
 import challenging.application.domain.challenge.repository.ChallengeRepository;
 import challenging.application.domain.participant.entity.Participant;
 import challenging.application.domain.participant.repository.ParticipantRepository;
+import challenging.application.global.dto.response.chalenge.ChallengeCreateResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeDeleteResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeReservationResponse;
 import challenging.application.global.error.ErrorCode;
 import challenging.application.global.error.challenge.AlreadyReservedException;
 import challenging.application.global.error.challenge.ChallengeNotFoundException;
@@ -15,10 +19,7 @@ import challenging.application.global.error.participant.ParticipantLimitExceeded
 import challenging.application.global.error.user.UnauthorizedException;
 import challenging.application.global.error.user.UserNotFoundException;
 import challenging.application.global.dto.request.ChallengeRequest;
-import challenging.application.global.dto.response.ChallengeCreateResponse;
-import challenging.application.global.dto.response.ChallengeDeleteResponse;
-import challenging.application.global.dto.response.ChallengeReservationResponse;
-import challenging.application.global.dto.response.ChallengeResponse;
+
 import challenging.application.global.images.ImageService;
 import challenging.application.global.images.S3PresignedImageService;
 import java.io.IOException;
@@ -55,18 +56,18 @@ public class ChallengeService {
 
   // 챌린지 단건 조회
   @Transactional(readOnly = true)
-  public ChallengeResponse getChallengeById(Long challengeId) {
+  public ChallengeGetResponse getChallengeById(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
     int currentParticipantNum = participantRepository.countByChallengeId(challengeId);
 
-    return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
+    return ChallengeGetResponse.fromEntity(challenge, currentParticipantNum);
   }
 
   // 전체 챌린지 조회
   @Transactional(readOnly = true)
-  public List<ChallengeResponse> getChallengesByCategoryAndDate() {
+  public List<ChallengeGetResponse> getChallengesByCategoryAndDate() {
     LocalDateTime current = LocalDateTime.now();
 
 
@@ -80,7 +81,7 @@ public class ChallengeService {
              challenge -> {
                 int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId());
 
-                return ChallengeResponse.fromEntity(challenge, currentParticipantNum);
+                return ChallengeGetResponse.fromEntity(challenge, currentParticipantNum);
             })
         .collect(Collectors.toList());
   }
@@ -168,13 +169,13 @@ public class ChallengeService {
   }
 
   @Transactional(readOnly = true)
-  public ChallengeResponse findOneChallenge(Long challengeId) {
+  public ChallengeGetResponse findOneChallenge(Long challengeId) {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
     int participantNum = participantRepository.countByChallengeId(challengeId);
 
-    return ChallengeResponse.fromEntity(challenge, participantNum);
+    return ChallengeGetResponse.fromEntity(challenge, participantNum);
   }
 
 

@@ -53,7 +53,7 @@ public class CustomAuthenticationPrincipalArgumentResolver implements HandlerMet
 
         String uuid = jwtUtils.getUUID(token);
 
-        return memberRepository.findByEmail(uuid).orElseThrow();
+        return memberRepository.findByUuid(uuid).orElseThrow();
     }
 
     private boolean isAuthenticationMember(Authentication authentication) {
