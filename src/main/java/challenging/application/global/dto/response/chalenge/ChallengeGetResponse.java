@@ -18,7 +18,7 @@ public record ChallengeGetResponse(
     int categoryId
 ) {
 
-  public static ChallengeGetResponse fromEntity(Challenge challenge, int currentParticipantNum, String imgUrl) {
+  public static ChallengeGetResponse fromEntity(Challenge challenge, int currentParticipantNum) {
     return new ChallengeGetResponse(
         challenge.getId(),
         challenge.getName(),
@@ -27,7 +27,7 @@ public record ChallengeGetResponse(
         challenge.getDate().toString(),
         challenge.getStartTime().toString(),
         challenge.getEndTime().toString(),
-        imgUrl,
+        challenge.getImgUrl(),
         challenge.getMinParticipantNum(),
         challenge.getMaxParticipantNum(),
         currentParticipantNum,

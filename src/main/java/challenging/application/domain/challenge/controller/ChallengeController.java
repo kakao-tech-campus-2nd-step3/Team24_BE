@@ -1,20 +1,21 @@
 package challenging.application.domain.challenge.controller;
 
+import challenging.application.global.dto.response.chalenge.ChallengeCreateResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeDeleteResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
+import challenging.application.global.dto.response.chalenge.ChallengeReservationResponse;
 import challenging.application.global.security.annotation.LoginMember;
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.challenge.service.ChallengeService;
 import challenging.application.global.dto.request.ChallengeRequest;
-import challenging.application.global.dto.request.DateRequest;
-import challenging.application.global.dto.response.chalenge.ChallengeCreateResponse;
-import challenging.application.global.dto.response.chalenge.ChallengeDeleteResponse;
-import challenging.application.global.dto.response.chalenge.ChallengeReservationResponse;
-import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
+
 
 import challenging.application.global.dto.response.ApiResponse;
 import java.util.List;
 
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/challenges")
@@ -39,12 +40,10 @@ public class ChallengeController {
     }
 
     // 챌린지 카테고리 조회
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<ApiResponse<?>> getChallengesByCategory(
-            @PathVariable int categoryId,
-            @RequestBody DateRequest dateRequest) {
+    @GetMapping()
+    public ResponseEntity<ApiResponse<?>> getChallengesByCategory() {
 
-        List<ChallengeGetResponse> responses = challengeService.getChallengesByCategoryAndDate(categoryId, dateRequest.date());
+        List<ChallengeGetResponse> responses = challengeService.getChallengesByCategoryAndDate();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -54,9 +53,10 @@ public class ChallengeController {
     // 챌린지 생성
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createChallenge(
-            @RequestBody ChallengeRequest challengeRequestDTO) {
+        @RequestPart(value = "dto") ChallengeRequest challengeRequestDTO,
+        @RequestParam("upload") MultipartFile multipartFile) {
 
-        ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO);
+        ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO,multipartFile);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
