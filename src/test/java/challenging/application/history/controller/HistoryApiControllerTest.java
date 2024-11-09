@@ -1,16 +1,17 @@
 package challenging.application.history.controller;
 
-import challenging.application.challenge.domain.Category;
-import challenging.application.challenge.domain.Challenge;
-import challenging.application.history.domain.History;
+import challenging.application.domain.category.Category;
+import challenging.application.domain.challenge.entity.Challenge;
+import challenging.application.domain.history.controller.HistoryApiController;
+import challenging.application.domain.history.entity.History;
 import challenging.application.history.mockUser.WithMockCustomUser;
-import challenging.application.auth.domain.Member;
-import challenging.application.auth.jwt.JWTUtils;
-import challenging.application.auth.repository.MemberRepository;
-import challenging.application.dto.response.ChallengeResponse;
-import challenging.application.dto.response.HistoryResponse;
-import challenging.application.history.service.HistoryServiceImpl;
-import challenging.application.userprofile.domain.UserProfile;
+import challenging.application.domain.auth.entity.Member;
+import challenging.application.global.security.utils.jwt.JWTUtils;
+import challenging.application.domain.auth.repository.MemberRepository;
+import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
+import challenging.application.global.dto.response.history.HistoryGetResponse;
+import challenging.application.domain.history.service.HistoryServiceImpl;
+import challenging.application.domain.userprofile.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,10 +49,10 @@ class HistoryApiControllerTest {
     Challenge challenge2;
     History history1;
     History history2;
-    ChallengeResponse challengeResponse1;
-    ChallengeResponse challengeResponse2;
-    HistoryResponse historyResponse1;
-    HistoryResponse historyResponse2;
+    ChallengeGetResponse challengeGetResponse1;
+    ChallengeGetResponse challengeGetResponse2;
+    HistoryGetResponse historyGetResponse1;
+    HistoryGetResponse historyGetResponse2;
 
     @BeforeEach
     public void setup() throws Exception {
@@ -71,12 +72,12 @@ class HistoryApiControllerTest {
         given(memberRepository.findByEmail(email)).willReturn(Optional.of(member));
 
         //when
-        given(historyService.findOneHistory(member.getId(), historyId)).willReturn(historyResponse1);
+        given(historyService.findOneHistory(member.getId(), historyId)).willReturn(historyGetResponse1);
 
         //expected
         mvc.perform(get("/api/histories/{historyId}",historyId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.challenge.challengeName").value(challengeResponse1.challengeName()))
+                .andExpect(jsonPath("$.challenge.challengeName").value(challengeGetResponse1.challengeName()))
                 .andDo(print());
     }
 
@@ -92,14 +93,14 @@ class HistoryApiControllerTest {
         given(memberRepository.findByEmail(email)).willReturn(Optional.of(member));
 
         //when
-        List<HistoryResponse> historyResponses = Arrays.asList(historyResponse1, historyResponse2);
+        List<HistoryGetResponse> historyGetRespons = Arrays.asList(historyGetResponse1, historyGetResponse2);
 
-        given(historyService.findAllHistory(member.getId())).willReturn(historyResponses);
+        given(historyService.findAllHistory(member.getId())).willReturn(historyGetRespons);
 
         //expected
         mvc.perform(get("/api/histories"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(historyResponses.size()))
+                .andExpect(jsonPath("$.size()").value(historyGetRespons.size()))
                 .andDo(print());
     }
 
@@ -158,11 +159,11 @@ class HistoryApiControllerTest {
                 .isHost(Boolean.TRUE)
                 .build();
 
-        challengeResponse1 = ChallengeResponse.fromEntity(challenge1, 1);
-        historyResponse1 = HistoryResponse.of(challengeResponse1, history1);
+        challengeGetResponse1 = ChallengeGetResponse.fromEntity(challenge1, 1);
+        historyGetResponse1 = HistoryGetResponse.of(challengeGetResponse1, history1);
 
-        challengeResponse2 = ChallengeResponse.fromEntity(challenge2, 1);
-        historyResponse2 = HistoryResponse.of(challengeResponse2, history2);
+        challengeGetResponse2 = ChallengeGetResponse.fromEntity(challenge2, 1);
+        historyGetResponse2 = HistoryGetResponse.of(challengeGetResponse2, history2);
     }
 
 }

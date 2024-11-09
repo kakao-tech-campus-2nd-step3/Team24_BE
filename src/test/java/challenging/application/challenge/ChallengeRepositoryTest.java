@@ -1,10 +1,10 @@
 package challenging.application.challenge;
 
-import challenging.application.auth.domain.Member;
-import challenging.application.auth.repository.MemberRepository;
-import challenging.application.challenge.domain.Category;
-import challenging.application.challenge.domain.Challenge;
-import challenging.application.challenge.repository.ChallengeRepository;
+import challenging.application.domain.auth.entity.Member;
+import challenging.application.domain.auth.repository.MemberRepository;
+import challenging.application.domain.category.Category;
+import challenging.application.domain.challenge.entity.Challenge;
+import challenging.application.domain.challenge.repository.ChallengeRepository;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
