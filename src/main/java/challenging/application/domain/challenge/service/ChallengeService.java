@@ -24,7 +24,6 @@ import challenging.application.global.dto.request.ChallengeRequest;
 
 import challenging.application.global.images.ImageService;
 import java.time.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -147,6 +146,12 @@ public class ChallengeService {
       throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_USER_ERROR);
     }
 
+    List<Participant> participants = challenge.getParticipants();
+    for (Participant participant : participants) {
+      Member member = participant.getMember();
+      member.getUserProfile().addPoint(challenge.getPoint());
+    }
+
     imageService.deleteImageByUrl(challenge.getImgUrl());
 
     challengeRepository.deleteById(challenge.getId());
@@ -160,7 +165,7 @@ public class ChallengeService {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
-    if (participantRepository.existsByChallengeIdAndMemberId(challengeId, user.getId())) {
+    if (participantRepository.findParticipantByChallengeIdAndMemberId(challengeId, user.getId()).isPresent()) {
       throw new AlreadyReservedException(ErrorCode.CHALLENGE_ALREADY_RESERVED_ERROR);
     }
 
@@ -186,6 +191,19 @@ public class ChallengeService {
     int participantNum = participantRepository.countByChallengeId(challengeId);
 
     return ChallengeGetResponse.fromEntity(challenge, participantNum);
+  }
+
+  @Transactional
+  public void cancelChallenge(Long challengeId, Member member){
+    Challenge challenge = challengeRepository.findById(challengeId)
+            .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
+
+    Participant participant = participantRepository.findParticipantByChallengeIdAndMemberId(challengeId, member.getId())
+            .orElseThrow(() -> new RuntimeException());
+
+    participantRepository.delete(participant);
+
+    member.getUserProfile().addPoint(challenge.getPoint());
   }
 
   @Transactional
