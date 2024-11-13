@@ -10,6 +10,8 @@ public record ChallengeRequest(
     @Size(min = 1, message = "챌린지 이름은 비어 있을 수 없습니다.")
     String challengeName,
     String challengeBody,
+    @NotNull(message = "챌린지 카테고리 번호는 필수입니다.")
+    Integer categoryId,
     @NotNull(message = "포인트는 필수 입력값입니다.")
     @Min(value = 0, message = "포인트는 0 이상이어야 합니다.")
     Integer point,

@@ -7,10 +7,10 @@ import java.util.Arrays;
 
 public enum Category {
 
-    SPORT("운동", 1),
-    SELF_IMPROVEMENT("자기계발", 2),
-    HOBBY("취미", 3),
-    STUDY("공부", 4);
+    SPORT("운동", 0),
+    SELF_IMPROVEMENT("자기계발", 1),
+    HOBBY("취미", 2),
+    STUDY("공부", 3);
 
     private final String categoryName;
     private final Integer categoryCode;

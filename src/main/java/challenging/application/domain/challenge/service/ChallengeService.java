@@ -2,6 +2,7 @@ package challenging.application.domain.challenge.service;
 
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.auth.repository.MemberRepository;
+import challenging.application.domain.category.Category;
 import challenging.application.domain.challenge.entity.Challenge;
 import challenging.application.domain.challenge.repository.ChallengeRepository;
 import challenging.application.domain.history.entity.History;
@@ -109,6 +110,7 @@ public class ChallengeService {
         .name(challengeRequestDTO.challengeName())
         .body(challengeRequestDTO.challengeBody())
         .point(challengeRequestDTO.point())
+        .category(Category.findByCategoryCode(challengeRequestDTO.categoryId()))
         .date(LocalDate.parse(challengeRequestDTO.challengeDate()))
         .startTime(LocalTime.parse(challengeRequestDTO.startTime()))
         .endTime(LocalTime.parse(challengeRequestDTO.endTime()))
