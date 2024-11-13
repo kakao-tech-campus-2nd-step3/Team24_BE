@@ -89,14 +89,11 @@ public class ChallengeService {
   public ChallengeCreateResponse createChallenge(
       ChallengeRequest challengeRequestDTO,
       MultipartFile multipartFile) {
-    Member host = memberRepository.findById(challengeRequestDTO.hostId())
+    Member host = memberRepository.findByUuid(challengeRequestDTO.hostUuid())
             .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND_ERROR));
 
-    Category category = Category.findByCategoryCode(challengeRequestDTO.categoryId());
-    
 
     Challenge challenge = Challenge.builder()
-        .category(category)
         .host(host)
         .name(challengeRequestDTO.challengeName())
         .body(challengeRequestDTO.challengeBody())
@@ -109,19 +106,17 @@ public class ChallengeService {
         .maxParticipantNum(challengeRequestDTO.maxParticipantNum())
         .build();
 
-    Long challengId = challenge.getId();
+    Challenge savedChallenge = challengeRepository.save(challenge);
 
     String imgUrl = null;
 
-    imgUrl = imageService.imageload(multipartFile, challengId);
+    imgUrl = imageService.imageload(multipartFile, savedChallenge.getId());
 
     challenge.updateImgUrl(imgUrl);
 
-    Challenge savedChallenge = challengeRepository.save(challenge);
-
     Participant participant = new Participant(savedChallenge, host);
-    participantRepository.save(participant);
 
+    participantRepository.save(participant);
 
     return new ChallengeCreateResponse(savedChallenge.getId(),savedChallenge.getImgUrl());
   }
@@ -133,13 +128,13 @@ public class ChallengeService {
     Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
-    if (!challenge.getHost().getId().equals(user.getId())) {
+    if (!challenge.getHost().getUuid().equals(user.getUuid())) {
       throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_USER_ERROR);
     }
 
     imageService.deleteImageByUrl(challenge.getImgUrl());
 
-    challengeRepository.delete(challenge);
+    challengeRepository.deleteById(challenge.getId());
 
     return new ChallengeDeleteResponse(challengeId);
   }

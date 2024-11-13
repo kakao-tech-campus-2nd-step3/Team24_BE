@@ -54,8 +54,11 @@ public class ChallengeController {
     // 챌린지 생성
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createChallenge(
-        @RequestPart(value = "dto") ChallengeRequest challengeRequestDTO,
-        @RequestParam("upload") MultipartFile multipartFile) {
+//        @RequestPart(value = "dto") ChallengeRequest challengeRequestDTO,
+//        @RequestParam("upload") MultipartFile multipartFile)
+    @ModelAttribute ChallengeRequest challengeRequestDTO,
+    @RequestParam("image") MultipartFile multipartFile){
+
 
         ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO,multipartFile);
 
