@@ -2,8 +2,7 @@ package challenging.application.global.dto.request;
 
 
 public record UserProfileRequest() {
-    public record UserProfilePutRequest(String userNickName,
-                                        String Extension
+    public record UserProfilePutRequest(String userNickName
     ){};
 
 }

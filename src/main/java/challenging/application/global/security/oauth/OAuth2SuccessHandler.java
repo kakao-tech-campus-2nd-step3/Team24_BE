@@ -1,21 +1,17 @@
 package challenging.application.global.security.oauth;
 
-import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.auth.entity.RefreshToken;
 import challenging.application.global.dto.response.ApiResponse;
 import challenging.application.global.security.utils.jwt.JWTUtils;
-import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.auth.service.RefreshTokenService;
 import challenging.application.global.security.utils.servletUtils.cookie.CookieUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -34,20 +30,17 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JWTUtils jwtUtil;
     private final RefreshTokenService refreshTokenService;
-    private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+        Authentication authentication) throws IOException {
 
         OAuth2UserImpl customUserDetails = (OAuth2UserImpl) authentication.getPrincipal();
 
         String uuid = customUserDetails.getUUID();
 
         String role = getRole(authentication);
-
-//        Optional<Member> findMember = memberRepository.findByUuid(uuid);
 
         Optional<RefreshToken> findRefreshToken = refreshTokenService.findRefreshToken(customUserDetails.getMember().getId());
 
@@ -65,13 +58,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("Access = {}", accessToken);
         log.info("Refresh = {}", refreshToken);
 
-        setInformationInResponse(response, accessToken, refreshToken);
+        setInformationInResponse(response, uuid, accessToken, refreshToken);
     }
 
-    private void setInformationInResponse(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
+    private void setInformationInResponse(HttpServletResponse response, String uuid, String accessToken, String refreshToken) throws IOException {
+        Cookie uuidInCookie = CookieUtils.createCookie("uuid", uuid);
         Cookie access = CookieUtils.createCookie(ACCESS_TOKEN, accessToken);
         Cookie refresh = CookieUtils.createCookie(REFRESH_TOKEN, refreshToken);
 
+        response.addCookie(uuidInCookie);
         response.addCookie(access);
         response.addCookie(refresh);
 

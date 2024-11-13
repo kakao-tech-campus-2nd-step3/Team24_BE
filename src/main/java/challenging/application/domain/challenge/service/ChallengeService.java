@@ -165,7 +165,7 @@ public class ChallengeService {
     Participant participant = new Participant(challenge, user);
     participantRepository.save(participant);
 
-    return new ChallengeReservationResponse(challengeId,user.getId());
+    return new ChallengeReservationResponse(challengeId,user.getUuid());
   }
 
   @Transactional(readOnly = true)
