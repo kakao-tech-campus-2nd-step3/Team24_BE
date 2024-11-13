@@ -63,4 +63,12 @@ public class UserProfile {
     public void addPoint(Integer point) {
         this.point += point;
     }
+
+    public void usePoint(Integer point) {
+        if(this.point < point){
+            throw new IllegalArgumentException("보유 포인트가 부족합니다.");
+        }
+
+        this.point -= point;
+    }
 }

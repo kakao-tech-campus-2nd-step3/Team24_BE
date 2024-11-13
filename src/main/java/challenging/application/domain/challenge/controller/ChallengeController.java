@@ -54,10 +54,9 @@ public class ChallengeController {
     // 챌린지 생성
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createChallenge(
-//        @RequestPart(value = "dto") ChallengeRequest challengeRequestDTO,
-//        @RequestParam("upload") MultipartFile multipartFile)
-    @ModelAttribute ChallengeRequest challengeRequestDTO,
-    @RequestParam("image") MultipartFile multipartFile){
+        @ModelAttribute ChallengeRequest challengeRequestDTO,
+        @RequestParam("image") MultipartFile multipartFile
+    ){
 
 
         ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO,multipartFile);
@@ -93,10 +92,12 @@ public class ChallengeController {
                 .body(ApiResponse.successResponse(challengeResponse));
     }
 
-    @PostMapping("/vote")
-    public ResponseEntity<?> voteChallenge(@RequestBody ChallengeVoteRequest challengeVoteRequest){
+    @PostMapping("/{challengeId}/vote")
+    public ResponseEntity<?> voteChallenge(
+            @PathVariable Long challengeId,
+            @RequestBody ChallengeVoteRequest challengeVoteRequest){
 
-        challengeService.voteChallenge(challengeVoteRequest);
+        challengeService.voteChallenge(challengeId, challengeVoteRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

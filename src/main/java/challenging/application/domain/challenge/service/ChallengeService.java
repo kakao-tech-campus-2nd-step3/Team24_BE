@@ -89,9 +89,9 @@ public class ChallengeService {
   public ChallengeCreateResponse createChallenge(
       ChallengeRequest challengeRequestDTO,
       MultipartFile multipartFile) {
+
     Member host = memberRepository.findByUuid(challengeRequestDTO.hostUuid())
             .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND_ERROR));
-
 
     Challenge challenge = Challenge.builder()
         .host(host)
@@ -113,6 +113,8 @@ public class ChallengeService {
     imgUrl = imageService.imageload(multipartFile, savedChallenge.getId());
 
     challenge.updateImgUrl(imgUrl);
+
+    host.getUserProfile().usePoint(challengeRequestDTO.point());
 
     Participant participant = new Participant(savedChallenge, host);
 
@@ -155,6 +157,8 @@ public class ChallengeService {
       throw new ParticipantLimitExceededException(ErrorCode.PARTICIPANT_LIMIT_ERROR);
     }
 
+    user.getUserProfile().usePoint(challenge.getPoint());
+
     Participant participant = new Participant(challenge, user);
     participantRepository.save(participant);
 
@@ -172,19 +176,17 @@ public class ChallengeService {
   }
 
   @Transactional
-  public void voteChallenge(ChallengeVoteRequest challengeVoteRequest) {
-    Challenge challenge = challengeRepository.findById(challengeVoteRequest.challengeId())
+  public void voteChallenge(Long challengeId, ChallengeVoteRequest challengeVoteRequest) {
+    Challenge challenge = challengeRepository.findById(challengeId)
         .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
-    List<Participant> participants = participantRepository.findAllByChallengeId(challengeVoteRequest.challengeId());
-
+    List<Participant> participants = participantRepository.findAllByChallengeId(challengeId);
 
     long successCount = participants.stream()
         .filter(participant -> !participant.getMember().getUuid().equals(challengeVoteRequest.banUuid()))
         .count();
 
-    int dividedPoints = challenge.getPoint() / (int) successCount ;
-
+    int dividedPoints = (challenge.getPoint() * participants.size()) / (int) successCount ;
 
     for (Participant participant : participants) {
       Member member = participant.getMember();
