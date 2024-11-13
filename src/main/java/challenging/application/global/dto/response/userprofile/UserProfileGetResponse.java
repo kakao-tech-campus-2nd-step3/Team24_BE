@@ -6,7 +6,7 @@ public record UserProfileGetResponse(String userNickName,
                                      Integer point,
                                      String imgUrl
 ){
-    public static UserProfileGetResponse of(UserProfile userProfile, String imgUrl) {
-        return new UserProfileGetResponse(userProfile.getUserNickName(),userProfile.getPoint(),imgUrl);
+    public static UserProfileGetResponse of(UserProfile userProfile) {
+        return new UserProfileGetResponse(userProfile.getUserNickName(),userProfile.getPoint(),userProfile.getImgUrl());
     }
 };

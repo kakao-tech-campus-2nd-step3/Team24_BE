@@ -2,61 +2,50 @@ package challenging.application.domain.userprofile.service;
 
 import challenging.application.domain.userprofile.domain.UserProfile;
 import challenging.application.domain.userprofile.repository.UserProfileRepository;
-import challenging.application.global.dto.request.UserProfileRequest.UserProfilePutRequest;
 import challenging.application.global.dto.response.userprofile.UserProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
-import challenging.application.global.images.S3PresignedImageService;
+import challenging.application.global.images.ImageService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
-    private final S3PresignedImageService s3PresignedImageService;
+    private final ImageService imageService;
 
     public UserProfileService(UserProfileRepository userProfileRepository,
-        S3PresignedImageService s3PresignedImageService) {
+        ImageService imageService) {
         this.userProfileRepository = userProfileRepository;
-        this.s3PresignedImageService = s3PresignedImageService;
+        this.imageService = imageService;
     }
 
     public UserProfileGetResponse getUserProfile(Long memberId) {
         UserProfile userProfile = userProfileRepository.findByMemberId(memberId).orElseThrow(
             () -> new RuntimeException()
         );
-        String presignedGetUrl = null;
-        if (userProfile.getImageExtension() != null && userProfile.getImageExtension() != null) {
-            presignedGetUrl = s3PresignedImageService.createUserPresignedGetUrl(
-                userProfile.getImageExtension(),
-                userProfile.getMember().getUuid()
-            );
-        }
 
-        UserProfileGetResponse userProfileGetResponse = UserProfileGetResponse.of(userProfile,presignedGetUrl);
-
+        UserProfileGetResponse userProfileGetResponse = UserProfileGetResponse.of(userProfile);
 
         return userProfileGetResponse;
     }
 
-    public UserProfilePutResponse putUserProfile(Long memberId, UserProfilePutRequest userProfilePutRequest){
+    public UserProfilePutResponse putUserProfile(Long memberId, String userNickname, MultipartFile image){
         UserProfile userProfile = userProfileRepository.findByMemberId(memberId).orElseThrow(
             () -> new RuntimeException()
         );
-        userProfile.updateUserNickName(userProfilePutRequest.userNickName());
-        userProfile.updateImageExtension(userProfilePutRequest.Extension());
 
-        String presignedPutUrl = null;
+        String s3Url = userProfile.getImgUrl();
 
-        if (userProfile.getImageExtension() != null && userProfile.getImageExtension() != null) {
-            presignedPutUrl = s3PresignedImageService.createUserPresignedPutUrl(
-                userProfile.getImageExtension(),
-                userProfile.getMember().getUuid()
-            );
+        if (image != null){
+            s3Url = imageService.imageload(image, memberId);
+            userProfile.updateImgUrl(s3Url);
+
         }
 
+        userProfile.updateUserNickName(userNickname);
 
-
-        return new UserProfilePutResponse(userProfilePutRequest.userNickName(),presignedPutUrl);
+        return new UserProfilePutResponse(userNickname,s3Url);
     }
 
 

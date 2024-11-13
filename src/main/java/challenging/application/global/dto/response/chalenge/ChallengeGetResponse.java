@@ -14,7 +14,7 @@ public record ChallengeGetResponse(
     int minParticipantNum,
     int maxParticipantNum,
     int currentParticipantNum,
-    Long hostId,
+    String uuid,
     int categoryId
 ) {
 
@@ -31,7 +31,7 @@ public record ChallengeGetResponse(
         challenge.getMinParticipantNum(),
         challenge.getMaxParticipantNum(),
         currentParticipantNum,
-        challenge.getHost().getId(),
+        challenge.getHost().getUuid(),
         challenge.getCategory().getCategoryCode()
     );
   }

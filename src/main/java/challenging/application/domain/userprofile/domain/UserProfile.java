@@ -18,9 +18,10 @@ public class UserProfile {
     private String userNickName;
 
     private Integer point;
-    private String imageExtension;
+    private String imgUrl;
 
-    public UserProfile() {}
+    public UserProfile() {
+    }
 
     public UserProfile(Long id, Member member, String userNickName, Integer point) {
         this.id = id;
@@ -37,8 +38,8 @@ public class UserProfile {
         return point;
     }
 
-    public String getImageExtension() {
-        return imageExtension;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
     public Member getMember() {
@@ -46,14 +47,14 @@ public class UserProfile {
     }
 
     public void updateUserNickName(String userNickName) {
-        if (userNickName != null){
+        if (userNickName != null) {
             this.userNickName = userNickName;
         }
     }
 
-    public void updateImageExtension(String imageExtension) {
-        if (imageExtension != null){
-            this.imageExtension = imageExtension;
+    public void updateImgUrl(String imgUrl) {
+        if (imgUrl != null) {
+            this.imgUrl = imgUrl;
         }
     }
 }
