@@ -2,7 +2,6 @@ package challenging.application.domain.challenge.service;
 
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.auth.repository.MemberRepository;
-import challenging.application.domain.category.Category;
 import challenging.application.domain.challenge.entity.Challenge;
 import challenging.application.domain.challenge.repository.ChallengeRepository;
 import challenging.application.domain.history.entity.History;
@@ -24,6 +23,7 @@ import challenging.application.global.dto.request.ChallengeRequest;
 
 import challenging.application.global.images.ImageService;
 import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -37,9 +37,7 @@ public class ChallengeService {
   private final MemberRepository memberRepository;
   private final ParticipantRepository participantRepository;
   private final ImageService imageService;
-
   private final HistoryRepository historyRepository;
-
 
   public ChallengeService(ChallengeRepository challengeRepository,
       MemberRepository memberRepository,
@@ -65,7 +63,7 @@ public class ChallengeService {
 
   // 전체 챌린지 조회
   @Transactional(readOnly = true)
-  public List<ChallengeGetResponse> getChallengesByCategoryAndDate() {
+  public List<ChallengeGetResponse> getChallengesByDate() {
     LocalDateTime current = LocalDateTime.now();
 
 
@@ -83,6 +81,19 @@ public class ChallengeService {
             })
         .collect(Collectors.toList());
   }
+
+  @Transactional(readOnly = true)
+  public List<ChallengeGetResponse> findWaitingChallenges(Member member) {
+    return participantRepository.findAllByMemberId(member.getId()).stream()
+            .map(Participant::getChallenge)
+            .filter(challenge -> !challenge.isEndChallenge())
+            .map(challenge -> {
+              int currentParticipantNum = participantRepository.countByChallengeId(challenge.getId());
+              return ChallengeGetResponse.fromEntity(challenge, currentParticipantNum);
+            })
+            .collect(Collectors.toList());
+  }
+
 
   // 챌린지 생성
   @Transactional

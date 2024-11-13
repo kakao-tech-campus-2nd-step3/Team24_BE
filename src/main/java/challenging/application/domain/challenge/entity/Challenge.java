@@ -72,4 +72,11 @@ public class Challenge {
   public void updateImgUrl(String imgUrl) {
     this.imgUrl = imgUrl;
   }
+
+  public boolean isEndChallenge(){
+    LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
+
+    LocalDateTime currentDateTime = LocalDateTime.now();
+    return !currentDateTime.isBefore(startDateTime);
+  }
 }

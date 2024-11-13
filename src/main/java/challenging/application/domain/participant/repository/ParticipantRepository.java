@@ -8,5 +8,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
   Integer countByChallengeId(Long challengeId);
   boolean existsByChallengeIdAndMemberId(Long challengeId, Long memberId);
   List<Participant> findAllByChallengeId(Long challengeId);
+  List<Participant> findAllByMemberId(Long memberId);
 
 }
