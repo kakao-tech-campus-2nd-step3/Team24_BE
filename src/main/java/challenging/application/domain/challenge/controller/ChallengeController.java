@@ -1,6 +1,7 @@
 package challenging.application.domain.challenge.controller;
 
 import challenging.application.global.dto.request.ChallengeVoteRequest;
+import challenging.application.global.dto.response.chalenge.ChallengeCancelResponse;
 import challenging.application.global.dto.response.chalenge.ChallengeCreateResponse;
 import challenging.application.global.dto.response.chalenge.ChallengeDeleteResponse;
 import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
@@ -99,6 +100,22 @@ public class ChallengeController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.successResponse(challengeResponse));
+    }
+
+    @PostMapping("/{challengeId}/cancel")
+    public ResponseEntity<?> cancelChallenge(
+            @PathVariable Long challengeId,
+            @LoginMember Member member){
+
+        challengeService.cancelChallenge(challengeId, member);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.successResponseWithMessage(
+                        "챌린지를 취소하였습니다.",
+                        new ChallengeCancelResponse(challengeId, member.getUuid())
+                ));
+
     }
 
     @PostMapping("/{challengeId}/vote")
