@@ -27,6 +27,9 @@ public class Challenge {
 
   private int point;
 
+  @Enumerated(EnumType.STRING)
+  private Category category;
+
   private LocalDate date;
 
   private LocalTime startTime;
@@ -51,6 +54,7 @@ public class Challenge {
       String name,
       String body,
       int point,
+      Category category,
       LocalDate date,
       LocalTime startTime,
       LocalTime endTime,
@@ -61,6 +65,7 @@ public class Challenge {
     this.name = name;
     this.body = body;
     this.point = point;
+    this.category = category;
     this.date = date;
     this.startTime = startTime;
     this.endTime = endTime;
