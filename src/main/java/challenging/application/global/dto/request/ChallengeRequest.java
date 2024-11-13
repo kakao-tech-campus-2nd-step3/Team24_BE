@@ -5,9 +5,7 @@ import jakarta.validation.constraints.*;
 public record ChallengeRequest(
 
     @NotNull(message = "호스트 ID는 필수 입력값입니다.")
-    Long hostId,
-    @NotNull(message = "카테고리 ID는 필수 입력값입니다.")
-    int categoryId,
+    String hostUuid,
     @NotNull(message = "챌린지 이름은 필수 입력값입니다.")
     @Size(min = 1, message = "챌린지 이름은 비어 있을 수 없습니다.")
     String challengeName,
@@ -21,7 +19,6 @@ public record ChallengeRequest(
     String startTime,
     @NotNull(message = "종료 시간은 필수 입력값입니다.")
     String endTime,
-    String imageExtension,
     @NotNull(message = "최소 참가자 수는 필수 입력값입니다.")
     @Min(value = 1, message = "최소 참가자 수는 1명 이상이어야 합니다.")
     int minParticipantNum,

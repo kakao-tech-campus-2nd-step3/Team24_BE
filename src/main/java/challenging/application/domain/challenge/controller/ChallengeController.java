@@ -41,10 +41,19 @@ public class ChallengeController {
     }
 
     // 챌린지 카테고리 조회
-    @GetMapping()
-    public ResponseEntity<ApiResponse<?>> getChallengesByCategory() {
+    @GetMapping
+    public ResponseEntity<ApiResponse<?>> getChallenges() {
 
-        List<ChallengeGetResponse> responses = challengeService.getChallengesByCategoryAndDate();
+        List<ChallengeGetResponse> responses = challengeService.getChallengesByDate();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.successResponse(responses));
+    }
+
+    @GetMapping("/waiting")
+    public ResponseEntity<ApiResponse<?>> getWaitingChallenges(@LoginMember Member member) {
+        List<ChallengeGetResponse> responses = challengeService.findWaitingChallenges(member);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -54,8 +63,10 @@ public class ChallengeController {
     // 챌린지 생성
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createChallenge(
-        @RequestPart(value = "dto") ChallengeRequest challengeRequestDTO,
-        @RequestParam("upload") MultipartFile multipartFile) {
+        @ModelAttribute ChallengeRequest challengeRequestDTO,
+        @RequestParam("image") MultipartFile multipartFile
+    ){
+
 
         ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO,multipartFile);
 
@@ -90,10 +101,12 @@ public class ChallengeController {
                 .body(ApiResponse.successResponse(challengeResponse));
     }
 
-    @PostMapping("/vote")
-    public ResponseEntity<?> voteChallenge(@RequestBody ChallengeVoteRequest challengeVoteRequest){
+    @PostMapping("/{challengeId}/vote")
+    public ResponseEntity<?> voteChallenge(
+            @PathVariable Long challengeId,
+            @RequestBody ChallengeVoteRequest challengeVoteRequest){
 
-        challengeService.voteChallenge(challengeVoteRequest);
+        challengeService.voteChallenge(challengeId, challengeVoteRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

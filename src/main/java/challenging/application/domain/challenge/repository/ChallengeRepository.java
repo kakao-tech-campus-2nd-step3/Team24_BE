@@ -22,7 +22,4 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
   @Query("SELECT c FROM Challenge c JOIN FETCH c.host WHERE c.id = :id")
   Optional<Challenge> findByIdWithHost(@Param("id") Long id);
 
-
-
-
 }

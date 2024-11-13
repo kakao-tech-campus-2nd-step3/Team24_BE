@@ -34,13 +34,17 @@ public class CookieUtils {
     public static String checkRefreshTokenInCookie(HttpServletRequest request) {
         String refresh = null;
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
 
-            if (cookie.getName().equals(REFRESH_TOKEN)) {
+        if(cookies != null){
+            for (Cookie cookie : cookies) {
 
-                refresh = cookie.getValue();
+                if (cookie.getName().equals(REFRESH_TOKEN)) {
+
+                    refresh = cookie.getValue();
+                }
             }
         }
+
         return refresh;
     }
 }

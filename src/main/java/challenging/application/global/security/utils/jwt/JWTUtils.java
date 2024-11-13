@@ -16,8 +16,8 @@ import static challenging.application.domain.auth.constant.AuthConstant.*;
 @Component
 public class JWTUtils {
     private final SecretKey secretKey;
-    private final Long accessExpiredTime = 60 * 10 * 1000L;
-    private final Long refreshExpiredTime = 60 * 60 * 24 * 1000L;
+    private final Long accessExpiredTime = 60 * 60 * 24 * 1000L;
+    private final Long refreshExpiredTime = 60 * 60 * 48 * 1000L;
 
     public JWTUtils(@Value("${spring.jwt.secret}") String secret) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
