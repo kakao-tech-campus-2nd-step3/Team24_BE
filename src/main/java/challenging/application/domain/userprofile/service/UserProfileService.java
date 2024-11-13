@@ -6,9 +6,11 @@ import challenging.application.global.dto.response.userprofile.UserProfileGetRes
 import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
 import challenging.application.global.images.ImageService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@Transactional
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
@@ -40,7 +42,6 @@ public class UserProfileService {
         if (image != null){
             s3Url = imageService.imageload(image, memberId);
             userProfile.updateImgUrl(s3Url);
-
         }
 
         userProfile.updateUserNickName(userNickname);
