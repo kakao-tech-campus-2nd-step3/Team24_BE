@@ -105,7 +105,7 @@ public class JWTAccessFilter extends OncePerRequestFilter {
     }
 
     private boolean isReissue(String requestUri) {
-        return requestUri.matches("^\\/reissue(?:\\/.*)?$");
+        return requestUri.matches("^\\/api/reissue(?:\\/.*)?$");
     }
 
 
