@@ -18,9 +18,11 @@ public class UserProfile {
     private String userNickName;
 
     private Integer point;
+
     private String imgUrl;
 
     public UserProfile() {
+        point = 0;
     }
 
     public UserProfile(Long id, Member member, String userNickName, Integer point) {
