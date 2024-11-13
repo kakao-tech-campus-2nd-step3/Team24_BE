@@ -1,9 +1,9 @@
 package challenging.application.domain.history.controller;
 
+import challenging.application.domain.history.service.HistoryService;
 import challenging.application.global.security.annotation.LoginMember;
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.global.dto.response.history.HistoryGetResponse;
-import challenging.application.domain.history.service.HistoryService;
 import challenging.application.global.dto.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

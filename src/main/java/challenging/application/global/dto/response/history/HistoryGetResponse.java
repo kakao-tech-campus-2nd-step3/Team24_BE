@@ -6,9 +6,9 @@ import challenging.application.global.dto.response.chalenge.ChallengeGetResponse
 public record HistoryGetResponse(
     ChallengeGetResponse challenge,
 
-    Boolean is_succeed,
+    Boolean isSucceed,
 
-    Boolean is_host,
+    Boolean isHost,
 
     Integer point
 ) {
