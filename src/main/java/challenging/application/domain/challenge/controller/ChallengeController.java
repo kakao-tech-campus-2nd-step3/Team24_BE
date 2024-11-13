@@ -1,5 +1,6 @@
 package challenging.application.domain.challenge.controller;
 
+import challenging.application.global.dto.request.ChallengeVoteRequest;
 import challenging.application.global.dto.response.chalenge.ChallengeCreateResponse;
 import challenging.application.global.dto.response.chalenge.ChallengeDeleteResponse;
 import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
@@ -87,5 +88,16 @@ public class ChallengeController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.successResponse(challengeResponse));
+    }
+
+    @PostMapping("/vote")
+    public ResponseEntity<?> voteChallenge(@RequestBody ChallengeVoteRequest challengeVoteRequest){
+
+        challengeService.voteChallenge(challengeVoteRequest);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.successResponseWithMessage("투표가 성공적으로 처리되었습니다.", null));
+
     }
 }

@@ -41,4 +41,5 @@ public class Member {
         this.userProfile = userProfile;
         this.uuid = UUID.randomUUID().toString();
     }
+
 }

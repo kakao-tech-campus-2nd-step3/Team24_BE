@@ -57,4 +57,8 @@ public class UserProfile {
             this.imgUrl = imgUrl;
         }
     }
+
+    public void addPoint(Integer point) {
+        this.point += point;
+    }
 }
