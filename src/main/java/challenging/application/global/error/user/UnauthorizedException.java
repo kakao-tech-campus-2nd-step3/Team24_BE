@@ -1,22 +1,12 @@
 package challenging.application.global.error.user;
 
 import challenging.application.global.error.ErrorCode;
+import challenging.application.global.error.Team24Exception;
 
-public class UnauthorizedException extends RuntimeException {
-  private final ErrorCode errorCode;
+public class UnauthorizedException extends Team24Exception {
 
-  public UnauthorizedException(ErrorCode errorCode) {
-    super(errorCode.getMessage());
-    this.errorCode = errorCode;
-  }
-
-  @Override
-  public String getMessage() {
-    return super.getMessage();
-  }
-
-  public int getStatusCode(){
-    return errorCode.getStatus().value();
+  public UnauthorizedException() {
+    super(ErrorCode.UNAUTHORIZED_USER_ERROR);
   }
 
 }

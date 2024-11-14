@@ -1,11 +1,9 @@
 package challenging.application.domain.userprofile.controller;
 
-import challenging.application.global.dto.request.ChallengeRequest;
 import challenging.application.global.dto.response.userprofile.UserProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
 import challenging.application.global.security.annotation.LoginMember;
-import challenging.application.global.dto.request.UserProfileRequest;
-import challenging.application.domain.auth.entity.Member; // Member 엔터티
+import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.userprofile.service.UserProfileService;
 import challenging.application.global.dto.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +35,8 @@ public class UserProfileController {
         @LoginMember Member user,
         @RequestPart(value = "userNickName", required = false) String userNickName,
         @RequestPart(value = "image", required = false) MultipartFile image) {
-        UserProfilePutResponse userProfileResponse = userProfileService.putUserProfile(user.getId(),
-            userNickName,image);
+
+        UserProfilePutResponse userProfileResponse = userProfileService.putUserProfile(user.getId(), userNickName,image);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

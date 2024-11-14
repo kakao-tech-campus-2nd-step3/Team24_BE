@@ -34,13 +34,11 @@ public class HistoryService {
   public List<HistoryGetResponse> findAllHistory(Long memberId) {
     List<History> histories = historyRepository.findAllByMemberId(memberId);
 
-    List<HistoryGetResponse> historyGetRespons = histories.stream()
+      return histories.stream()
         .map(history -> {
           ChallengeGetResponse challengeGetResponseDTO = challengeService.findOneChallenge(history.getChallenge().getId());
           return HistoryGetResponse.of(challengeGetResponseDTO, history);
         })
         .collect(Collectors.toList());
-
-    return historyGetRespons;
   }
 }

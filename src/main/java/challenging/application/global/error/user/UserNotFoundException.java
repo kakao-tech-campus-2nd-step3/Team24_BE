@@ -1,21 +1,11 @@
 package challenging.application.global.error.user;
 
 import challenging.application.global.error.ErrorCode;
+import challenging.application.global.error.Team24Exception;
 
-public class UserNotFoundException extends RuntimeException {
-  private final ErrorCode errorCode;
-
-  public UserNotFoundException(ErrorCode errorCode) {
-    super(errorCode.getMessage());
-    this.errorCode = errorCode;
+public class UserNotFoundException extends Team24Exception {
+  public UserNotFoundException() {
+    super(ErrorCode.USER_NOT_FOUND_ERROR);
   }
 
-  @Override
-  public String getMessage() {
-    return super.getMessage();
-  }
-
-  public int getStatusCode(){
-    return errorCode.getStatus().value();
-  }
 }

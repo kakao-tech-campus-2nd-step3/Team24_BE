@@ -102,7 +102,7 @@ public class ChallengeService {
       MultipartFile multipartFile) {
 
     Member host = memberRepository.findByUuid(challengeRequestDTO.hostUuid())
-            .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND_ERROR));
+            .orElseThrow(UserNotFoundException::new);
 
     Challenge challenge = Challenge.builder()
         .host(host)
@@ -143,7 +143,7 @@ public class ChallengeService {
         .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
     if (!challenge.getHost().getUuid().equals(user.getUuid())) {
-      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_USER_ERROR);
+      throw new UnauthorizedException();
     }
 
     List<Participant> participants = challenge.getParticipants();

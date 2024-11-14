@@ -4,8 +4,10 @@ import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.challenge.entity.Challenge;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class History {
 
     @Id
@@ -37,18 +39,4 @@ public class History {
         this.member = member;
         this.challenge = challenge;
     }
-
-    public Challenge getChallenge() {
-        return challenge;
-    }
-
-    public Boolean getSucceed() {
-        return isSucceed;
-    }
-
-    public Boolean getHost() {
-        return isHost;
-    }
-
-    public Integer getPoint() { return point; }
 }

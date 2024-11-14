@@ -14,6 +14,6 @@ public record HistoryGetResponse(
 ) {
 
   public static HistoryGetResponse of(ChallengeGetResponse challenge, History history) {
-    return new HistoryGetResponse(challenge, history.getSucceed(), history.getHost(),history.getPoint());
+    return new HistoryGetResponse(challenge, history.getIsSucceed(), history.getIsHost(),history.getPoint());
   }
 }

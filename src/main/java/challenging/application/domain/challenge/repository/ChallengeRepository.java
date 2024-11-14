@@ -1,6 +1,5 @@
 package challenging.application.domain.challenge.repository;
 
-import challenging.application.domain.category.Category;
 import challenging.application.domain.challenge.entity.Challenge;
 import java.time.LocalDate;
 import java.time.LocalTime;
