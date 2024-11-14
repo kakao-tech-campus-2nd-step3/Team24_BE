@@ -1,5 +1,7 @@
 package challenging.application.domain.userprofile.controller;
 
+import challenging.application.global.dto.request.UserProfileRequest;
+import challenging.application.global.dto.response.userprofile.HostProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
 import challenging.application.global.security.annotation.LoginMember;
@@ -41,5 +43,18 @@ public class UserProfileController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.successResponse(userProfileResponse));
+    }
+
+    @GetMapping("/host/{uuid}")
+    public ResponseEntity<ApiResponse<?>> getUserProfileByUUID(
+        @LoginMember Member user,
+        @RequestBody String uuid
+    ) {
+        HostProfileGetResponse hostProfile = userProfileService.getHostProfile(uuid);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.successResponse(hostProfile));
+
     }
 }
