@@ -4,7 +4,6 @@ import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.category.Category;
 import challenging.application.domain.challenge.entity.Challenge;
-import challenging.application.domain.challenge.repository.ChallengeRepository;
 import challenging.application.domain.userprofile.domain.UserProfile;
 import challenging.application.domain.userprofile.repository.UserProfileRepository;
 import java.time.LocalDateTime;
@@ -16,6 +15,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @Transactional
+@ActiveProfiles("test")
 class ChallengeRepositoryTest {
 
   @Autowired

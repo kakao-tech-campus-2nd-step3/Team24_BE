@@ -18,7 +18,7 @@ public class Participant {
   private Challenge challenge;
 
   @ManyToOne
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "member_id")
   private Member member;
 
   protected Participant() {
