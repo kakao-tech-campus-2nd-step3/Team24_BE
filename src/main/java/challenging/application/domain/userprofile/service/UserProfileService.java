@@ -47,9 +47,7 @@ public class UserProfileService {
     }
 
     public HostProfileGetResponse getHostProfile(String uuid){
-        UserProfile userProfile = userProfileRepository.findByMemberUuid(uuid).orElseThrow(
-            () -> new UserProfileNotFoundException()
-        );
+        UserProfile userProfile = userProfileRepository.findByMemberUuid(uuid).orElseThrow(UserProfileNotFoundException::new);
 
         return HostProfileGetResponse.of(userProfile);
     }

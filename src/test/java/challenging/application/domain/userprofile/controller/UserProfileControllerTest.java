@@ -1,6 +1,5 @@
 package challenging.application.domain.userprofile.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,11 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.auth.repository.MemberRepository;
-import challenging.application.domain.history.service.HistoryService;
 import challenging.application.domain.userprofile.domain.UserProfile;
 import challenging.application.domain.userprofile.service.UserProfileService;
-import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
-import challenging.application.global.dto.response.history.HistoryGetResponse;
+import challenging.application.global.dto.response.userprofile.HostProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
 import challenging.application.global.security.utils.jwt.JWTUtils;
@@ -99,6 +96,22 @@ class UserProfileControllerTest {
                 )
                 .andExpect(jsonPath("$.data.userNickName").value(userNickName))
                 .andExpect(jsonPath("$.data.imgUrl").value("s3://"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("/api/userprofile/host/{uuid} get 호스트 프로필 조회 테스트")
+    @WithMockCustomUser
+    void api_userprofile_host_uuid_get_응답_테스트() throws Exception {
+        //given
+        String uuid = "uuid";
+        HostProfileGetResponse hostProfileGetResponse = new HostProfileGetResponse("test", "s3://");
+        given(userProfileService.getHostProfile(uuid)).willReturn(hostProfileGetResponse);
+
+        //expected
+        mvc.perform(get("/api/userprofile/host/{uuid}", uuid))
+                .andExpect(jsonPath("$.data.userNickName").value(hostProfileGetResponse.userNickName()))
+                .andExpect(jsonPath("$.data.imgUrl").value(hostProfileGetResponse.imgUrl()))
                 .andDo(print());
     }
 }

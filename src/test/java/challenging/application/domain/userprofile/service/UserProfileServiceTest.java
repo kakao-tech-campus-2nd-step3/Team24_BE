@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 
 import challenging.application.domain.userprofile.domain.UserProfile;
 import challenging.application.domain.userprofile.repository.UserProfileRepository;
+import challenging.application.global.dto.response.userprofile.HostProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
 import challenging.application.global.images.ImageService;
@@ -71,5 +72,20 @@ class UserProfileServiceTest {
         // Then
         assertThat(userProfilePutResponse.userNickName()).isEqualTo(putNickName);
         assertThat(userProfilePutResponse.imgUrl()).isEqualTo(newS3Url);
+    }
+
+    @Test
+    @DisplayName("호스트 profile 조회 기능 테스트")
+    void 호스트_프로필_조회_기능_테스트(){
+        //given
+        String uuid = "uuid";
+        UserProfile mockUserProfile = new UserProfile(null, "test", 2000);
+        given(userProfileRepository.findByMemberUuid(uuid)).willReturn(Optional.of(mockUserProfile));
+
+        //when
+        HostProfileGetResponse hostProfile = userProfileService.getHostProfile(uuid);
+
+        //then
+        assertThat(hostProfile.userNickName()).isEqualTo(mockUserProfile.getUserNickName());
     }
 }

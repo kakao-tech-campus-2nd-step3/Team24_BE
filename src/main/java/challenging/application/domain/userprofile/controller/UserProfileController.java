@@ -1,6 +1,5 @@
 package challenging.application.domain.userprofile.controller;
 
-import challenging.application.global.dto.request.UserProfileRequest;
 import challenging.application.global.dto.response.userprofile.HostProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
@@ -47,8 +46,7 @@ public class UserProfileController {
 
     @GetMapping("/host/{uuid}")
     public ResponseEntity<ApiResponse<?>> getUserProfileByUUID(
-        @LoginMember Member user,
-        @RequestBody String uuid
+        @PathVariable("uuid") String uuid
     ) {
         HostProfileGetResponse hostProfile = userProfileService.getHostProfile(uuid);
 
