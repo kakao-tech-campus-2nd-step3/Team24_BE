@@ -24,8 +24,9 @@ public class HistoryApiController {
     private final HistoryService historyService;
 
     @GetMapping("/{historyId}")
-    public ResponseEntity<ApiResponse<?>> getHistoryOne(@LoginMember Member member,
-                                                                      @PathVariable Long historyId) {
+    public ResponseEntity<ApiResponse<?>> getHistoryOne(
+            @LoginMember Member member,
+            @PathVariable("historyId") Long historyId) {
         HistoryGetResponse findHistory = historyService.findOneHistory(member.getId(), historyId);
 
         return ResponseEntity.status(HttpStatus.OK)

@@ -62,8 +62,9 @@ class HistoryServiceTest {
         //then
         assertAll(
                 () -> assertThat(findHistory.challenge().challengeBody()).isEqualTo(challenge1.getBody()),
-                () -> assertThat(findHistory.isHost()).isEqualTo(history1.getHost()),
-                () -> assertThat(findHistory.isSucceed()).isEqualTo(history1.getSucceed())
+                () -> assertThat(findHistory.isHost()).isEqualTo(history1.getIsHost()),
+                () -> assertThat(findHistory.isSucceed()).isEqualTo(history1.getIsSucceed()
+                )
         );
     }
 
