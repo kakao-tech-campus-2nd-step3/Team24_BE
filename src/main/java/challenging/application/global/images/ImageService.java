@@ -1,5 +1,9 @@
 package challenging.application.global.images;
 
+import challenging.application.global.error.images.ImageFileDeleteException;
+import challenging.application.global.error.images.ImageFileNotFoundException;
+import challenging.application.global.error.images.ImageFileUploadException;
+import challenging.application.global.error.images.S3Exception;
 import java.io.File;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +39,7 @@ public class ImageService {
         String s3Url = null;
         try {
             if (multipartFile == null || multipartFile.isEmpty()) {
-                throw new IllegalArgumentException("업로드할 파일이 없습니다.");
+                throw new ImageFileNotFoundException();
             }
 
             // 파일 이름 생성
@@ -66,10 +70,10 @@ public class ImageService {
             }
         } catch (IOException e) {
             System.err.println("파일 업로드 중 오류 발생: " + e.getMessage());
-            throw new RuntimeException("파일 업로드 중 오류가 발생했습니다.", e);
+            throw new ImageFileUploadException();
         } catch (Exception e) {
             System.err.println("예기치 않은 오류 발생: " + e.getMessage());
-            throw new RuntimeException("파일 처리 중 예기치 않은 오류가 발생했습니다.", e);
+            throw new S3Exception();
         }
 
         return s3Url;
@@ -91,7 +95,7 @@ public class ImageService {
             System.out.println("이미지가 성공적으로 삭제되었습니다: " + key);
         } catch (Exception e) {
             System.err.println("이미지 삭제 중 오류 발생: " + e.getMessage());
-            throw new RuntimeException("이미지 삭제 중 오류가 발생했습니다.", e);
+            throw new ImageFileDeleteException();
         }
     }
 
@@ -99,7 +103,7 @@ public class ImageService {
         String s3Url = null;
         try {
             if (multipartFile == null || multipartFile.isEmpty()) {
-                throw new IllegalArgumentException("업로드할 파일이 없습니다.");
+                throw new ImageFileNotFoundException();
             }
 
             // 파일 이름 생성
@@ -130,10 +134,10 @@ public class ImageService {
             }
         } catch (IOException e) {
             System.err.println("파일 업로드 중 오류 발생: " + e.getMessage());
-            throw new RuntimeException("파일 업로드 중 오류가 발생했습니다.", e);
+            throw new ImageFileUploadException();
         } catch (Exception e) {
             System.err.println("예기치 않은 오류 발생: " + e.getMessage());
-            throw new RuntimeException("파일 처리 중 예기치 않은 오류가 발생했습니다.", e);
+            throw new S3Exception();
         }
 
         return s3Url;
@@ -155,7 +159,7 @@ public class ImageService {
             System.out.println("이미지가 성공적으로 삭제되었습니다: " + key);
         } catch (Exception e) {
             System.err.println("이미지 삭제 중 오류 발생: " + e.getMessage());
-            throw new RuntimeException("이미지 삭제 중 오류가 발생했습니다.", e);
+            throw new ImageFileDeleteException();
         }
     }
 
