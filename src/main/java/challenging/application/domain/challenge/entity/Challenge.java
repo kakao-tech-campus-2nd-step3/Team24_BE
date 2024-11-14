@@ -42,6 +42,8 @@ public class Challenge {
 
   private int maxParticipantNum;
 
+  private String challengeUrl;
+
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Participant> participants = new ArrayList<>();
 
@@ -60,7 +62,9 @@ public class Challenge {
       LocalTime endTime,
       String imgUrl,
       int minParticipantNum,
-      int maxParticipantNum) {
+      int maxParticipantNum,
+      String challengeUrl
+  ) {
     this.host = host;
     this.name = name;
     this.body = body;
@@ -72,6 +76,7 @@ public class Challenge {
     this.imgUrl = imgUrl;
     this.minParticipantNum = minParticipantNum;
     this.maxParticipantNum = maxParticipantNum;
+    this.challengeUrl = challengeUrl;
   }
 
   public void updateImgUrl(String imgUrl) {

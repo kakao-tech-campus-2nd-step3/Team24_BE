@@ -461,7 +461,8 @@ class ChallengeServiceTest {
                 "10:00",
                 "12:00",
                 2,
-                4
+                4,
+                "test.com"
         );
 
         multipartFile = mock(MultipartFile.class);

@@ -116,6 +116,7 @@ public class ChallengeService {
         .imgUrl(null)
         .minParticipantNum(challengeRequestDTO.minParticipantNum())
         .maxParticipantNum(challengeRequestDTO.maxParticipantNum())
+        .challengeUrl(challengeRequestDTO.challengeUrl())
         .build();
 
     Challenge savedChallenge = challengeRepository.save(challenge);
@@ -132,7 +133,7 @@ public class ChallengeService {
 
     participantRepository.save(participant);
 
-    return new ChallengeCreateResponse(savedChallenge.getId(),savedChallenge.getImgUrl());
+    return new ChallengeCreateResponse(savedChallenge.getId(),savedChallenge.getImgUrl(), savedChallenge.getChallengeUrl());
   }
 
 
@@ -180,7 +181,7 @@ public class ChallengeService {
     Participant participant = new Participant(challenge, user);
     participantRepository.save(participant);
 
-    return new ChallengeReservationResponse(challengeId,user.getUuid());
+    return new ChallengeReservationResponse(challengeId,user.getUuid(), challenge.getChallengeUrl());
   }
 
   @Transactional(readOnly = true)

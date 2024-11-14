@@ -155,7 +155,7 @@ class ChallengeControllerTest {
         String uuid = "uuid";
 
         MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "test image content".getBytes());
-        ChallengeCreateResponse challengeCreateResponse = new ChallengeCreateResponse(3L, "s3://");
+        ChallengeCreateResponse challengeCreateResponse = new ChallengeCreateResponse(3L, "s3://", "test.com");
 
         given(jwtUtils.getUUID(token)).willReturn(uuid);
         given(memberRepository.findByUuid(uuid)).willReturn(Optional.of(member));
@@ -174,12 +174,14 @@ class ChallengeControllerTest {
                         .param("endTime", "12:00")
                         .param("minParticipantNum", "5")
                         .param("maxParticipantNum", "20")
+                        .param("challengeUrl", "test.com")
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .with(csrf())
                 )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.challengeId").value(3))
                 .andExpect(jsonPath("$.data.imgUrl").value("s3://"))
+                .andExpect(jsonPath("$.data.challengeUrl").value("test.com"))
                 .andDo(print());
     }
 
@@ -190,7 +192,7 @@ class ChallengeControllerTest {
         String token = "AccessToken";
         String uuid = "uuid";
 
-        ChallengeReservationResponse challengeReservationResponse = new ChallengeReservationResponse(challenge1.getId(), member.getUuid());
+        ChallengeReservationResponse challengeReservationResponse = new ChallengeReservationResponse(challenge1.getId(), member.getUuid(), challenge1.getChallengeUrl());
         given(jwtUtils.getUUID(token)).willReturn(uuid);
         given(memberRepository.findByUuid(uuid)).willReturn(Optional.of(member));
         given(challengeService.reserveChallenge(challenge1.getId(), member)).willReturn(challengeReservationResponse);
@@ -199,6 +201,7 @@ class ChallengeControllerTest {
         mvc.perform(post("/api/challenges/reservation/{challengeId}", challenge1.getId())
                         .with(csrf()))
                 .andExpect(jsonPath("$.data.challengeId").value(challenge1.getId()))
+                .andExpect(jsonPath("$.data.challengeUrl").value(challenge1.getChallengeUrl()))
                 .andExpect(jsonPath("$.data.uuid").value(member.getUuid()))
                 .andDo(print());
     }
@@ -262,6 +265,7 @@ class ChallengeControllerTest {
                 .host(member)
                 .minParticipantNum(2)
                 .maxParticipantNum(4)
+                .challengeUrl("test.com")
                 .build();
 
         Field idField1 = Challenge.class.getDeclaredField("id");
