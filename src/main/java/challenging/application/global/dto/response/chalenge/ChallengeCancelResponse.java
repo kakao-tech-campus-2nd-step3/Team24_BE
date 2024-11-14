@@ -1,7 +1,7 @@
 package challenging.application.global.dto.response.chalenge;
 
 public record ChallengeCancelResponse(
-        Long challenegeId,
+        Long challengeId,
 
         String uuid
 ) {
