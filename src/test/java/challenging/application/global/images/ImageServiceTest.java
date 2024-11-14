@@ -2,7 +2,6 @@ package challenging.application.global.images;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -45,13 +45,13 @@ class ImageServiceTest {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    private static final String TEST_LOCAL_LOCATION = "/Users/pakjeongwoo/Documents/";
     private File tempFile;
 
     @BeforeEach
-    void setUp() throws IOException, NoSuchFieldException, IllegalAccessException {
-        Field localLocationField = ImageService.class.getDeclaredField("localLocation");
-        localLocationField.setAccessible(true);
-        localLocationField.set(imageService, "/Users/pakjeongwoo/Documents/");
+    void setUp() throws IOException {
+        // ReflectionTestUtils를 사용하여 private 필드를 설정합니다.
+        ReflectionTestUtils.setField(imageService, "localLocation", TEST_LOCAL_LOCATION);
 
         tempFile = File.createTempFile("test", ".jpg");
         Files.write(tempFile.toPath(), "Test Content".getBytes());
@@ -68,9 +68,9 @@ class ImageServiceTest {
 
     @AfterEach
     void tearDown() throws IOException {
-        Path filePath = Paths.get("/Users/pakjeongwoo/Documents/1.jpg");
+        Path filePath = Paths.get(TEST_LOCAL_LOCATION + "1.jpg");
         if (Files.exists(filePath)) {
-            Files.delete(filePath);  // 파일이 존재하면 삭제
+            Files.delete(filePath);
         }
     }
 
@@ -117,7 +117,6 @@ class ImageServiceTest {
         assertEquals("업로드할 파일이 없습니다.", exception.getCause().getMessage());
     }
 
-
     @Test
     void S3업로드_예외처리_테스트() {
         when(multipartFile.isEmpty()).thenReturn(false);
@@ -130,7 +129,6 @@ class ImageServiceTest {
         assertTrue(exception.getMessage().contains("파일 업로드 중 오류가 발생했습니다.") ||
             exception.getCause() != null && exception.getCause().getMessage().contains("S3 업로드 중 오류 발생"));
     }
-
 
     @Test
     void 다양한파일확장자_업로드_테스트() throws IOException {
@@ -151,7 +149,7 @@ class ImageServiceTest {
         when(s3Client.putObject(any(PutObjectRequest.class), any(RequestBody.class))).thenReturn(null);
 
         String s3Url1 = imageService.imageloadUserProfile(multipartFile, 1L);
-        String s3Url2 = imageService.imageloadUserProfile(multipartFile, 1L); // 동일한 ID로 재업로드
+        String s3Url2 = imageService.imageloadUserProfile(multipartFile, 1L);
 
         assertEquals(expectedUrl, s3Url1);
         assertEquals(expectedUrl, s3Url2);
@@ -160,7 +158,7 @@ class ImageServiceTest {
     @Test
     void 대용량파일_업로드_테스트() throws IOException {
         tempFile = File.createTempFile("large", ".jpg");
-        byte[] largeContent = new byte[20 * 1024 * 1024]; // 20MB 파일 생성
+        byte[] largeContent = new byte[20 * 1024 * 1024];
         Files.write(tempFile.toPath(), largeContent);
         doAnswer(invocation -> {
             File file = invocation.getArgument(0);

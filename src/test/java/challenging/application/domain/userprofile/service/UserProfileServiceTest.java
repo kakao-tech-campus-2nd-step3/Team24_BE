@@ -63,7 +63,7 @@ class UserProfileServiceTest {
         UserProfile mockUserProfile = new UserProfile(null, "test", 2000);
 
         given(userProfileRepository.findByMemberId(memberId)).willReturn(Optional.of(mockUserProfile));
-        given(imageService.imageload(image, memberId)).willReturn(newS3Url);
+        given(imageService.imageloadUserProfile(image, memberId)).willReturn(newS3Url);
 
         // When
         UserProfilePutResponse userProfilePutResponse = userProfileService.putUserProfile(memberId, putNickName, image);
