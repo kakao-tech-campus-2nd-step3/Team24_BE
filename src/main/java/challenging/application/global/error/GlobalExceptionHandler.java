@@ -2,19 +2,12 @@ package challenging.application.global.error;
 
 import challenging.application.global.error.response.ErrorResult;
 import challenging.application.global.error.response.ErrorValidationResult;
-import challenging.application.global.error.challenge.AlreadyReservedException;
-import challenging.application.global.error.category.CategoryNotFoundException;
-import challenging.application.global.error.challenge.ChallengeNotFoundException;
-import challenging.application.global.error.history.HistoryNotFoundException;
-import challenging.application.global.error.date.InvalidDateException;
-import challenging.application.global.error.participant.ParticipantLimitExceededException;
-import challenging.application.global.error.user.UnauthorizedException;
-import challenging.application.global.error.user.UserNotFoundException;
 import challenging.application.global.dto.response.ApiResponse;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -31,6 +24,14 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .contentType(MediaType.APPLICATION_JSON)
         .body(ApiResponse.validationErrorResponse(errorValidationResult));
+  }
+
+  @ResponseBody
+  @ExceptionHandler(MissingServletRequestPartException.class)
+  public ResponseEntity<ApiResponse<?>> imageExceptionHandler(MissingServletRequestPartException e) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(ApiResponse.imageErrorResponse());
   }
 
   @ExceptionHandler(Team24Exception.class)
