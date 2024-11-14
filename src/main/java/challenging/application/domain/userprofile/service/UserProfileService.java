@@ -40,7 +40,7 @@ public class UserProfileService {
         String s3Url = userProfile.getImgUrl();
 
         if (image != null){
-            s3Url = imageService.imageload(image, memberId);
+            s3Url = imageService.imageloadUserProfile(image, memberId);
             userProfile.updateImgUrl(s3Url);
         }
 
