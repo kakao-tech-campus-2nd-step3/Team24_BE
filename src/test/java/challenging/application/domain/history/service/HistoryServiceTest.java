@@ -1,16 +1,28 @@
-package challenging.application.history.service;
+package challenging.application.domain.history.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.category.Category;
 import challenging.application.domain.challenge.entity.Challenge;
 import challenging.application.domain.challenge.service.ChallengeService;
-import challenging.application.domain.history.service.HistoryServiceImpl;
-import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
-import challenging.application.global.dto.response.history.HistoryGetResponse;
-import challenging.application.global.error.history.HistoryNotFoundException;
 import challenging.application.domain.history.entity.History;
 import challenging.application.domain.history.repository.HistoryRepository;
 import challenging.application.domain.userprofile.domain.UserProfile;
+import challenging.application.global.dto.response.chalenge.ChallengeGetResponse;
+import challenging.application.global.dto.response.history.HistoryGetResponse;
+import challenging.application.global.error.ErrorCode;
+import challenging.application.global.error.history.HistoryNotFoundException;
+import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,24 +31,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.*;
-
 @ExtendWith(MockitoExtension.class)
-class HistoryServiceImplTest {
-
+class HistoryServiceTest {
     @InjectMocks
-    HistoryServiceImpl historyService;
+    HistoryService historyService;
 
     @Mock
     HistoryRepository historyRepository;
@@ -64,8 +62,8 @@ class HistoryServiceImplTest {
         //then
         assertAll(
                 () -> assertThat(findHistory.challenge().challengeBody()).isEqualTo(challenge1.getBody()),
-                () -> assertThat(findHistory.is_host()).isEqualTo(history1.getHost()),
-                () -> assertThat(findHistory.is_succeed()).isEqualTo(history1.getSucceed())
+                () -> assertThat(findHistory.isHost()).isEqualTo(history1.getHost()),
+                () -> assertThat(findHistory.isSucceed()).isEqualTo(history1.getSucceed())
         );
     }
 
@@ -78,7 +76,7 @@ class HistoryServiceImplTest {
         //expected
         assertThatThrownBy(() -> historyService.findOneHistory(anyLong(), anyLong()))
                 .isInstanceOf(HistoryNotFoundException.class)
-                .hasMessage(HISTORY_NOT_FOUND);
+                .hasMessage(ErrorCode.HISTORY_NOT_FOUND_ERROR.getMessage());
     }
 
     @Test
@@ -91,10 +89,10 @@ class HistoryServiceImplTest {
         histories.add(history2);
 
         given(historyRepository.findAllByMemberId(anyLong())).willReturn(histories);
-        given(challengeService.findOneChallenge(history1.getChallenge().getId())).willReturn(
-                ChallengeGetResponse.fromEntity(challenge1, 2));
-        given(challengeService.findOneChallenge(history2.getChallenge().getId())).willReturn(
-                ChallengeGetResponse.fromEntity(challenge2, 2));
+        given(challengeService.findOneChallenge(history1.getChallenge().getId()))
+                .willReturn(ChallengeGetResponse.fromEntity(challenge1, 2));
+        given(challengeService.findOneChallenge(history2.getChallenge().getId()))
+                .willReturn(ChallengeGetResponse.fromEntity(challenge2, 2));
         //when
 
         List<HistoryGetResponse> historyGetRespons = historyService.findAllHistory(1L);
@@ -117,7 +115,6 @@ class HistoryServiceImplTest {
                 .startTime(LocalTime.now())
                 .endTime(LocalTime.now())
                 .host(member)
-                .imageExtension("png")
                 .minParticipantNum(2)
                 .maxParticipantNum(4)
                 .build();
@@ -135,7 +132,6 @@ class HistoryServiceImplTest {
                 .startTime(LocalTime.now())
                 .endTime(LocalTime.now())
                 .host(member)
-                .imageExtension("png")
                 .minParticipantNum(2)
                 .maxParticipantNum(4)
                 .build();
