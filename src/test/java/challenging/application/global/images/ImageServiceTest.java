@@ -45,7 +45,7 @@ class ImageServiceTest {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    private static final String TEST_LOCAL_LOCATION = "/Users/pakjeongwoo/Documents/";
+    private static final String TEST_LOCAL_LOCATION = "C:\\picture\\";
     private File tempFile;
 
     @BeforeEach

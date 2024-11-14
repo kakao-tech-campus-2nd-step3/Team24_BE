@@ -23,10 +23,10 @@ public record ChallengeRequest(
     String endTime,
     @NotNull(message = "최소 참가자 수는 필수 입력값입니다.")
     @Min(value = 1, message = "최소 참가자 수는 1명 이상이어야 합니다.")
-    int minParticipantNum,
+    Integer minParticipantNum,
     @NotNull(message = "최대 참가자 수는 필수 입력값입니다.")
     @Min(value = 1, message = "최대 참가자 수는 1명 이상이어야 합니다.")
-    int maxParticipantNum
+    Integer maxParticipantNum
 
 ) {
 

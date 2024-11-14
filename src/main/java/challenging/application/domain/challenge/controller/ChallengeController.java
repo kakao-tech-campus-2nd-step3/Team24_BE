@@ -32,7 +32,7 @@ public class ChallengeController {
     // 챌린지 단건 조회
     @GetMapping("/{challengeId}")
     public ResponseEntity<ApiResponse<?>> getChallenge(
-            @PathVariable Long challengeId) {
+            @PathVariable("challengeId") Long challengeId) {
 
         ChallengeGetResponse response = challengeService.getChallengeById(challengeId);
 
@@ -67,8 +67,6 @@ public class ChallengeController {
         @ModelAttribute ChallengeRequest challengeRequestDTO,
         @RequestParam("image") MultipartFile multipartFile
     ){
-
-
         ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO,multipartFile);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -79,7 +77,7 @@ public class ChallengeController {
     // 챌린지 삭제
     @DeleteMapping("{challengeId}")
     public ResponseEntity<ApiResponse<?>> deleteChallenge(
-            @PathVariable Long challengeId,
+            @PathVariable("challengeId") Long challengeId,
             @LoginMember Member loginMember
     ) {
         ChallengeDeleteResponse response = challengeService.deleteChallenge(challengeId, loginMember);
@@ -92,7 +90,7 @@ public class ChallengeController {
     // 챌린지 예약
     @PostMapping("/reservation/{challengeId}")
     public ResponseEntity<ApiResponse<?>> reserveChallenge(
-            @PathVariable Long challengeId,
+            @PathVariable("challengeId") Long challengeId,
             @LoginMember Member loginMember
     ) {
         ChallengeReservationResponse challengeResponse = challengeService.reserveChallenge(challengeId, loginMember);
@@ -104,7 +102,7 @@ public class ChallengeController {
 
     @PostMapping("/{challengeId}/cancel")
     public ResponseEntity<?> cancelChallenge(
-            @PathVariable Long challengeId,
+            @PathVariable("challengeId") Long challengeId,
             @LoginMember Member member){
 
         challengeService.cancelChallenge(challengeId, member);
@@ -120,7 +118,7 @@ public class ChallengeController {
 
     @PostMapping("/{challengeId}/vote")
     public ResponseEntity<?> voteChallenge(
-            @PathVariable Long challengeId,
+            @PathVariable("challengeId") Long challengeId,
             @RequestBody ChallengeVoteRequest challengeVoteRequest){
 
         challengeService.voteChallenge(challengeId, challengeVoteRequest);
