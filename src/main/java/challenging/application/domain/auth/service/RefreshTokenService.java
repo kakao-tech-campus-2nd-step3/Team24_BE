@@ -6,7 +6,6 @@ import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.auth.repository.RefreshTokenRepository;
 import challenging.application.global.error.token.RefreshTokenNotFoundException;
 import challenging.application.global.error.user.UserNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
