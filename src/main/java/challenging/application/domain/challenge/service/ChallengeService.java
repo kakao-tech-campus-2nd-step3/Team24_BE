@@ -122,7 +122,7 @@ public class ChallengeService {
 
     String imgUrl = null;
 
-    imgUrl = imageService.imageload(multipartFile, savedChallenge.getId());
+    imgUrl = imageService.imageloadChallenge(multipartFile, savedChallenge.getId());
 
     challenge.updateImgUrl(imgUrl);
 
@@ -152,7 +152,7 @@ public class ChallengeService {
       member.getUserProfile().addPoint(challenge.getPoint());
     }
 
-    imageService.deleteImageByUrl(challenge.getImgUrl());
+    imageService.deleteImageChallenge(challenge.getImgUrl());
 
     challengeRepository.deleteById(challenge.getId());
 
