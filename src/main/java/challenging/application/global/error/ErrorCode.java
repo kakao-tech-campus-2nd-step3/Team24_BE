@@ -29,7 +29,12 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리 입니다."),
 
     //PARTICIPANT
-    PARTICIPANT_LIMIT_ERROR(HttpStatus.BAD_REQUEST, "최대 참가자 수에 도달했습니다.");
+    PARTICIPANT_LIMIT_ERROR(HttpStatus.BAD_REQUEST, "최대 참가자 수에 도달했습니다."),
+
+    //USERPROFILE
+    USER_PROFILE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "존재하지 않는 유저 프로필 입니다."),
+    POINT_NOT_ENOUGH_ERROR(HttpStatus.BAD_REQUEST, "보유 포인트가 부족합니다."),
+    POINT_NOT_NEGETIVE_ERROR(HttpStatus.BAD_REQUEST, "포인트는 음수가 될 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
