@@ -15,7 +15,9 @@ public record ChallengeGetResponse(
     int minParticipantNum,
     int maxParticipantNum,
     int currentParticipantNum,
-    String hostUuid
+    String hostUuid,
+
+    String challengeUrl
 ) {
 
   public static ChallengeGetResponse fromEntity(Challenge challenge, int currentParticipantNum) {
@@ -32,7 +34,8 @@ public record ChallengeGetResponse(
         challenge.getMinParticipantNum(),
         challenge.getMaxParticipantNum(),
         currentParticipantNum,
-        challenge.getHost().getUuid()
+        challenge.getHost().getUuid(),
+        challenge.getChallengeUrl()
     );
   }
 }
