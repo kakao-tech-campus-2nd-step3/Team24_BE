@@ -233,6 +233,8 @@ public class ChallengeService {
       if (isSucceed) {
         member.getUserProfile().addPoint(point);
         memberRepository.save(member);
+        System.out.println(member.getEmail());
+        System.out.println(point);
       }
 
       History history = History.builder()
