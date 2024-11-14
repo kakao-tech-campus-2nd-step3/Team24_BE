@@ -1,4 +1,4 @@
-package challenging.application.challenge;
+package challenging.application.domain.challenge.repository;
 
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.auth.repository.MemberRepository;
