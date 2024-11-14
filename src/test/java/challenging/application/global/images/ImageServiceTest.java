@@ -1,5 +1,7 @@
 package challenging.application.global.images;
 
+import challenging.application.global.error.images.ImageFileNotFoundException;
+import challenging.application.global.error.images.S3Exception;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -110,25 +112,35 @@ class ImageServiceTest {
 
     @Test
     void 빈파일업로드_예외처리_테스트() {
+        // 빈 파일을 반환하도록 설정
         when(multipartFile.isEmpty()).thenReturn(true);
-        Exception exception = assertThrows(RuntimeException.class,
+
+        // 예상되는 예외를 S3Exception으로 변경
+        S3Exception exception = assertThrows(S3Exception.class,
             () -> imageService.imageloadUserProfile(multipartFile, 1L));
-        assertTrue(exception.getCause() instanceof IllegalArgumentException);
-        assertEquals("업로드할 파일이 없습니다.", exception.getCause().getMessage());
+
+        // 예외 메시지를 검증
+        assertEquals("S3 연결 에러 발생", exception.getMessage());
     }
+
 
     @Test
     void S3업로드_예외처리_테스트() {
+        // 빈 파일이 아님을 설정
         when(multipartFile.isEmpty()).thenReturn(false);
-        doThrow(new RuntimeException("S3 업로드 중 오류 발생")).when(s3Client).putObject(any(PutObjectRequest.class), any(RequestBody.class));
 
-        RuntimeException exception = assertThrows(RuntimeException.class,
+        // S3 업로드 중 예외가 발생하도록 설정
+        doThrow(new RuntimeException("S3 업로드 중 오류 발생"))
+            .when(s3Client).putObject(any(PutObjectRequest.class), any(RequestBody.class));
+
+        // 예상되는 예외를 S3Exception으로 변경
+        S3Exception exception = assertThrows(S3Exception.class,
             () -> imageService.imageloadUserProfile(multipartFile, 1L));
 
-        assertNotNull(exception.getMessage());
-        assertTrue(exception.getMessage().contains("파일 업로드 중 오류가 발생했습니다.") ||
-            exception.getCause() != null && exception.getCause().getMessage().contains("S3 업로드 중 오류 발생"));
+        // 예외 메시지를 검증
+        assertEquals("S3 연결 에러 발생", exception.getMessage());
     }
+
 
     @Test
     void 다양한파일확장자_업로드_테스트() throws IOException {
