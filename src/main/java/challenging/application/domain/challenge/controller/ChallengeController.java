@@ -13,6 +13,7 @@ import challenging.application.global.dto.request.ChallengeRequest;
 
 
 import challenging.application.global.dto.response.ApiResponse;
+import jakarta.validation.Valid;
 import java.util.List;
 
 import org.springframework.http.*;
@@ -64,8 +65,8 @@ public class ChallengeController {
     // 챌린지 생성
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createChallenge(
-        @ModelAttribute ChallengeRequest challengeRequestDTO,
-        @RequestParam("image") MultipartFile multipartFile
+        @ModelAttribute @Valid ChallengeRequest challengeRequestDTO,
+        @RequestParam("image") @Valid MultipartFile multipartFile
     ){
         ChallengeCreateResponse response = challengeService.createChallenge(challengeRequestDTO,multipartFile);
 

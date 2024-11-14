@@ -39,4 +39,8 @@ public class ApiResponse<T> {
     public static ApiResponse<?> errorResponse(ErrorResult error){
         return new ApiResponse<>(ERROR, error.getStatusCode(), error.getMessage(), null);
     }
+
+    public static ApiResponse<?> imageErrorResponse(){
+        return new ApiResponse<>(ERROR, 400,  "사진을 넣어주세요.", null);
+    }
 }
