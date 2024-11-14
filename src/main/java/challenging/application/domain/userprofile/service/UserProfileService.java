@@ -2,6 +2,7 @@ package challenging.application.domain.userprofile.service;
 
 import challenging.application.domain.userprofile.domain.UserProfile;
 import challenging.application.domain.userprofile.repository.UserProfileRepository;
+import challenging.application.global.dto.response.userprofile.HostProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfileGetResponse;
 import challenging.application.global.dto.response.userprofile.UserProfilePutResponse;
 import challenging.application.global.error.userprofile.UserProfileNotFoundException;
@@ -43,5 +44,13 @@ public class UserProfileService {
         userProfile.updateUserNickName(userNickname);
 
         return new UserProfilePutResponse(userNickname,s3Url);
+    }
+
+    public HostProfileGetResponse getHostProfile(String uuid){
+        UserProfile userProfile = userProfileRepository.findByMemberUuid(uuid).orElseThrow(
+            () -> new UserProfileNotFoundException()
+        );
+
+        return HostProfileGetResponse.of(userProfile);
     }
 }
