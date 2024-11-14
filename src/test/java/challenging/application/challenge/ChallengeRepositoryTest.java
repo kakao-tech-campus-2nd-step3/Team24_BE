@@ -5,10 +5,12 @@ import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.category.Category;
 import challenging.application.domain.challenge.entity.Challenge;
 import challenging.application.domain.challenge.repository.ChallengeRepository;
+import challenging.application.domain.userprofile.domain.UserProfile;
+import challenging.application.domain.userprofile.repository.UserProfileRepository;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.*;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
@@ -31,13 +34,22 @@ class ChallengeRepositoryTest {
   @Autowired
   private MemberRepository memberRepository;
 
+  @Autowired
+  private UserProfileRepository userProfileRepository;
+
+  private Challenge challenge1;
+  private Challenge challenge2;
+
   @BeforeEach
   void setUp() {
-    Member host = new Member("테스트하는 사람", "테스트 닉네임", "test@example.com", "ROLE_USER");
+    UserProfile userProfile = new UserProfile();
+    userProfileRepository.save(userProfile);
+
+    Member host = new Member("테스트하는 사람", "테스트 닉네임", "test@example.com", userProfile);
     memberRepository.save(host);
     memberRepository.save(host);
 
-    Challenge challenge1 = Challenge.builder()
+    challenge1 = Challenge.builder()
         .host(host)
         .category(Category.SPORT)
         .name("아침 조깅")
@@ -46,13 +58,11 @@ class ChallengeRepositoryTest {
         .date(LocalDate.of(2024, 11, 11))
         .startTime(LocalTime.of(6, 0))
         .endTime(LocalTime.of(7, 0))
-        .imageUrl(
-            "https://i.namu.wiki/i/h1OsaRJTYVMZqNJgV18rsMgnuW93lXxkWb1ujRDctn0egswSk1VXIEeZVBZ9zRad-PK9S1YhMTyFWTKK2lyEJieoSiOHBERaR4ilxP-7zjbsZvVC-muvIA50Of-aCAnJBj6NGrRv7j4uwXQfCDlneA.webp")
         .minParticipantNum(5)
         .maxParticipantNum(20)
         .build();
 
-    Challenge challenge2 = Challenge.builder()
+    challenge2 = Challenge.builder()
         .host(host)
         .category(Category.SPORT)
         .name("저녁 조깅")
@@ -61,7 +71,6 @@ class ChallengeRepositoryTest {
         .date(LocalDate.of(2024, 11, 11))
         .startTime(LocalTime.of(18, 0))
         .endTime(LocalTime.of(19, 0))
-        .imageUrl("https://health.chosun.com/site/data/img_dir/2022/03/30/2022033000861_0.jpg")
         .minParticipantNum(5)
         .maxParticipantNum(20)
         .build();
@@ -82,15 +91,29 @@ class ChallengeRepositoryTest {
 
   @ParameterizedTest
   @MethodSource("dateProvider")
-  @DisplayName("카테고리와 날짜로 챌린지 검색")
+  @DisplayName("날짜로 챌린지 검색")
   void testFindByCategoryAndDateAndStartTimeAfter(LocalDateTime queryDate, int expectedCount) {
-    List<Challenge> challenges = challengeRepository.findByCategoryAndDateTimeAfter(
-        Category.SPORT,
+    List<Challenge> challenges = challengeRepository.findDateTimeAfter(
         queryDate.toLocalDate(),
         queryDate.toLocalTime()
     );
 
     assertEquals(expectedCount, challenges.size());
+  }
+
+  @Test
+  @DisplayName("Challenge 엔티티와 함께 host 정보를 로드한다")
+  void testFindByIdWithHost() {
+    // given
+    Long challengeId = challenge1.getId();
+
+    // when
+    Optional<Challenge> result = challengeRepository.findByIdWithHost(challengeId);
+
+    // then
+    assertThat(result).isPresent();
+    assertThat(result.get().getHost()).isNotNull();
+    assertThat(result.get().getHost().getUsername()).isEqualTo("테스트 닉네임");
   }
 
 }
