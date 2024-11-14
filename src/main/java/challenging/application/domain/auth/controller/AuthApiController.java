@@ -12,18 +12,14 @@ import challenging.application.global.security.utils.servletUtils.cookie.CookieU
 import challenging.application.domain.auth.constant.AuthConstant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthApiController {
 
     private final JWTUtils jwtUtil;
     private final AuthService authService;
@@ -41,7 +37,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<?>> authorization() {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(ApiResponse.successResponseWithMessage("Authorization 컨트롤러 입니다.",null));
+                .body(ApiResponse.successResponseWithMessage("인증된 회원입니다.",null));
     }
 
     @PostMapping("/logout")
@@ -80,7 +76,7 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(ApiResponse.successResponseWithMessage("토큰이 정상적으로 재발급 되었습니다.", new TokenResponse(newAccess, newAccess)
+                .body(ApiResponse.successResponseWithMessage("토큰이 정상적으로 재발급 되었습니다.", new TokenResponse(newAccess, newRefresh)
                 ));
     }
 }

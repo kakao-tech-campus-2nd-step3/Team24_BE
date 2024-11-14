@@ -1,7 +1,8 @@
 package challenging.application.global.security.filter;
 
 import challenging.application.domain.auth.constant.AuthConstant;
-import challenging.application.domain.auth.controller.AuthController;
+import challenging.application.domain.auth.controller.AuthApiController;
+import challenging.application.domain.auth.service.AuthService;
 import challenging.application.domain.auth.service.RefreshTokenService;
 import challenging.application.global.error.ErrorCode;
 import challenging.application.global.security.configuration.SecurityConfiguration;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest(AuthApiController.class)
 @Import({SecurityConfiguration.class, WebConfig.class})
 public class JWTRefreshFilterTest {
 
@@ -67,6 +68,9 @@ public class JWTRefreshFilterTest {
     @MockBean
     RefreshTokenService refreshTokenService;
 
+    @MockBean
+    AuthService authService;
+
     String token;
     String tokenRefresh;
 
@@ -94,7 +98,7 @@ public class JWTRefreshFilterTest {
     }
 
     @Test
-    @DisplayName("Token 재발급 시 쿠키에 Refresh Token이 없을 때 400 ERROR")
+    @DisplayName("Token 재발급 시 쿠키에 Refresh Token이 없을 때 401 ERROR")
     void 재발급_시_쿠키에_REFRESH_TOKEN_없을_때_ERROR() throws Exception {
         //given
         Cookie cookie = new Cookie(AuthConstant.REFRESH_TOKEN, tokenRefresh);
@@ -104,13 +108,13 @@ public class JWTRefreshFilterTest {
                         .header("Authorization","Bearer " + token)
                         .cookie(cookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_ERROR.getMessage()))
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("Token 재발급 시 Refresh Token이 DB에 없을 때 400 Error")
+    @DisplayName("Token 재발급 시 Refresh Token이 DB에 없을 때 401 Error")
     void 재발급_시_REFRESH_TOKEN_DB에_없으면_ERROR() throws Exception {
         //given
         Cookie cookie = new Cookie(AuthConstant.REFRESH_TOKEN, tokenRefresh);
@@ -120,14 +124,14 @@ public class JWTRefreshFilterTest {
                         .header("Authorization","Bearer " + token)
                         .cookie(cookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_ERROR.getMessage()))
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("Token 재발급 시 Refresh Token이 만료 되었을 때 400 Error")
-    void 재발급_시_REFRESH_TOKEN_만료_400_ERROR(@Value("${spring.jwt.secret}") String secret) throws Exception {
+    @DisplayName("Token 재발급 시 Refresh Token이 만료 되었을 때 401 Error")
+    void 재발급_시_REFRESH_TOKEN_만료_401_ERROR(@Value("${spring.jwt.secret}") String secret) throws Exception {
         //given
         Cookie cookie = new Cookie(AuthConstant.REFRESH_TOKEN, tokenRefresh);
         JWTUtils testJwt = new JWTUtils(secret);
@@ -142,7 +146,7 @@ public class JWTRefreshFilterTest {
         mvc.perform(post("/api/reissue")
                         .header("Authorization","Bearer " + token)
                         .cookie(cookie))
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_ERROR.getMessage()))
                 .andDo(print());
     }
@@ -158,7 +162,7 @@ public class JWTRefreshFilterTest {
                         .header("Authorization","Bearer " + token)
                         .cookie(cookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_ERROR.getMessage()))
                 .andDo(print());
     }

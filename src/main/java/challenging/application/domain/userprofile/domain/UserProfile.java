@@ -1,6 +1,8 @@
 package challenging.application.domain.userprofile.domain;
 
 import challenging.application.domain.auth.entity.Member;
+import challenging.application.global.error.userprofile.PointNotEnoughException;
+import challenging.application.global.error.userprofile.PointNotNegetiveException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,11 +24,10 @@ public class UserProfile {
     private String imgUrl;
 
     public UserProfile() {
-        point = 0;
+        point = 10000;
     }
 
-    public UserProfile(Long id, Member member, String userNickName, Integer point) {
-        this.id = id;
+    public UserProfile(Member member, String userNickName, Integer point) {
         this.member = member;
         this.userNickName = userNickName;
         this.point = point;
@@ -61,12 +62,19 @@ public class UserProfile {
     }
 
     public void addPoint(Integer point) {
+        if(point < 0){
+            throw new PointNotNegetiveException();
+        }
         this.point += point;
     }
 
     public void usePoint(Integer point) {
-        if(this.point < point){
-            throw new IllegalArgumentException("보유 포인트가 부족합니다.");
+        if(point < 0){
+            throw new PointNotNegetiveException();
+        }
+
+        if (this.point < point) {
+            throw new PointNotEnoughException();
         }
 
         this.point -= point;
