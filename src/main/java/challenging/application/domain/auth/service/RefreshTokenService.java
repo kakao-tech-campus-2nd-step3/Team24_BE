@@ -4,6 +4,8 @@ import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.auth.entity.RefreshToken;
 import challenging.application.domain.auth.repository.MemberRepository;
 import challenging.application.domain.auth.repository.RefreshTokenRepository;
+import challenging.application.global.error.token.RefreshTokenNotFoundException;
+import challenging.application.global.error.user.UserNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +20,13 @@ import java.util.Date;
 public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
+
     private final MemberRepository memberRepository;
 
     @Transactional
     public RefreshToken renewalRefreshToken(String previousToken, String newToken, Long expiredMs) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(previousToken)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 REFRESH_TOKEN 입니다."));
+                .orElseThrow(RefreshTokenNotFoundException::new);
 
         Date newExpireTime = new Date(System.currentTimeMillis() + expiredMs);
 
@@ -35,7 +38,7 @@ public class RefreshTokenService {
     @Transactional
     public RefreshToken addRefreshEntity(String refresh, String uuid, Long expiredMs) {
         Member member = memberRepository.findByUuid(uuid)
-                .orElseThrow(() -> new EntityNotFoundException(uuid + "의 회원이 없습니다."));
+                .orElseThrow(UserNotFoundException::new);
 
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 

@@ -25,5 +25,4 @@ public class AuthService {
 
         return member.getUuid();
     }
-
 }
