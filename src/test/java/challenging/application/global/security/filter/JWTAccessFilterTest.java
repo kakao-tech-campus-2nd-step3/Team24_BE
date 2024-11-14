@@ -1,6 +1,7 @@
 package challenging.application.global.security.filter;
 
 import challenging.application.domain.auth.controller.AuthApiController;
+import challenging.application.domain.auth.service.AuthService;
 import challenging.application.domain.auth.service.RefreshTokenService;
 import challenging.application.global.error.ErrorCode;
 import challenging.application.global.security.configuration.SecurityConfiguration;
@@ -64,6 +65,9 @@ public class JWTAccessFilterTest {
     @MockBean
     RefreshTokenService refreshTokenService;
 
+    @MockBean
+    AuthService authService;
+
     String token;
     String tokenRefresh;
 
@@ -80,7 +84,7 @@ public class JWTAccessFilterTest {
         mvc.perform(get("/api/auth")
                         .header("Authorization","Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Authorization 컨트롤러 입니다."))
+                .andExpect(jsonPath("$.message").value("인증된 회원입니다."))
                 .andDo(print());
     }
 
@@ -95,20 +99,20 @@ public class JWTAccessFilterTest {
     }
 
     @Test
-    @DisplayName("Header 에 Token 값이 올바르지 않을 때 400 Error")
+    @DisplayName("Header 에 Token 값이 올바르지 않을 때 401 Error")
     void HEADER_TOKEN_값_이상_400_TEST() throws Exception {
         token = token + "test 용 이상한 값";
 
         mvc.perform(get("/api/auth")
                         .header("Authorization","Bearer " + token))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_SIGNATURE_ERROR.getMessage()))
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("Header 에 Token 값이 만료 되었을 때 400 Error")
+    @DisplayName("Header 에 Token 값이 만료 되었을 때 401 Error")
     void HEADER_TOKEN_만료_400_TEST(@Value("${spring.jwt.secret}") String secret) throws Exception {
         //given
         JWTUtils testJwt = new JWTUtils(secret);
@@ -123,7 +127,7 @@ public class JWTAccessFilterTest {
         mvc.perform(get("/api/auth")
                         .header("Authorization","Bearer " + token))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_EXPIRED_ERROR.getMessage()))
                 .andDo(print());
     }
@@ -135,7 +139,7 @@ public class JWTAccessFilterTest {
         mvc.perform(get("/api/auth")
                         .header("Authorization","Bearer " + tokenRefresh))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_ERROR.getMessage()))
                 .andDo(print());
     }

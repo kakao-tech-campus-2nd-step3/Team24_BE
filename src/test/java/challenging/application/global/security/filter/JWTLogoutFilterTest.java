@@ -2,6 +2,7 @@ package challenging.application.global.security.filter;
 
 import challenging.application.domain.auth.constant.AuthConstant;
 import challenging.application.domain.auth.controller.AuthApiController;
+import challenging.application.domain.auth.service.AuthService;
 import challenging.application.domain.auth.service.RefreshTokenService;
 import challenging.application.global.error.ErrorCode;
 import challenging.application.global.security.configuration.SecurityConfiguration;
@@ -67,6 +68,9 @@ public class JWTLogoutFilterTest {
     @MockBean
     RefreshTokenService refreshTokenService;
 
+    @MockBean
+    AuthService authService;
+
     String token;
     String tokenRefresh;
 
@@ -94,7 +98,7 @@ public class JWTLogoutFilterTest {
     }
 
     @Test
-    @DisplayName("로그아웃 시 쿠키에 Refresh Token이 없을 때 400 ERROR")
+    @DisplayName("로그아웃 시 쿠키에 Refresh Token이 없을 때 401 ERROR")
     void 로그아웃_시_쿠키에_REFRESH_TOKEN_없을_때_ERROR() throws Exception {
         //given
         Cookie cookie = new Cookie(AuthConstant.REFRESH_TOKEN, tokenRefresh);
@@ -104,13 +108,13 @@ public class JWTLogoutFilterTest {
                         .header("Authorization","Bearer " + token)
                         .cookie(cookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_ERROR.getMessage()))
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("로그아웃 시 Refresh Token이 DB에 없을 때 400 Error")
+    @DisplayName("로그아웃 시 Refresh Token이 DB에 없을 때 401 Error")
     void 로그아웃_시_REFRESH_TOKEN_DB에_없으면_ERROR() throws Exception {
         //given
         Cookie cookie = new Cookie(AuthConstant.REFRESH_TOKEN, tokenRefresh);
@@ -120,14 +124,14 @@ public class JWTLogoutFilterTest {
                         .header("Authorization","Bearer " + token)
                         .cookie(cookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_ERROR.getMessage()))
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("Refresh Token이 만료 되었을 때 400 Error")
-    void HEADER_TOKEN_만료_400_TEST(@Value("${spring.jwt.secret}") String secret) throws Exception {
+    @DisplayName("Refresh Token이 만료 되었을 때 401 Error")
+    void HEADER_TOKEN_만료_401_TEST(@Value("${spring.jwt.secret}") String secret) throws Exception {
         //given
         Cookie cookie = new Cookie(AuthConstant.REFRESH_TOKEN, tokenRefresh);
         JWTUtils testJwt = new JWTUtils(secret);
@@ -142,7 +146,7 @@ public class JWTLogoutFilterTest {
         mvc.perform(post("/api/logout")
                         .header("Authorization","Bearer " + token)
                         .cookie(cookie))
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_ERROR.getMessage()))
                 .andDo(print());
     }
@@ -158,7 +162,7 @@ public class JWTLogoutFilterTest {
                         .header("Authorization","Bearer " + token)
                         .cookie(cookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value(ErrorCode.TOKEN_ERROR.getMessage()))
                 .andDo(print());
     }
