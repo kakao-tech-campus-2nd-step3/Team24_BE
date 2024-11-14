@@ -37,7 +37,13 @@ public enum ErrorCode {
     //USERPROFILE
     USER_PROFILE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "존재하지 않는 유저 프로필 입니다."),
     POINT_NOT_ENOUGH_ERROR(HttpStatus.BAD_REQUEST, "보유 포인트가 부족합니다."),
-    POINT_NOT_NEGETIVE_ERROR(HttpStatus.BAD_REQUEST, "포인트는 음수가 될 수 없습니다.");
+    POINT_NOT_NEGETIVE_ERROR(HttpStatus.BAD_REQUEST, "포인트는 음수가 될 수 없습니다."),
+
+    //IMAGE
+    IMAGE_FILE_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "이미지파일은 필수 입력입니다."),
+    IMAGE_FILE_UPLOAD_ERROR(HttpStatus.BAD_REQUEST,"이미지 파일 업로드 에러발생."),
+    IMAGE_FILE_DELETE_ERROR(HttpStatus.BAD_REQUEST,"이미지 파일 삭제 에러발생."),
+    S3_NETWORK_ERROR(HttpStatus.BAD_REQUEST,"S3 연결 에러 발생");
 
     private final HttpStatus status;
     private final String message;
