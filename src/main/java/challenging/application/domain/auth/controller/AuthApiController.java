@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthApiController {
 
     private final JWTUtils jwtUtil;
     private final AuthService authService;
@@ -37,7 +37,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<?>> authorization() {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(ApiResponse.successResponseWithMessage("Authorization 컨트롤러 입니다.",null));
+                .body(ApiResponse.successResponseWithMessage("인증된 회원입니다.",null));
     }
 
     @PostMapping("/logout")
@@ -76,7 +76,7 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(ApiResponse.successResponseWithMessage("토큰이 정상적으로 재발급 되었습니다.", new TokenResponse(newAccess, newAccess)
+                .body(ApiResponse.successResponseWithMessage("토큰이 정상적으로 재발급 되었습니다.", new TokenResponse(newAccess, newRefresh)
                 ));
     }
 }

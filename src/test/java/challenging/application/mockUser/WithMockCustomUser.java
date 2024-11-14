@@ -1,11 +1,8 @@
-package challenging.application.history.mockUser;
-
-
-
-import org.springframework.security.test.context.support.WithSecurityContext;
+package challenging.application.mockUser;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import org.springframework.security.test.context.support.WithSecurityContext;
 
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithMockCustomUserSecurityContextFactory.class)

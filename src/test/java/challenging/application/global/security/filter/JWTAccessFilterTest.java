@@ -1,6 +1,6 @@
 package challenging.application.global.security.filter;
 
-import challenging.application.domain.auth.controller.AuthController;
+import challenging.application.domain.auth.controller.AuthApiController;
 import challenging.application.domain.auth.service.RefreshTokenService;
 import challenging.application.global.error.ErrorCode;
 import challenging.application.global.security.configuration.SecurityConfiguration;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest(AuthApiController.class)
 @Import({SecurityConfiguration.class, WebConfig.class})
 public class JWTAccessFilterTest {
 
