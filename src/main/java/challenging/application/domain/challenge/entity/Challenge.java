@@ -2,6 +2,7 @@ package challenging.application.domain.challenge.entity;
 
 import challenging.application.domain.auth.entity.Member;
 import challenging.application.domain.category.Category;
+import challenging.application.domain.history.entity.History;
 import challenging.application.domain.participant.entity.Participant;
 import jakarta.persistence.*;
 import java.time.*;
@@ -44,8 +45,11 @@ public class Challenge {
 
   private String challengeUrl;
 
-  @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Participant> participants = new ArrayList<>();
+
+  @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<History> histories = new ArrayList<>();
 
   protected Challenge() {
   }
