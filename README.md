@@ -1,4 +1,5 @@
-![banner](https://github.com/user-attachments/assets/4a1b3fd3-9973-4857-a0c4-6db76cec8757)
+<img width="1000" alt="배너" src="./images/banner.png">
+
 
 # 프로젝트 소개
 ## 개발 배경 및 필요성
@@ -40,7 +41,6 @@
 
 ## 기존 서비스 대비 차별성
 ### □ 기능 비교표
-
 |             | 열품타 | 챌린저스 | Challenge ON Air |
 |:-----------:|:-----:|:------:|:---------------:|
 | 동기부여를 해주는가? |   O   |   O    |       O       |
@@ -56,16 +56,32 @@
 ---
 # 상세설계
 ## 시스템 구성도
-
 ### □ 아키텍쳐
+<img width="900" alt="14" src="./images/architecture.png">
+
+### □ ERD
+<img width="900" alt="14" src="./images/erd.png">
 
 
 
+## 사용 기술
+| 번호 |       구분        |   버젼   |
+|:--:|:---------------:|:------:|
+| 1  |      MySQL      | 8.0.33 |
+| 2  |    Java JDK     | 21.0.4 |
+| 3  |       JWT       | 0.12.3 |
+| 4  |   Spring Boot   | 3.3.3  |
+| 5  | Spring Security | 3.3.3  |
+| 6  |   Junit5    | 5.11.3 |
+| 7  |   mockito   | 5.14.2 |
+| 8  |   Gradle    | 8.10.1 |
 
-- Spring Boot는 
+---
 
+# 개발 결과
+## 전체 시스템 흐름도
+### □ IA (information architecture)
+<img width="900" alt="14" src="./images/IA.png">
 
-
-
-
-
+### □ 기능 명세서
+[API 문서](https://quickest-asterisk-75d.notion.site/API-c6cf0477554b483ca56c747753a55fa7)
