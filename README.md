@@ -60,7 +60,7 @@
 <img width="900" alt="14" src="./images/architecture.png">
 
 ### □ ERD
-<img width="900" alt="14" src="./images/erd.png">
+<img width="900" alt="14" src="./images/erd.jpeg">
 
 
 
