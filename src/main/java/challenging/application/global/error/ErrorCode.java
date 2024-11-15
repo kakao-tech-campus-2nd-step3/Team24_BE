@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     //AUTH
     UNAUTHORIZED_USER_ERROR(HttpStatus.UNAUTHORIZED, "인증 되지 않은 사용자 입니다."),
-    USER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다. 유저를 찾을 수 없습니다."),
+    USER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다. 사용자를 찾을 수 없습니다."),
+    FORBIDDEN_ERROR(HttpStatus.NOT_FOUND, "권한이 없는 사용자입니다."),
 
     //Token
     TOKEN_EXPIRED_ERROR(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
@@ -43,7 +44,8 @@ public enum ErrorCode {
     IMAGE_FILE_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "이미지파일은 필수 입력입니다."),
     IMAGE_FILE_UPLOAD_ERROR(HttpStatus.BAD_REQUEST,"이미지 파일 업로드 에러발생."),
     IMAGE_FILE_DELETE_ERROR(HttpStatus.BAD_REQUEST,"이미지 파일 삭제 에러발생."),
-    S3_NETWORK_ERROR(HttpStatus.BAD_REQUEST,"S3 연결 에러 발생");
+    S3_NETWORK_ERROR(HttpStatus.BAD_REQUEST,"S3 연결 에러 발생"),
+    PARTICIPANT_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST,"참여자 찾기 실패 에러");
 
     private final HttpStatus status;
     private final String message;
