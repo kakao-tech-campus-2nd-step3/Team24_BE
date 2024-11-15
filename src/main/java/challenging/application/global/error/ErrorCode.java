@@ -44,7 +44,8 @@ public enum ErrorCode {
     IMAGE_FILE_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "이미지파일은 필수 입력입니다."),
     IMAGE_FILE_UPLOAD_ERROR(HttpStatus.BAD_REQUEST,"이미지 파일 업로드 에러발생."),
     IMAGE_FILE_DELETE_ERROR(HttpStatus.BAD_REQUEST,"이미지 파일 삭제 에러발생."),
-    S3_NETWORK_ERROR(HttpStatus.BAD_REQUEST,"S3 연결 에러 발생");
+    S3_NETWORK_ERROR(HttpStatus.BAD_REQUEST,"S3 연결 에러 발생"),
+    PARTICIPANT_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST,"참여자 찾기 실패 에러");
 
     private final HttpStatus status;
     private final String message;

@@ -17,6 +17,7 @@ import challenging.application.global.dto.response.chalenge.ChallengeReservation
 import challenging.application.global.error.ErrorCode;
 import challenging.application.global.error.challenge.AlreadyReservedException;
 import challenging.application.global.error.challenge.ChallengeNotFoundException;
+import challenging.application.global.error.challenge.ParticipantNotFoundException;
 import challenging.application.global.error.participant.ParticipantLimitExceededException;
 import challenging.application.global.error.user.ForbiddenException;
 import challenging.application.global.error.user.UnauthorizedException;
@@ -201,7 +202,7 @@ public class ChallengeService {
             .orElseThrow(() -> new ChallengeNotFoundException(ErrorCode.CHALLENGE_NOT_FOUND_ERROR));
 
     Participant participant = participantRepository.findParticipantByChallengeIdAndMemberId(challengeId, member.getId())
-            .orElseThrow(() -> new RuntimeException());
+            .orElseThrow(() -> new ParticipantNotFoundException());
 
     participantRepository.delete(participant);
 
