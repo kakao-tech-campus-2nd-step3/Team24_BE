@@ -85,3 +85,6 @@
 
 ### □ 기능 명세서
 [API 문서](https://quickest-asterisk-75d.notion.site/API-c6cf0477554b483ca56c747753a55fa7)
+
+### 백엔드 배포 IP
+http://52.79.51.86:8080
